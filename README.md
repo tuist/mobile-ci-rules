@@ -222,12 +222,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [agent-rules](https://github.com/steipete/agent-rules) - Original inspiration for AI-optimized documentation
 - [Firecrawl](https://firecrawl.dev) - Web scraping API used for clean content extraction
 
-## 💬 Support
-
-- **Issues**: [GitHub Issues](https://github.com/tuist/mobile-ci-rules/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/tuist/mobile-ci-rules/discussions)
-- **Updates**: Watch this repository for the latest changes
-
 ---
 
 *Last updated: Automatically via GitHub Actions*
