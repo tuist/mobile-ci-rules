@@ -1,10 +1,16 @@
-# 📱 Mobile CI Documentation for Local Agents
+# 📱 Mobile CI Rules for Local Agents
 
 A comprehensive collection of mobile CI/CD documentation from all major providers, automatically converted to `.mdc` format for optimal consumption by local AI agents and development tools.
 
 ## 🎯 Purpose
 
 This repository aggregates and maintains up-to-date documentation from the leading mobile CI/CD platforms, making it easy for local AI agents to provide accurate, current information about mobile development pipelines. Each provider's documentation is combined into a single comprehensive `.mdc` file that's optimized for AI consumption.
+
+**Key Goals:**
+- **🚀 Accelerate CI Adoption**: Help teams quickly understand and implement mobile CI/CD solutions
+- **🔄 Simplify Migration**: Provide comprehensive documentation to ease migration between different CI platforms
+- **🤖 Enable AI-Assisted Development**: Optimize documentation format for local AI agents to provide contextual CI/CD guidance
+- **📚 Centralize Knowledge**: Single source of truth for mobile CI/CD best practices across all major platforms
 
 ## 📁 Repository Structure
 
@@ -51,8 +57,8 @@ Each `.mdc` file contains:
 
 1. **Clone this repository** to your local machine:
    ```bash
-   git clone https://github.com/your-username/mobile-ci-docs.git
-   cd mobile-ci-docs
+   git clone https://github.com/tuist/mobile-ci-rules.git
+   cd mobile-ci-rules
    ```
 
 2. **Reference in your prompts:**
@@ -60,11 +66,12 @@ Each `.mdc` file contains:
    Using the mobile CI documentation in ./docs/[provider].mdc, help me set up [specific task]
    ```
 
-3. **Example prompts:**
-   - "Using the ./docs/bitrise.mdc documentation, help me set up iOS code signing"
-   - "Reference ./docs/github-actions.mdc to create a React Native CI workflow"
-   - "Check ./docs/codemagic.mdc for Flutter build configuration best practices"
-   - "Using ./docs/circleci.mdc, show me how to parallelize my Android tests"
+3. **Example prompts for CI adoption and migration:**
+   - "Using ./docs/bitrise.mdc, help me migrate from Jenkins to Bitrise for iOS builds"
+   - "Compare ./docs/github-actions.mdc and ./docs/circleci.mdc to choose the best CI for my React Native project"
+   - "Reference ./docs/codemagic.mdc to set up my first Flutter CI pipeline"
+   - "Using ./docs/circleci.mdc, help me migrate my existing Android builds from local scripts"
+   - "Compare signing approaches across ./docs/bitrise.mdc and ./docs/appcircle.mdc for iOS deployment"
 
 ### For Codeium/Copilot
 
@@ -159,8 +166,8 @@ cat docs/codemagic.mdc
 ### Setup
 
 ```bash
-git clone https://github.com/your-username/mobile-ci-docs.git
-cd mobile-ci-docs
+git clone https://github.com/tuist/mobile-ci-rules.git
+cd mobile-ci-rules
 npm install
 
 # Set up environment variable
@@ -217,8 +224,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 💬 Support
 
-- **Issues**: [GitHub Issues](https://github.com/your-username/mobile-ci-docs/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/mobile-ci-docs/discussions)
+- **Issues**: [GitHub Issues](https://github.com/tuist/mobile-ci-rules/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/tuist/mobile-ci-rules/discussions)
 - **Updates**: Watch this repository for the latest changes
 
 ---

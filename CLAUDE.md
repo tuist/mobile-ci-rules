@@ -1,16 +1,22 @@
-# CI-LLMs Project Context
+# Mobile CI Rules Project Context
 
 ## Project Overview
 
-This repository contains comprehensive mobile CI/CD documentation scraped from major providers and optimized for consumption by LLMs and AI development tools.
+This repository contains comprehensive mobile CI/CD documentation scraped from major providers and optimized for consumption by LLMs and AI development tools to accelerate CI adoption and simplify migration between platforms.
 
 ## What This Project Does
 
 **Purpose**: Aggregate mobile CI/CD documentation from all major providers into a single, LLM-optimized repository that's automatically kept up-to-date.
 
+**Key Goals**:
+- 🚀 **Accelerate CI Adoption**: Help teams quickly understand and implement mobile CI/CD solutions
+- 🔄 **Simplify Migration**: Provide comprehensive documentation to ease migration between different CI platforms  
+- 🤖 **Enable AI-Assisted Development**: Optimize documentation format for local AI agents to provide contextual CI/CD guidance
+- 📚 **Centralize Knowledge**: Single source of truth for mobile CI/CD best practices across all major platforms
+
 **Key Features**:
-- 9 comprehensive `.mdc` files covering all major mobile CI providers
-- ~51,500 lines of combined documentation
+- 10 comprehensive `.mdc` files covering all major mobile CI providers
+- ~51,500+ lines of combined documentation
 - Automated weekly updates via GitHub Actions
 - Clean format optimized for LLM consumption
 - No metadata clutter - just pure documentation content
