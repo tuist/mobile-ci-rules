@@ -1,0 +1,847 @@
+---
+title: Xcode Cloud Complete Pipeline Reference
+provider: Xcode Cloud
+generated_at: 2025-07-08T13:32:13.195Z
+pages_included: 5
+---
+
+# Xcode Cloud Complete Pipeline Reference
+
+This comprehensive guide contains all pipeline, workflow, and build configuration documentation for Xcode Cloud.
+
+## Table of Contents
+
+
+1. [Xcode Cloud workflow reference](#section-1)
+2. [Configuring your first Xcode Cloud workflow](#section-2)
+3. [Writing custom build scripts](#section-3)
+4. [Environment variable reference](#section-4)
+5. [The page you're looking for can't be found.](#section-5)
+
+
+---
+
+
+## 1. Xcode Cloud workflow reference {#section-1}
+
+*Source: [https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference)*
+
+[Skip Navigation](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference#app-main)
+
+Collection
+
+- [Xcode](https://developer.apple.com/documentation/xcode)
+- [Xcode Cloud](https://developer.apple.com/documentation/xcode/xcode-cloud)
+- Xcode Cloud workflow reference
+
+# Xcode Cloud workflow reference
+
+Configure metadata, start conditions, actions, post-actions, and more to create custom Xcode Cloud workflows.
+
+## [Overview](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Overview)
+
+By configuring a first workflow in Xcode, you started a continuous integration and delivery (CI/CD) practice with Xcode Cloud. After you’ve reviewed how you can best refine your CI/CD practice as described in [Developing a workflow strategy for Xcode Cloud](https://developer.apple.com/documentation/xcode/developing-a-workflow-strategy-for-xcode-cloud), create custom workflows that fit the unique needs for ensuring your app’s or framework’s quality. For example, add metadata to describe the purpose of a workflow, configure conditions that start a new build, add actions and post-actions, and more.
+
+You need to use Xcode to initially configure your project or workspace to use Xcode Cloud. However, after you’ve started your first build, you can edit and create workflows in either Xcode or [App Store Connect](https://appstoreconnect.apple.com/).
+
+For additional information about Xcode Cloud workflows, see [Explore Xcode Cloud workflows](https://developer.apple.com/wwdc21/10268) and [Customize your advanced Xcode Cloud workflows](https://developer.apple.com/wwdc21/10269).
+
+### [Metadata](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Metadata)
+
+Even if you’re a solo developer, you might create several workflows. To help distinguish workflows from each other and make each workflow’s purpose easy to understand, open the workflow and provide metadata in the General section.
+
+Name
+
+Choose a name that’s easy to recognize. For example, name a workflow “Nightly Builds” if it distributes a new version of your app to your team every night.
+
+Description
+
+Provide additional context that explains the workflow’s purpose. For example, enter “A workflow that automatically archives both the iOS and the macOS app every night”.
+
+![A screenshot that shows a workflow in Xcode. The General section is visible and shows the name and description that the user provided.](https://docs-assets.developer.apple.com/published/f5090090ba3a21cc016c980e101019cd/Xcode-Cloud-Workflow-Reference-1%402x.png)
+
+### [Environment](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Environment)
+
+When you develop and maintain your app or framework over time, you need to make sure that current and upcoming Xcode versions can successfully build it. If your product is a framework, you might need to ensure your framework supports previous Xcode versions.
+
+To reduce the work needed to perform these verifications, configure a workflow’s temporary build environment. For example, create a workflow that builds your project and runs your tests using the latest publicly released Xcode and macOS versions. Then, create another workflow that performs the same verifications with the latest beta versions of macOS and Xcode.
+
+To configure a workflow’s temporary build environment, navigate to the workflow’s Environment section, and choose from available Xcode and macOS versions.
+
+### [Perform a clean build](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Perform-a-clean-build)
+
+To reduce the amount of time it takes to perform a build, Xcode Cloud stores each build’s derived data and other cached information for reuse in a secure and private way. However, you might need to perform a clean build that doesn’t cache data. For example, you need to configure a workflow to perform a clean build if you add a post-action that distributes a new version to external testers with [TestFlight](https://developer.apple.com/testflight/).
+
+To configure a workflow that starts a new build without cached data:
+
+1. Open the workflow in Xcode or App Store Connect and navigate to the Environment section.
+
+2. Select Clean and save the workflow.
+
+
+### [Custom environment variables](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Custom-environment-variables)
+
+In addition to Xcode and macOS versions, you can set custom _environment variables_ for a workflow in its Environment section. These variables are available to custom build scripts you use to extend workflows. For example, set a secret environment variable to contain an API key you use in a custom build script that uploads a workflow’s artifacts to your server.
+
+### [Start conditions](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Start-conditions)
+
+When you create a new workflow, Xcode suggests the Branch Changes condition that starts a new build for every change to your Git repository’s default branch. This condition is useful when you get started with CI. However, starting a build for every change to your default branch might not be the appropriate setting for you. For example, a workflow that runs UI tests on many simulated devices can take a significant amount of time to complete, and starting a build for every branch change isn’t practical. In this case, make changes to the workflow’s start condition or add start conditions to tell Xcode Cloud to perform a workflow less often.
+
+For more information about configuring start conditions, see [Configuring start conditions](https://developer.apple.com/documentation/xcode/configuring-start-conditions).
+
+### [Auto-cancel builds](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Auto-cancel-builds)
+
+By default, workflows have the Auto-cancel Builds setting enabled for each start condition. As a result, Xcode Cloud automatically cancels an in-progress build if a workflow queues a new build for the same workflow. This reduces the time to verify your latest code change — a useful setting in case you push updates to a branch in quick succession.
+
+For example, say you push five changes to a branch within five minutes. Xcode Cloud detects each change and starts a build because it meets the Branch Changes start condition, resulting in five builds. To know whether your fifth change passed the configured verifications, you’d have to wait for each build to complete, even though the fifth change supersedes the others. With Auto-cancel Builds enabled, Xcode Cloud cancels the first four builds and immediately starts the build for the latest change.
+
+### [Actions](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Actions)
+
+Automatically and frequently building your project and verifying changes is key to a CI/CD practice. As a result, configuring a workflow’s actions is a fundamental task you perform in its Actions section. A workflow can perform the following actions:
+
+- Build
+
+- Test
+
+- Analyze
+
+- Archive
+
+
+Note how these actions match your project’s or workspace’s scheme actions. To create a workflow that fits your requirements, add as many actions to a workflow as needed. For example, create a workflow that performs the test and archive actions for your app.
+
+For detailed information on actions you configure for an Xcode Cloud workflow, see [Configuring your Xcode Cloud workflow’s actions](https://developer.apple.com/documentation/xcode/configuring-your-xcode-cloud-workflow-s-actions). For additional information on using Xcode Cloud to run your tests, see [Author fast and reliable tests for Xcode Cloud](https://developer.apple.com/wwdc22/110361).
+
+### [Post-actions](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Post-actions)
+
+Performing actions is at the core of a workflow. However, similar to how you configure post-actions in a scheme, you can configure post-actions for a workflow that happen after Xcode Cloud performs the workflow’s actions.
+
+By adding post-actions, you can:
+
+- Configure custom notification settings. For example, limit email notifications to a certain build status, let Xcode Cloud email additional coworkers, or configure Xcode Cloud to send notifications to [Slack](https://slack.com/).
+
+- Distribute a new version of your app to testers using [TestFlight](https://developer.apple.com/testflight/).
+
+- Upload a version of your app to App Store Connect that you can subsequently submit for app review.
+
+
+For additional information on sending notifications to Slack, see [Connecting Xcode Cloud to Slack](https://developer.apple.com/documentation/xcode/connecting-xcode-cloud-to-slack)
+
+### [Custom build scripts](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Custom-build-scripts)
+
+Xcode Cloud uses your project’s configured schemes and offers a wide variety of workflow settings. However, you might want to perform additional custom tasks you can’t configure using a scheme or workflow. For example, you might need to install an additional tool to build your project, to upload an app archive to storage, to use a different app icon for nightly builds, and so on.
+
+To address these use cases, you can create shell scripts, referred to as _custom build scripts_, that Xcode Cloud runs at a specific moment during a build. For more information, see [Writing custom build scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts).
+
+### [Automate workflow management](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Automate-workflow-management)
+
+Using either Xcode or App Store Connect, you can create custom workflows to verify the quality of your apps or frameworks. However, you may need to further automate Xcode Cloud usage and create and manage numerous workflows for multiple apps — especially in a corporate context. If this applies to you, use the App Store Connect API to manage workflows, start builds, and access Xcode Cloud data. For more information, see [Xcode Cloud Workflows and Builds](https://developer.apple.com/documentation/AppStoreConnectAPI/xcode-cloud-workflows-and-builds).
+
+## [Topics](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#topics)
+
+### [Start conditions](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Start-conditions)
+
+[Configuring start conditions](https://developer.apple.com/documentation/xcode/configuring-start-conditions)
+
+Configure Xcode Cloud to start a build when you update a branch, pull request, or Git tag, or based on a schedule.
+
+### [Actions](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Actions)
+
+[Configuring your Xcode Cloud workflow’s actions](https://developer.apple.com/documentation/xcode/configuring-your-xcode-cloud-workflow-s-actions)
+
+Add actions to an Xcode Cloud workflow to build, test, analyze, and archive your app or framework when it performs a build.
+
+## [See Also](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#see-also)
+
+### [Workflows](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference\#Workflows)
+
+[Developing a workflow strategy for Xcode Cloud](https://developer.apple.com/documentation/xcode/developing-a-workflow-strategy-for-xcode-cloud)
+
+Review how you can best create custom Xcode Cloud workflows to refine your continuous integration and delivery practice.
+
+[Creating a workflow that builds your app for distribution](https://developer.apple.com/documentation/xcode/creating-a-workflow-that-builds-your-app-for-distribution)
+
+Configure a workflow to build and sign your app for distribution to testers with TestFlight, in the App Store, or as a notarized app.
+
+Current page is Xcode Cloud workflow reference
+
+---
+
+
+## 2. Configuring your first Xcode Cloud workflow {#section-2}
+
+*Source: [https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow)*
+
+[Skip Navigation](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow#app-main)
+
+- [Xcode](https://developer.apple.com/documentation/xcode)
+- [Xcode Cloud](https://developer.apple.com/documentation/xcode/xcode-cloud)
+- Configuring your first Xcode Cloud workflow
+
+Article
+
+# Configuring your first Xcode Cloud workflow
+
+Set up your project or workspace to use Xcode Cloud and adopt continuous integration and delivery.
+
+## [Overview](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Overview)
+
+Xcode helps you configure your project or workspace to use Xcode Cloud. It analyzes your project, suggests a configuration to quickly build your app or framework with Xcode Cloud, and makes it easy to refine your continuous integration practice after you complete your first build.
+
+For additional information about Xcode Cloud, see [Meet Xcode Cloud](https://developer.apple.com/wwdc21/10267), [Explore Xcode Cloud workflows](https://developer.apple.com/wwdc21/10268), [Customize your advanced Xcode Cloud workflows](https://developer.apple.com/wwdc21/10269), and [Get the most out of Xcode Cloud](https://developer.apple.com/videos/play/wwdc2022-110374).
+
+### [Review Xcode Cloud workflows](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Review-Xcode-Cloud-workflows)
+
+When you start configuring a project or workspace to use Xcode Cloud, Xcode analyzes your project to detect its settings and then creates a list of its apps and frameworks — referred to as _products_. After you select a product, Xcode suggests a first workflow for it. The workflow is the configuration for the steps you want Xcode Cloud to perform.
+
+A workflow includes the following settings:
+
+- General information, such as a name and a description of the workflow.
+
+- Xcode and macOS versions of the temporary build environment. Note that Xcode Cloud may periodically update available macOS and Xcode versions and ask you to update your workflows so they continue to build successfully.
+
+- Start conditions that define when Xcode Cloud runs a workflow.
+
+- Actions that Xcode Cloud performs. You can configure several actions for a workflow. Available actions are: build, analyze, test, and archive.
+
+- Postactions that Xcode Cloud performs. For example, you can configure custom notifications or distribute a new version of your app to testers in [TestFlight](https://developer.apple.com/testflight/).
+
+- Custom build scripts that perform particular tasks, such as installing a third-party tool. For more information, see [Writing custom build scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts).
+
+
+After reviewing the suggested workflow, you connect Xcode Cloud to your Git repository and run the workflow, referred to as a _build_.
+
+When it completes a build, Xcode Cloud:
+
+- Sends an email that contains information about the build, including links to the build report in Xcode and in [App Store Connect](https://appstoreconnect.apple.com/).
+
+- Stores the build’s _artifacts_ and makes them available for downloading in Xcode or in App Store Connect.
+
+
+The artifacts that Xcode Cloud creates include:
+
+- Detailed build logs
+
+- The exported app archive, app binary, or framework
+
+- A test result bundle, including screenshots you create in your automated user interface tests
+
+
+Use Xcode to initially configure your project or workspace to use Xcode Cloud. After you complete your first build, use either Xcode or App Store Connect to configure additional workflows, access build information, and more. For more information, see [Create additional workflows in Xcode](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow#Create-additional-workflows-in-Xcode).
+
+### [Select the archive action](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Select-the-archive-action)
+
+For each app or framework that you want to build with Xcode Cloud, make sure its corresponding scheme uses the archive action. Choose Product > Scheme > Edit Scheme. In the sidebar, click Build and in the detail area, select the Archive checkbox for the target.
+
+![A screenshot that shows a scheme of the Fruta app with an enabled archive action.](https://docs-assets.developer.apple.com/published/e945f8514d710390e42820ba221438d6/Configuring-Your-First-Xcode-Cloud-Workflow-1%402x.png)
+
+To find out which of your project’s schemes use the archive action, run the following command in Terminal:
+
+```
+xcodebuild -project Example.xcodeproj -describeAllArchivableProducts -json
+
+```
+
+Xcode uses the same command to find available products that you can build with Xcode Cloud.
+
+### [Select a product](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Select-a-product)
+
+To configure your project or workspace to use Xcode Cloud, open your project or workspace in Xcode. In the Report navigator, click the Cloud button, and then click Get Started.
+
+Xcode analyzes your project or workspace, and then creates a list in the Select a Product sheet for the products it finds. Select the product that matches your app or framework and click Next.
+
+![A screenshot of the Select a Product sheet in Xcode that lists all products for the Fruta app.](https://docs-assets.developer.apple.com/published/07ee5eb73ec5e84c53b4716d0a544368/Configuring-Your-First-Xcode-Cloud-Workflow-3%402x.png)
+
+If your project contains targets that use the same bundle identifier, Xcode Cloud treats them as one product. Note that a product can only have one bundle ID, and a bundle ID always matches exactly one Xcode Cloud product. If your workspace or project contains several app targets:
+
+- When possible, share the same bundle ID across versions of your app for each platform. For example, use the same bundle ID for the iOS, macOS, and watchOS versions of your app.
+
+- If each version of your app uses a different bundle ID — for example, if the iOS version uses `com.example.myiosapp` and the macOS app uses `com.example.mymacapp` — Xcode detects more than one product. Select one of them when you create your first workflow, and later configure additional workflows for the other product.
+
+
+You may be a member of more than one Apple Developer Program team. In this case, Xcode asks you to select a team. Select the team you intend to use for distribution to testers with TestFlight, and for publishing the app in the App Store.
+
+### [Review the suggested workflow](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Review-the-suggested-workflow)
+
+Based on the product you select, Xcode suggests a first workflow that:
+
+- Starts a build for each change to your Git repository’s default branch, and for each pull request that targets your default branch
+
+- Uses the latest released macOS and Xcode versions for its temporary build environment
+
+- Uses the archive action
+
+- Sends an email with information about the build, including links to the build report in Xcode and in App Store Connect
+
+
+Before starting your first build, review the suggested workflow; for example, verify whether Xcode chooses the correct scheme.
+
+To review the suggested workflow:
+
+1. Click Edit Workflow in the Review Workflow sheet.
+
+2. Make changes only if necessary in the sheet that displays the workflow information and save them.
+
+3. In the Review Workflow sheet, click Next and follow the steps to grant Xcode Cloud access to your source code repository.
+
+
+![A screenshot of the suggested workflow in Xcode for the Fruta app.](https://docs-assets.developer.apple.com/published/f00fe5c3b5dd12f29978feca81c98da4/Configuring-Your-First-Xcode-Cloud-Workflow-4%402x.png)
+
+### [Grant Xcode Cloud access to your source code](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Grant-Xcode-Cloud-access-to-your-source-code)
+
+Xcode Cloud requires access to the Git repository containing your code. It uses this access to build and test your code automatically when you make changes. When you configure your project or workspace to use Xcode Cloud, Xcode analyzes it to detect the source code management (SCM) provider you use. In the Grant Access to Your Source Code sheet, click Grant Access and let Xcode guide you through your SCM provider’s authorization process.
+
+![A screenshot of the Grant Access to Your Source Code sheet in Xcode.](https://docs-assets.developer.apple.com/published/370da2c2fcf558030fd8b44500dac3b6/Configuring-Your-First-Xcode-Cloud-Workflow-5%402x.png)
+
+After allowing Xcode Cloud to access your Git repository, Xcode indicates that it can access your source code. Click Next, and in the next sheet, click Complete.
+
+For additional guidance on granting Xcode Cloud access to your source code, see [Source code management setup](https://developer.apple.com/documentation/xcode/source-code-management-setup).
+
+### [Create an app record](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Create-an-app-record)
+
+Xcode Cloud combines Xcode, [TestFlight](https://developer.apple.com/testflight/), and App Store Connect into a powerful CI/CD system. As a result, you need an app record in App Store Connect for your app.
+
+If you already have an app record in App Store Connect, Xcode Cloud uses it automatically. If you don’t have an app record, Xcode helps you create one after you grant Xcode Cloud access to your Git repository.
+
+To create an app record, you need to have the App Manager, Admin, or Account Holder role for your team. If you have the Developer role, you need the Create Apps permission. If you don’t have the required role or permission, see [Create an app record in App Store Connect](https://developer.apple.com/documentation/xcode/configuring-xcode-cloud-for-your-team#Create-an-app-record-in-App-Store-Connect).
+
+### [Start your first build](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Start-your-first-build)
+
+After granting Xcode Cloud access to your Git repository and, if applicable, creating an app record, you’re ready to start your first build. Choose a branch from the pop-up menu and click Start Build. Xcode Cloud checks out the branch and starts building your code.
+
+![A screenshot of the Start Build sheet in Xcode for the Fruta app.](https://docs-assets.developer.apple.com/published/7450d7c337f31cf4f7a578035b6be55c/Configuring-Your-First-Xcode-Cloud-Workflow-6%402x.png)
+
+To view information about the in-progress build in the Editor pane, select the build in the Report navigator. To see detailed build logs, expand an action in the report outline and click Logs. If the report outline isn’t visible, enable it using the Adjust Editor Options button in the top-right corner of the Editor pane.
+
+When Xcode Cloud finishes building your project, it sends an email that contains information about the build, including the build’s status, the commit it used for the build, and links to the build report in Xcode or in App Store Connect.
+
+### [Understand why a build fails](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Understand-why-a-build-fails)
+
+There’s a chance that your first build might fail. This is especially likely for complex code bases and projects with many dependencies. To understand why a build failed, select a build in the Report navigator, expand a failed action in the report outline, and click Logs to see the build logs.
+
+![A screenshot of Xcode that shows detailed build information in the Editor pane for a failed archive action.](https://docs-assets.developer.apple.com/published/ba9dafa2ed0f6e806ddcbfc73e585049/Configuring-Your-First-Xcode-Cloud-Workflow-7%402x.png)
+
+You can also click Artifacts and download the build report. For additional guidance, see [Resolving common configuration and build issues](https://developer.apple.com/documentation/xcode/resolving-common-configuration-and-build-issues).
+
+In addition to viewing build logs in Xcode, you can explore build logs in App Store Connect by following these steps:
+
+1. Sign in to App Store Connect and go to your app’s page.
+
+2. Click the Xcode Cloud tab.
+
+3. Click Builds in the sidebar.
+
+4. Expand a workflow and select a build.
+
+5. Expand an action in the sidebar and click Logs.
+
+
+### [Refine your continuous integration practice](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Refine-your-continuous-integration-practice)
+
+After configuring your first workflow and successfully completing your first build, spend time planning next steps to refine your CI/CD process, and consider the following:
+
+- Ask coworkers to start using Xcode Cloud as [Connect your personal SCM account to Xcode Cloud](https://developer.apple.com/documentation/xcode/configuring-xcode-cloud-for-your-team#Connect-your-personal-SCM-account-to-Xcode-Cloud) describes.
+
+- Change your first workflow’s name and description.
+
+- Add a test action to your first workflow that runs your unit tests.
+
+- Change your first workflow’s start conditions to only start a build if you update a custom branch or add start conditions.
+
+- Add a postaction to distribute a new version of your app to testers with [TestFlight](https://developer.apple.com/testflight/).
+
+- Create additional workflows to perform advanced verifications that take more time to complete; for example, configure a workflow that runs your automated UI tests once per week.
+
+- Create workflows for other products that Xcode detected when you created your first workflow.
+
+- Share build configurations across workflows. For more information, see [Sharing macOS and Xcode versions across Xcode Cloud workflows](https://developer.apple.com/documentation/xcode/sharing-custom-aliases-across-xcode-cloud-workflows) and [Sharing environment variables across Xcode Cloud workflows](https://developer.apple.com/documentation/xcode/sharing-environment-variables-across-xcode-cloud-workflows).
+
+- Receive build information in [Slack](https://slackhq.com/), a popular collaboration tool. For more information, see [Connecting Xcode Cloud to Slack](https://developer.apple.com/documentation/xcode/connecting-xcode-cloud-to-slack).
+
+- Require an Xcode Cloud build to succeed before it’s possible to merge a pull request. For more information, see [Configuring requirements for merging a pull request](https://developer.apple.com/documentation/xcode/configuring-requirements-for-merging-a-pull-request).
+
+
+### [Create additional workflows in Xcode](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Create-additional-workflows-in-Xcode)
+
+To configure and create additional workflows, or to make changes to an existing one in Xcode:
+
+1. Click the Cloud button in the Report navigator.
+
+2. Control-click your app’s name, or a workflow, and choose Manage Workflows.
+
+3. In the Manage Workflows sheet, double-click a workflow to make changes to it, or add a new workflow using the Add button (+).
+
+
+For more information on creating custom workflows, see [Developing a workflow strategy for Xcode Cloud](https://developer.apple.com/documentation/xcode/developing-a-workflow-strategy-for-xcode-cloud) and [Xcode Cloud workflow reference](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference).
+
+### [Edit and create workflows in App Store Connect](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Edit-and-create-workflows-in-App-Store-Connect)
+
+You need to configure your first Xcode Cloud workflow in Xcode. The deep integration of Xcode Cloud into Xcode enables an integrated development process where you write code, review changes, view build information, and configure workflows. However, teams may have dedicated infrastructure engineers or release managers who aren’t familiar with Xcode. To accommodate them, and to offer you an additional way to configure your workflows and view build information, App Store Connect also deeply integrates with Xcode Cloud.
+
+To view, edit, or create workflows in App Store Connect:
+
+1. Sign in to App Store Connect and go to your app’s page.
+
+2. Click the Xcode Cloud tab.
+
+3. Click Manage Workflows in the sidebar.
+
+4. Click the Add button next to Manage Workflows to create a workflow, or click a workflow to view and edit its settings.
+
+
+By clicking the More button (···) for a workflow, you can also edit, duplicate, deactivate, or delete a workflow.
+
+### [Download and archive build artifacts](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Download-and-archive-build-artifacts)
+
+When Xcode Cloud completes a build for a workflow, it creates a set of artifacts that includes build information, app binaries, symbol information, test results, and more. Xcode Cloud stores artifacts for up to 30 days after it completes a build.
+
+Beyond the need to archive past builds, it’s especially important to download and archive build artifacts for a version of an app that you distribute on the App Store. This is because you may need the symbol information Xcode Cloud creates when it archives your app to diagnose issues using crash reports.
+
+To download build information and artifacts, you can use Xcode or App Store Connect. Alternatively, use the App Store Connect API to automate the task of downloading the build artifacts.
+
+For information on automating Xcode Cloud with the App Store Connect API, see [Xcode Cloud Workflows and Builds](https://developer.apple.com/documentation/AppStoreConnectAPI/xcode-cloud-workflows-and-builds). For information on symbol information and crash reports, see [Diagnosing issues using crash reports and device logs](https://developer.apple.com/documentation/xcode/diagnosing-issues-using-crash-reports-and-device-logs).
+
+## [See Also](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#see-also)
+
+### [Essentials](https://developer.apple.com/documentation/xcode/configuring-your-first-xcode-cloud-workflow\#Essentials)
+
+[About continuous integration and delivery with Xcode Cloud](https://developer.apple.com/documentation/xcode/about-continuous-integration-and-delivery-with-xcode-cloud)
+
+Learn how continuous integration and delivery with Xcode Cloud helps you create high-quality apps and frameworks.
+
+[Setting up your project to use Xcode Cloud](https://developer.apple.com/documentation/xcode/setting-up-your-project-to-use-xcode-cloud)
+
+Review account, project, and source control requirements before configuring your project or workspace to use Xcode Cloud.
+
+Current page is Configuring your first Xcode Cloud workflow
+
+---
+
+
+## 3. Writing custom build scripts {#section-3}
+
+*Source: [https://developer.apple.com/documentation/xcode/writing-custom-build-scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts)*
+
+[Skip Navigation](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts#app-main)
+
+- [Xcode](https://developer.apple.com/documentation/xcode)
+- [Xcode Cloud](https://developer.apple.com/documentation/xcode/xcode-cloud)
+- Writing custom build scripts
+
+Article
+
+# Writing custom build scripts
+
+Extend your Xcode Cloud workflows with custom build scripts that perform custom tasks or install additional tools.
+
+## [Overview](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Overview)
+
+Xcode Cloud leverages your project’s configured schemes and offers settings to create advanced workflows. However, Xcode Cloud workflows can offer even more flexibility to meet your project’s requirements. For example, you might need to install an additional third-party tool to successfully build your project, upload build artifacts to private storage, use a different app icon for nightly builds, and so on.
+
+If you need additional flexibility in your Xcode Cloud workflows, create a _custom build script_ to perform a specific task at a designated time. Xcode Cloud recognizes three different script types:
+
+- A _post-clone script_ that runs after Xcode Cloud clones your Git repository.
+
+- A _pre- `xcodebuild` script_ that runs before Xcode Cloud runs `xcodebuild`.
+
+- A _post- `xcodebuild` script_ that Xcode Cloud runs after running `xcodebuild`.
+
+
+For Xcode Cloud to recognize your custom build scripts, you’ll need to place them at a specific location: the `ci_scripts` directory. Xcode Cloud runs your custom build scripts from this directory. Additionally, name the scripts according to conventions listed below. When it starts a new build, Xcode Cloud recognizes your custom build scripts automatically and runs them for every action.
+
+For additional information about custom build scripts, see [Customize your advanced Xcode Cloud workflows](https://developer.apple.com/videos/play/wwdc2021/10269). For more information on installing a third-party tool, see [Use a custom build script to install a third-party dependency or tool](https://developer.apple.com/documentation/xcode/making-dependencies-available-to-xcode-cloud#Use-a-custom-build-script-to-install-a-third-party-dependency-or-tool).
+
+### [Create the CI scripts directory](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Create-the-CI-scripts-directory)
+
+Custom build scripts reside in a directory named `ci_scripts` that’s located in the same directory as your Xcode project or workspace, and Xcode Cloud runs your custom build scripts with this directory as the root directory.
+
+To create the `ci_scripts` directory:
+
+1. Open your project or workspace in Xcode and navigate to the Project navigator.
+
+2. In the Project navigator, Control-click your project and choose New Group to create the group and its corresponding directory.
+
+3. Name the new group `ci_scripts`.
+
+
+### [Create a custom build script](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Create-a-custom-build-script)
+
+When Xcode Cloud performs an action you’ve added to a workflow, it performs a series of steps. If you add a custom build script, Xcode Cloud runs it at a specific moment between these steps.
+
+The name of a custom script’s corresponding file determines when Xcode Cloud runs the script; only use the following file names for your scripts:
+
+`ci_post_clone.sh`
+
+The post-clone script runs after Xcode Cloud clones your Git repository. You might use a post-clone script to install an additional tool, or to add a new entry to a property list.
+
+`ci_pre_xcodebuild.sh`
+
+The pre- `xcodebuild` script runs before Xcode Cloud runs the `xcodebuild` command. You might use a pre- `xcodebuild` script to compile additional dependencies.
+
+`ci_post_xcodebuild.sh`
+
+The post- `xcodebuild` script runs after Xcode Cloud runs the `xcodebuild` command — even if the `xcodebuild` command fails. You might use a post- `xcodebuild` script to upload artifacts to storage or another service.
+
+![An illustration that shows the different steps Xcode Cloud performs when it performs an action, including the custom build scripts from left to right.](https://docs-assets.developer.apple.com/published/6dc78b269a115b929a161d8daec31be0/Writing-Custom-Build-Scripts-1%402x.png)
+
+To create a custom build script:
+
+1. Open your project or workspace in Xcode and navigate to the Project navigator.
+
+2. Control-click the `ci_scripts` group you created earlier and choose New File.
+
+3. Choose the Shell Script template.
+
+4. Name the shell script `ci_post_clone.sh`, `ci_pre_xcodebuild.sh`, or `ci_post_xcodebuild.sh`.
+
+5. Create the file without adding it to a target.
+
+6. In Terminal, make the shell script an executable by running `chmod +x $filename.sh`.
+
+7. Add code to your custom build script — including a shebang in the first line; for example `#!/bin/sh` — and add it to your Git repository. Xcode Cloud runs it automatically when it starts the next build.
+
+
+Xcode Cloud respects the shebang if the file is executable. If you don’t include a shebang as the first line of your custom script or forget to make the file executable, Xcode Cloud runs the script as `zsh $filename`, which — depending on your script — can cause a failing build.
+
+Files you create with a custom build script aren’t available to other custom build scripts, and Xcode Cloud deletes any files a custom build script creates. As a result, downloadable Xcode Cloud build artifacts don’t include files you create with custom build scripts.
+
+### [Add resources to the CI scripts directory](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Add-resources-to-the-CI-scripts-directory)
+
+Custom build scripts run in a temporary build environment where your source code may not be available. As a result, you need to place all resources your custom scripts access in the `ci_scripts` directory. For example, place artwork or `.plist` files in the directory.
+
+In some cases, a custom build script needs to access a file that’s located in the repository, but placing it in the `ci_scripts` directory isn’t practical. In this case, create a symbolic link to the file in the `ci_scripts` directory. Xcode Cloud detects the symbolic link and makes it available within the `ci_scripts` directory in a subsequent phase of the running action.
+
+### [Access environment variables](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Access-environment-variables)
+
+Environment variables are key to custom scripts because they allow you to write flexible custom scripts with advanced control flows. For example, the following code snippet checks if the `CI_PULL_REQUEST_NUMBER` variable is present to only run a command when Xcode Cloud runs the script as part of a build from a pull request:
+
+```
+#!/bin/sh
+
+if [[ -n $CI_PULL_REQUEST_NUMBER ]];
+then
+    echo "This build started from a pull request."
+
+    # Perform an action only if the build starts from a pull request.
+fi
+
+```
+
+For a list of predefined environment variables, see [Environment variable reference](https://developer.apple.com/documentation/xcode/environment-variable-reference).
+
+### [Define custom environment variables](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Define-custom-environment-variables)
+
+In addition to predefined environment variables, you can define custom environment variables in a workflow’s Environment section. To learn more about configuring custom environment variables, see [Custom environment variables](https://developer.apple.com/documentation/xcode/xcode-cloud-workflow-reference#Custom-environment-variables)
+
+### [Add debug information](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Add-debug-information)
+
+The output of your custom build scripts appears in the build report’s build logs. Log information that may be helpful when you debug a custom build script. However, never log sensitive information like API keys or access tokens in your shell script output unless you use a secret custom environment variable. If you mark a custom environment variable to be a secret, Xcode Cloud replaces its value with asterisks ( `**********`) in build logs.
+
+### [Write resilient scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Write-resilient-scripts)
+
+Custom build scripts can perform critical tasks like installing dependencies or uploading build artifacts to storage. Write resilient code that handles errors gracefully, and, if a command fails, return a nonzero exit code. By returning a nonzero exit code in your custom build script, you let Xcode Cloud know that something went wrong and let it fail the build to let you know that there’s an issue.
+
+The following build script sets the `-e` option to stop the script if a command exits with a nonzero exit code. Additionally, return a nonzero exit code in case something goes wrong:
+
+```
+#!/bin/sh
+
+# Set the -e flag to stop running the script in case a command returns
+# a nonzero exit code.
+set -e
+
+# A command or script succeeded.
+echo "A command or script was successful."
+exit 0
+
+...
+
+# Something went wrong.
+echo "Something went wrong. Include helpful information here."
+exit 1
+
+```
+
+### [Use helper scripts in complex custom build scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Use-helper-scripts-in-complex-custom-build-scripts)
+
+If your repository contains more than one project, you’ll likely need to configure several Xcode Cloud workflows. Because Xcode Cloud only recognizes one `ci_scripts` directory in your repository — and that directory can only contain the three custom build scripts — you’ll need to add _helper scripts_. Helper scripts are shell scripts you place in the `ci_scripts` directory that you can use to split up the tasks of the default build scripts.
+
+You can use the helper scripts to create a more flexible build environment, where you offload most of the logic you want Xcode Cloud to perform in a custom build script into a separate shell script file. For example, you might use environment variables to determine which Xcode Cloud workflow runs the build script, what started the build, the platform of the running build, and so on, to run logic only when applicable.
+
+When it comes to naming your helper scripts, use a filename that makes it easy to recognize the script’s purpose. For example, you might prefix helper scripts with the name of their intended platform and name the following script `platform-detect.sh` because it uses the `CI_PRODUCT_PLATFORM` variable to detect the platform for the current build:
+
+```
+#!/bin/sh
+
+if [ $CI_PRODUCT_PLATFORM = 'macOS' ]
+then
+    ./macos_perform_example_task.sh
+else
+    ./iOS_perform_example_task.sh
+fi
+
+```
+
+To help make your helper scripts more recognizable, you should avoid prefixing the script names with `ci_`.
+
+## [See Also](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#see-also)
+
+### [Custom build scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts\#Custom-build-scripts)
+
+[Environment variable reference](https://developer.apple.com/documentation/xcode/environment-variable-reference)
+
+Review predefined environment variables you use in custom build scripts.
+
+Current page is Writing custom build scripts
+
+---
+
+
+## 4. Environment variable reference {#section-4}
+
+*Source: [https://developer.apple.com/documentation/xcode/environment-variable-reference](https://developer.apple.com/documentation/xcode/environment-variable-reference)*
+
+[Skip Navigation](https://developer.apple.com/documentation/xcode/environment-variable-reference#app-main)
+
+- [Xcode](https://developer.apple.com/documentation/xcode)
+- [Xcode Cloud](https://developer.apple.com/documentation/xcode/xcode-cloud)
+- Environment variable reference
+
+Article
+
+# Environment variable reference
+
+Review predefined environment variables you use in custom build scripts.
+
+## [Overview](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Overview)
+
+With custom workflows, you can tailor Xcode Cloud to your needs. When you create a custom workflow, you configure the temporary build environment Xcode Cloud uses, start conditions, actions, and other settings. However, you may need to perform custom tasks, for example, installing a third-party tool or uploading a build’s artifacts to your server. To achieve this, Xcode Cloud supports running custom shell scripts, referred to as _custom build scripts_.
+
+Xcode Cloud includes a set of predefined environment variables that you can use to write flexible custom build scripts with advanced control flows. For example, access the `CI_XCODEBUILD_ACTION` variable in your script to determine which action is running and use this information to run a specific command. You can also use the absence of a variable to change your custom build script’s control flow.
+
+For more information on using custom build scripts and accessing environment variables, see [Writing custom build scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts).
+
+### [Variables that are always available](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variables-that-are-always-available)
+
+The following environment variables are available every time Xcode Cloud starts a build, no matter which actions or start conditions you configure for a workflow:
+
+`CI`
+
+A Boolean value that evaluates to `TRUE` when the custom build script runs in Xcode Cloud. Use it to only run the build script when Xcode Cloud builds your project or workspace. See also `CI_XCODE_CLOUD`.
+
+`CI_BUILD_ID`
+
+A string that uniquely identifies the current build, for example, `12345678-ABCD-DEFG-1234-012345ABCDEF`.
+
+`CI_BUILD_NUMBER`
+
+The number of the current build, for example, `42`.
+
+`CI_BUILD_URL`
+
+A URL to the Xcode Cloud build in App Store Connect.
+
+`CI_BUNDLE_ID`
+
+The bundle ID of the product, for example, `com.example.appname`.
+
+`CI_COMMIT`
+
+The Git commit hash that Xcode Cloud uses for the current build.
+
+`CI_DERIVED_DATA_PATH`
+
+The path to the directory that contains your project’s derived data.
+
+`CI_PRIMARY_REPOSITORY_PATH`
+
+The location of the source code in the temporary build environment cloned from the primary repository specified in the workflow, for example, `/Volumes/workspace/repository`.
+
+`CI_PRODUCT`
+
+The name of the workflow’s product.
+
+`CI_PRODUCT_ID`
+
+A string that uniquely identifies the product, for example, `12345678-ABCD-DEFG-1234-012345ABCDEF`. Use it to distinguish between products in the same project or workspace.
+
+`CI_PRODUCT_PLATFORM`
+
+The platform ( `iOS`, `macOS`, `tvOS`, or `watchOS`) for the current action.
+
+`CI_PROJECT_FILE_PATH`
+
+The path to the Xcode project or workspace in the temporary build environment.
+
+`CI_START_CONDITION`
+
+The start condition that started the build. Available values are `manual`, `manual_rebuild`, `push`, `pr_open`, `pr_update`, and `schedule`.
+
+`CI_TEAM_ID`
+
+The ID of your Apple Development team, for example, `ABCDE12345`.
+
+`CI_WORKFLOW`
+
+The name of the workflow, for example, `Default Workflow`. Use this variable to run commands only for a specific workflow.
+
+`CI_WORKFLOW_ID`
+
+A string that uniquely identifies the workflow, for example, `12345678-ABCD-DEFG-1234-012345ABCDEF`.
+
+`CI_WORKSPACE_PATH`
+
+The location of the workspace used for cloning source code and storing artifacts, for example, `/Volumes/workspace`.
+
+`CI_XCODE_CLOUD`
+
+A Boolean value that evaluates to `TRUE` when the custom build script runs in Xcode Cloud. Use it to only run the script content when Xcode Cloud builds your project or workspace.
+
+`CI_XCODE_PROJECT`
+
+The name of the Xcode project or workspace.
+
+`CI_XCODE_SCHEME`
+
+The scheme that the current action uses.
+
+`CI_XCODEBUILD_ACTION`
+
+The `xcodebuild` command that Xcode Cloud is about to perform. Possible values are `analyze`, `archive`, `build`, `build-for-testing`, and `test-without-building`.
+
+`CI_XCODEBUILD_EXIT_CODE`
+
+The exit code of the `xcodebuild` command. This variable is available after Xcode Cloud runs an action’s corresponding `xcodebuild` command. An exit code of `0` indicates that the `xcodebuild` command succeeded.
+
+### [Variables for specific start conditions](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variables-for-specific-start-conditions)
+
+The availability of the following environment variables depends on the workflow’s start condition you configure. For example, the `CI_PULL_REQUEST_NUMBER` variable is only available if the Pull Request Change start condition started the build.
+
+#### [Variable for branch changes](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variable-for-branch-changes)
+
+`CI_BRANCH`
+
+The name of the source branch that Xcode Cloud checked out for the current build, for example, `main`.
+
+#### [Variable for tag changes](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variable-for-tag-changes)
+
+`CI_TAG`
+
+The name of the tag that Xcode Cloud checked out for the current build, for example, `release-1.1`.
+
+#### [Variable for branch changes and tag changes](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variable-for-branch-changes-and-tag-changes)
+
+`CI_GIT_REF`
+
+The canonical Git reference that contains the `CI_COMMIT`, for example, `refs/heads/bug-fix` for a build from the `bug-fix` branch and `refs/tags/release-1.0` from the `release-1.0` tag.
+
+#### [Variables for pull request changes](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variables-for-pull-request-changes)
+
+`CI_PULL_REQUEST_HTML_URL`
+
+The URL to the pull request’s website.
+
+`CI_PULL_REQUEST_NUMBER`
+
+The pull request’s number, for example, `42`.
+
+`CI_PULL_REQUEST_SOURCE_BRANCH`
+
+The pull request’s source branch, for example, `feature/feature-12345`.
+
+`CI_PULL_REQUEST_SOURCE_COMMIT`
+
+The Git commit hash of a pull request’s source. It’s the same value as `CI_COMMIT`.
+
+`CI_PULL_REQUEST_SOURCE_REPO`
+
+The full name of a pull request’s source repository, for example, `example/fork-of-example-framework`. If the pull request involves only one repository, the variable’s value is the same as `CI_PULL_REQUEST_TARGET_REPO`.
+
+`CI_PULL_REQUEST_TARGET_BRANCH`
+
+The pull request’s target branch, for example, `main`.
+
+`CI_PULL_REQUEST_TARGET_COMMIT`
+
+The most recent Git commit hash of the pull request’s target branch. The CI service tests your changes against the merge of `CI_PULL_REQUEST_TARGET_COMMIT` and `CI_PULL_REQUEST_SOURCE_COMMIT`.
+
+`CI_PULL_REQUEST_TARGET_REPO`
+
+The full name of the pull request’s target repository, for example, `example/original-repository-of-example-framework`. If the pull request involves only one repository, the variable’s value is the same as `CI_PULL_REQUEST_SOURCE_REPO`.
+
+### [Variables for specific actions](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variables-for-specific-actions)
+
+The availability of the following environment variables depends on the action Xcode Cloud performs. For example, the `CI_ARCHIVE_PATH` variable is only available when Xcode Cloud performs an archive action.
+
+#### [Variables for test actions](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variables-for-test-actions)
+
+`CI_RESULT_BUNDLE_PATH`
+
+The path to the test action’s result bundle ( `.xcresult`).
+
+`CI_TEST_DESTINATION_DEVICE_TYPE`
+
+The device type of the simulated device you choose as the test action’s destination, for example, `iPhone 11`.
+
+`CI_TEST_DESTINATION_RUNTIME`
+
+The OS version of the simulated device you choose as the test action’s destination, for example, `iOS 13.0`.
+
+`CI_TEST_DESTINATION_UDID`
+
+A string that uniquely identifies the simulated device you choose as the test action’s destination.
+
+`CI_TEST_PLAN`
+
+The name of the test plan that the test action uses. This variable is only available if you use test plans.
+
+`CI_TEST_PRODUCTS_PATH`
+
+The path to the directory that contains your project’s test products that Xcode Cloud creates.
+
+#### [Variables for archive actions](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Variables-for-archive-actions)
+
+`CI_AD_HOC_SIGNED_APP_PATH`
+
+The path to an exported archive that’s code-signed for Ad Hoc distribution.
+
+`CI_APP_STORE_SIGNED_APP_PATH`
+
+The path to an exported archive that’s code-signed for TestFlight distribution and eligible for release on the App Store.
+
+`CI_ARCHIVE_PATH`
+
+The path to the exported app archive that Xcode Cloud creates when it runs an archive action.
+
+`CI_DEVELOPMENT_SIGNED_APP_PATH`
+
+The path to an exported app archive that’s code-signed for development distribution.
+
+`CI_DEVELOPER_ID_SIGNED_APP_PATH`
+
+The path to an exported app archive that’s code-signed using the Developer ID certificate. Use Developer ID signing only for Mac apps distributed outside the Mac App Store. For more information, see [Developer ID](https://developer.apple.com/developer-id/).
+
+## [See Also](https://developer.apple.com/documentation/xcode/environment-variable-reference\#see-also)
+
+### [Custom build scripts](https://developer.apple.com/documentation/xcode/environment-variable-reference\#Custom-build-scripts)
+
+[Writing custom build scripts](https://developer.apple.com/documentation/xcode/writing-custom-build-scripts)
+
+Extend your Xcode Cloud workflows with custom build scripts that perform custom tasks or install additional tools.
+
+Current page is Environment variable reference
+
+---
+
+
+## 5. The page you're looking for can't be found. {#section-5}
+
+*Source: [https://developer.apple.com/documentation/xcode/integrating-with-other-services](https://developer.apple.com/documentation/xcode/integrating-with-other-services)*
+
+[Skip Navigation](https://developer.apple.com/documentation/xcode/integrating-with-other-services#app-main)
+
+# The page you're looking for can't be found.
+
+Search developer.apple.comSearch Icon
+
+---

@@ -1,0 +1,610 @@
+---
+title: Bitrise Complete Pipeline Reference
+provider: Bitrise
+description: Mobile-focused CI/CD platform
+generated_at: 2025-07-08T13:42:56.293Z
+pages_included: 4
+---
+
+# Bitrise Complete Pipeline Reference
+
+Mobile-focused CI/CD platform - Complete documentation for mobile CI/CD pipelines.
+
+## Table of Contents
+
+
+1. [Builds](#section-1)
+2. [Steps and Workflows](#section-2)
+3. [Bitrise YAML Basics](#section-3)
+4. [Workflow Reference](#section-4)
+
+
+---
+
+
+## 1. Builds {#section-1}
+
+*Source: [https://devcenter.bitrise.io/en/builds.html](https://devcenter.bitrise.io/en/builds.html)*
+
+[Skip to main content](https://devcenter.bitrise.io/en/builds.html#content-wrapper)
+
+```
+
+```
+
+[Advanced search](https://devcenter.bitrise.io/search.html)
+
+EN
+
+- [EN](https://devcenter.bitrise.io/en/builds.html)
+- [日本語](https://devcenter.bitrise.io/ja/builds.html)
+
+- [Go to Support](https://support.bitrise.io/en/)
+- [Start for free](https://app.bitrise.io/users/sign_up)
+
+_print_
+
+Toggle navigation
+
+- [Prev](https://devcenter.bitrise.io/en/connectivity/bitrise-mcp.html)
+- [Next](https://devcenter.bitrise.io/en/builds/configuration-yaml.html)
+
+- [Home](https://devcenter.bitrise.io/)
+- Builds
+
+# Builds
+
+Abstract
+
+
+A Bitrise build is specified by the project’s Workflow which is a collection of Steps. The project’s build configuration can be modified in the bitrise.yml file or in the graphical Workflow Editor.
+
+A Bitrise build is a series of jobs, specified by the project’s [Workflow](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N62a1dd5315b38 "") which is a collection
+of [Steps](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N629f741be4d32 ""). The project’s build configuration is specified in the [bitrise.yml configuration file](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html "Storing an app's configuration YAML") which you can modify in [bitrise.io](https://www.bitrise.io/)’s graphical Workflow Editor or locally. The file can be stored
+on [bitrise.io](https://www.bitrise.io/) or [in your app's Git\\
+repository](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html#storing-the-bitrise-yml-file-in-your-repository "Storing the bitrise.yml file in your repository").
+
+When a build is running, the scripts that define the Steps will be executed in the order you’ve defined in your Workflow, with the input parameters you set. They can produce multiple different outputs that other Steps can use, including but not limited to executable binaries, screenshots, test reports, variables, and so
+on.
+
+The build process is the following:
+
+1. [Starting the build](https://devcenter.bitrise.io/en/builds/starting-builds.html "Starting builds"), either manually or by an automatic trigger.
+
+2. Environment preparation: A virtual machine will be provisioned and prepared to run the build. Build specific [Environment Variables](https://devcenter.bitrise.io/en/builds/environment-variables.html "Environment Variables") are preset so you can use these in your Steps. You can find more information
+    about the available stacks in the Workflow Editor, on the **Stack** tab.
+
+3. Workflow execution: Steps in Workflows are executed in the same order as defined in the Workflow Editor of your application, from top to bottom. You can reorder the Steps by dragging them around. The log each Step generates will be displayed on the build’s details page.
+
+4. Cleanup: After the execution of the build, a build log is created and stored on the Bitrise server. The [virtual machine running the build](https://devcenter.bitrise.io/en/infrastructure/build-machines.html "Build machines") is destroyed so your code/files will never fall into the wrong hands.
+
+
+
+### Build retention for 200 days
+
+
+
+On the **Builds** page of your app, we only show builds from the last 200 days. The same limit applies if you are [searching for specific builds](https://devcenter.bitrise.io/en/builds/finding-a-specific-build.html "Finding a specific build") on the page. This
+limitation also applies to most API calls: the `GET/apps/{app-slug}/builds` endpoint and related endpoints can only return builds from the last 200 days.
+
+
+
+However, there are two methods to get a build that is older than 200 days:
+
+
+
+
+
+- If you know the exact build URL, you can access the build.
+
+- You can use the `GET/apps/{app-slug}/archived-builds` API endpoint: [Listing the archived builds of an\\
+app](https://devcenter.bitrise.io/en/api/managing-an-app-s-builds.html#listing-the-archived-builds-of-an-app "Listing the archived builds of an app").
+
+
+After the build has finished, users can be [notified via email](https://devcenter.bitrise.io/en/builds/configuring-build-settings/configuring-email-notifications.html "Configuring email notifications"), or you can [set up your own Slack integration](https://devcenter.bitrise.io/en/builds/configuring-build-settings/configuring-slack-integration.html "Sending Slack messages in a build"), for example.
+
+In this section:
+
+- [Configuration YAML](https://devcenter.bitrise.io/en/builds/configuration-yaml.html)
+- [Configuring build settings](https://devcenter.bitrise.io/en/builds/configuring-build-settings.html)
+- [Starting builds](https://devcenter.bitrise.io/en/builds/starting-builds.html)
+- [Managing build files](https://devcenter.bitrise.io/en/builds/managing-build-files.html)
+- [Environment Variables](https://devcenter.bitrise.io/en/builds/environment-variables.html)
+- [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html)
+- [Build\\
+statuses](https://devcenter.bitrise.io/en/builds/build-statuses.html)
+- [Installing tools during a build](https://devcenter.bitrise.io/en/builds/installing-tools-during-a-build.html)
+- [Finding a specific build](https://devcenter.bitrise.io/en/builds/finding-a-specific-build.html)
+- [Build numbering and app versioning](https://devcenter.bitrise.io/en/builds/build-numbering-and-app-versioning.html)
+- [Build data and troubleshooting](https://devcenter.bitrise.io/en/builds/build-data-and-troubleshooting.html)
+- [Build Annotations](https://devcenter.bitrise.io/en/builds/build-annotations.html)
+
+A Workflow is a collection of Steps, Environment Variables, and other configurations. When Bitrise starts a build, it runs one or more Workflows according to the configuration defined in the `bitrise.yml` file.
+
+A Step is a block of script execution that encapsulates a build task on Bitrise: the code to perform that task, the inputs and parameters you can define for the task, and the outputs the task generates.
+
+_app_ _project_ _trigger_ _application_ _app_ _app_ _app_ _project_ _stack_
+
+## Search results
+
+No results found
+
+[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
+
+- [Prev](https://devcenter.bitrise.io/en/connectivity/bitrise-mcp.html)
+- [Next](https://devcenter.bitrise.io/en/builds/configuration-yaml.html)
+
+---
+
+
+## 2. Steps and Workflows {#section-2}
+
+*Source: [https://devcenter.bitrise.io/en/steps-and-workflows.html](https://devcenter.bitrise.io/en/steps-and-workflows.html)*
+
+[Skip to main content](https://devcenter.bitrise.io/en/steps-and-workflows.html#content-wrapper)
+
+```
+
+```
+
+[Advanced search](https://devcenter.bitrise.io/search.html)
+
+EN
+
+- [EN](https://devcenter.bitrise.io/en/steps-and-workflows.html)
+- [日本語](https://devcenter.bitrise.io/ja/steps-and-workflows.html)
+
+- [Go to Support](https://support.bitrise.io/en/)
+- [Start for free](https://app.bitrise.io/users/sign_up)
+
+_print_
+
+Toggle navigation
+
+- [Prev](https://devcenter.bitrise.io/en/apps/creating-white-label-app-versions.html)
+- [Next](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html)
+
+- [Home](https://devcenter.bitrise.io/)
+- Workflows and Pipelines
+
+# Workflows and Pipelines
+
+Abstract
+
+
+Steps, Workflows, and Pipelines are the heart of how Bitrise works. A Bitrise build is simply a series of Steps, defined in a Workflow, executed by the Bitrise CLI on our virtual machines (or your own). A Pipeline is a collection of Workflows, organised in Stages.
+
+[Steps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html "Steps") and [Workflows](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html "Workflows") are the heart of how Bitrise works. A Bitrise build is simply a series of Steps,
+defined in a Workflow, executed by the Bitrise CLI on [our virtual machines](https://devcenter.bitrise.io/en/infrastructure/build-machines.html "Build machines") (or your own).
+
+A Step contains the code that performs the build task. You can configure the [inputs](https://devcenter.bitrise.io/en/steps-and-workflows/developing-your-own-bitrise-step/developing-a-new-step.html#step-inputs-72137 "Step inputs") and parameters that define the task, and view and reuse the outputs a Step
+generates.
+
+When a build of an _app_ is running, the Steps will be executed in the order that is defined in the Workflow.
+
+You can easily move Steps around in a Workflow, you can [chain different Workflows together](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/managing-workflows.html#chaining-workflows-together "Chaining Workflows together"), and you can configure your app so that different
+branches or code events trigger builds with different Workflows.
+
+You can execute multiple Workflows in parallel in a [Pipeline](https://devcenter.bitrise.io/en/steps-and-workflows/build-pipelines/pipelines-with-stages.html "Pipelines with stages"). Pipelines are the highest level of the Bitrise CI/CD configuration. In a Pipeline, Workflows are configured in a dependency
+graph, and Workflows on the same level are executed in parallel.
+
+In this section:
+
+- [Workflows](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html)
+- [Steps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html)
+- [Pipelines](https://devcenter.bitrise.io/en/steps-and-workflows/build-pipelines.html)
+- [Developing your own Bitrise Step](https://devcenter.bitrise.io/en/steps-and-workflows/developing-your-own-bitrise-step.html)
+
+See also:
+
+- [Build machine types](https://devcenter.bitrise.io/en/infrastructure/build-machines/build-machine-types.html "Build machine types")
+- [Workflow recipes for Android apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-android-apps.html "Workflow recipes for Android apps")
+- [Workflow recipes for iOS apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-ios-apps.html "Workflow recipes for iOS apps")
+- [Workflow recipes for cross-platform apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-cross-platform-apps.html "Workflow recipes for cross-platform apps")
+- [Step inputs](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/step-inputs.html "Step inputs")
+- [Storing an app's configuration YAML](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html "Storing an app's configuration YAML")
+- [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html "Secrets")
+- [Basics of configuration YAML](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html "Basics of configuration YAML")
+- [Customizing your configuration YAML](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html "Customizing your configuration YAML")
+- [Workflow reference](https://devcenter.bitrise.io/en/references/workflows-reference.html "Workflow reference")
+
+_app_ _app_ _apps_ _Workflows_ _app_ _app_ _app_ _app_ _project scanner_
+
+## Search results
+
+No results found
+
+[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
+
+- [Prev](https://devcenter.bitrise.io/en/apps/creating-white-label-app-versions.html)
+- [Next](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html)
+
+---
+
+
+## 3. Bitrise YAML Basics {#section-3}
+
+*Source: [https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html)*
+
+[Skip to main content](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html#content-wrapper)
+
+```
+
+```
+
+[Advanced search](https://devcenter.bitrise.io/search.html)
+
+EN
+
+- [EN](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html)
+- [日本語](https://devcenter.bitrise.io/ja/references/basics-of-bitrise-yml.html)
+
+- [Go to Support](https://support.bitrise.io/en/)
+- [Start for free](https://app.bitrise.io/users/sign_up)
+
+_print_
+
+Toggle navigation
+
+- [Prev](https://devcenter.bitrise.io/en/references.html)
+- [Next](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
+
+- [Home](https://devcenter.bitrise.io/)
+- [References](https://devcenter.bitrise.io/en/references.html)
+- Basics of configuration YAML
+
+# Basics of configuration YAML
+
+Abstract
+
+
+The `bitrise.yml` file is the heart of your Bitrise configuration. The Bitrise CLI needs this file to be able to run Bitrise builds, either locally or on our website.
+
+Your Bitrise configuration is defined in one or more YAML files. The [Bitrise CLI](https://devcenter.bitrise.io/en/bitrise-cli.html "Bitrise CLI") needs a configuration YAML file to be able to run Bitrise builds, either locally or on our website.
+
+The default configuration YAML file is called `bitrise.yml`. A bare minimal `bitrise.yml` is as simple as:
+
+```
+format_version: 11Copy
+```
+
+The above configuration is valid but does not include anything to execute with `run`.
+
+A minimal configuration which you can `bitrise run`:
+
+```
+format_version: 5
+workflows:
+  test:Copy
+```
+
+The above configuration can be executed with `bitrise run test`. The Bitrise CLI won’t give you any errors, but there’s still nothing declared to do.
+
+Let’s continue with an example that executes a single **Script** [Step](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N629f741be4d32 "")
+when you run it with `bitrise run test`.
+
+```
+format_version: 11
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: android
+app:
+  envs:
+  - MY_NAME: My Name
+workflows:
+  test:
+    steps:
+    - script@1.1.5:
+        inputs:
+        - content: echo "Hello ${MY_NAME}!"Copy
+```
+
+A quick walk through of this sample configuration:
+
+- `format_version` : declares the minimum Bitrise CLI format version. Get your Bitrise CLI’s supported highest format version with `bitrise version --full`.
+
+
+
+### Format version number
+
+
+
+The format version number determines what Bitrise CLI versions will be able to run the configuration. For example, if you set the `format_version` to `11` that means that Bitrise CLI versions which don’t support the format version `11` or higher
+won’t be able to run the configuration. This is important if you use features which are not available in older Bitrise CLI versions.
+
+- `default_step_lib_source` : specifies the source to use when no other source is defined for a Step.
+
+- `project_type` : defines your source project’s type (for example, `android`, `ios`, `flutter`).
+
+- `app` \- `envs` : specifies the [Environment Variables](https://devcenter.bitrise.io/en/builds/environment-variables.html "Environment Variables") (Env Var) which will be available for every build, workflow and step.
+
+- `workflows` : is the collection of separate build configurations which you can run with `bitrise run WORKFLOWID`.
+
+In our example the only workflow is `test`, which you can perform with `bitrise run test`. If you’d have a second workflow called `main`, you could run both `bitrise run test` and `bitrise run
+                          main`.
+
+- `steps` : lists the [Steps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html "Steps") which should be executed when the Workflow is run.
+
+In our example the `test` workflow includes only a single `script` Step. If multiple Steps are declared, they are performed one by one.
+
+- `script@1.1.5` : a Step (reference) to perform. This reference does not have a StepLib Source declaration, which means that the `default_step_lib_source` will be used as the StepLib Source.
+
+- `inputs` : specifies Step inputs.
+
+
+
+### Multiple inputs
+
+
+
+A Step can have many inputs. Specify only those input in the bitrise.yml which you want to set or overwrite.
+
+- `content` : the input you want to set.
+
+In our example, we specified the content of the Script Step.
+
+- `echo "Hello ${MY_NAME}!"` : this is the **value** we specified for the `content` input.
+
+
+### bitrise.yml size limitation
+
+If you edit your Workflow on [bitrise.io](https://www.bitrise.io/) (either in the [Workflow Editor](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N62c82c8b550b1 "") or on the **bitrise.yml** tab) and your `bitrise.yml` exceeds its size limitation, the UI will display the following warning upon trying to save your changes:
+
+```
+Error saving! Error saving app config: Validation failed: App config validation 784: unexpected token at 'Argument list too long - bin/bitriseCopy
+```
+
+This is because the total, combined size of the `bitrise.yml` and the `bitrise.secrets.yml` file cannot exceed 400KB.
+
+See also:
+
+- [Build machine types](https://devcenter.bitrise.io/en/infrastructure/build-machines/build-machine-types.html "Build machine types")
+- [Workflows and Pipelines](https://devcenter.bitrise.io/en/steps-and-workflows.html "Workflows and Pipelines")
+- [Workflow recipes for Android apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-android-apps.html "Workflow recipes for Android apps")
+- [Workflow recipes for iOS apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-ios-apps.html "Workflow recipes for iOS apps")
+- [Workflow recipes for cross-platform apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-cross-platform-apps.html "Workflow recipes for cross-platform apps")
+- [Steps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html "Steps")
+- [Step inputs](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/step-inputs.html "Step inputs")
+- [Storing an app's configuration YAML](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html "Storing an app's configuration YAML")
+- [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html "Secrets")
+- [Customizing your configuration YAML](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html "Customizing your configuration YAML")
+- [Workflow reference](https://devcenter.bitrise.io/en/references/workflows-reference.html "Workflow reference")
+
+A Step is a block of script execution that encapsulates a build task on Bitrise: the code to perform that task, the inputs and parameters you can define for the task, and the outputs the task generates.
+
+The Bitrise Workflow Editor allows you to edit your Workflows, configure Steps, upload files (including code signing files) and manage your app's triggers and stacks on a graphical user interface. It is available both online and [offline](https://devcenter.bitrise.io/en/bitrise-cli/installing-and-upgrading-the-offline-workflow-editor.html "Installing and upgrading the offline Workflow Editor").
+
+## Search results
+
+No results found
+
+[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
+
+- [Prev](https://devcenter.bitrise.io/en/references.html)
+- [Next](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
+
+---
+
+
+## 4. Workflow Reference {#section-4}
+
+*Source: [https://devcenter.bitrise.io/en/references/workflows-reference.html](https://devcenter.bitrise.io/en/references/workflows-reference.html)*
+
+[Skip to main content](https://devcenter.bitrise.io/en/references/workflows-reference.html#content-wrapper)
+
+```
+
+```
+
+[Advanced search](https://devcenter.bitrise.io/search.html)
+
+EN
+
+- [EN](https://devcenter.bitrise.io/en/references/workflows-reference.html)
+- [日本語](https://devcenter.bitrise.io/ja/references/workflows-reference.html)
+
+- [Go to Support](https://support.bitrise.io/en/)
+- [Start for free](https://app.bitrise.io/users/sign_up)
+
+_print_
+
+Toggle navigation
+
+- [Prev](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
+- [Next](https://devcenter.bitrise.io/en/references/steps-reference.html)
+
+- [Home](https://devcenter.bitrise.io/)
+- [References](https://devcenter.bitrise.io/en/references.html)
+- Workflow reference
+
+# Workflow reference
+
+### All bitrise.yml properties
+
+You can find the complete list of available properties in the [bitrise.yml format specification / reference](https://github.com/bitrise-io/bitrise/blob/master/_docs/bitrise-yml-format-spec.md) docs of the CLI.
+
+A [Workflow](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N62a1dd5315b38 "") is a collection of [Steps](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N629f741be4d32 ""), [Environment Variables](https://devcenter.bitrise.io/en/builds/environment-variables.html "Environment Variables"), and other configurations
+for a single `bitrise run` command.
+
+The only requirement for a Workflow is an ID. As an example, in this configuration we declared one Workflow with the ID `test`.
+
+```
+format_version: 1.3.1
+workflows:
+  test:
+Copy
+```
+
+You can define multiple Workflows and run a specific Workflow with `bitrise run WORKFLOWID`.
+
+Defining two Workflows:
+
+```
+format_version: 1.3.1
+workflows:
+  first:
+  second:Copy
+```
+
+List all available Workflows in a `bitrise.yml` file:
+
+```
+bitrise runCopy
+```
+
+Or, alternatively:
+
+```
+bitrise workflowsCopy
+```
+
+To add Steps to a Workflow simply include `steps:` and then add the Step(s).
+
+```
+format_version: 11
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  test:
+    steps:
+    - script:
+        title: First step
+    - script:
+        title: Second stepCopy
+```
+
+You can define Workflow-specific parameters and Environment Variables. A Workflow’s Environment Variables are used when the Workflow is executed, and are available for every Step in the Workflow:
+
+```
+format_version: 11
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  test:
+    envs:
+    - ENV_VAR_ONE: first value
+    - ENV_VAR_TWO: second valueCopy
+```
+
+You can chain Workflows to run multiple Workflows before and/or after a specific Workflow.
+
+```
+format_version: 1.3.1
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+workflows:
+  send-notifications:
+    steps:
+    # send notifications
+
+  setup:
+    steps:
+    # setup Steps to run
+
+  test:
+    before_run:
+    - setup
+    envs:
+    - IS_TEST: "true"
+    steps:
+    # test Steps to run
+
+  ci:
+    before_run:
+    - test
+    after_run:
+    - send-notifications
+
+  deploy:
+    before_run:
+    - test
+    steps:
+    # steps to deploy
+    after_run:
+    - send-notifications
+         Copy
+```
+
+Based on the above example, if you run:
+
+- `bitrise run send-notifications`: only the Steps of the `send-notifications` workflow will be executed.
+
+- `bitrise run setup` : only the Steps of the `setup` Workflow will be executed.
+
+- `bitrise run test` : first the Steps of the `setup` Workflow will be executed, then the Steps declared in `test` Workflow.
+
+- `bitrise run ci`: will execute the Steps of the Workflows in the following order:
+
+
+
+1. `setup`
+
+2. `test`
+
+3. `ci` (the `ci` Workflow doesn’t have any Steps, but that’s not an issue. It just means that no Step will be executed here and the build will continue with the next Workflow in the chain).
+
+4. `send-notifications`
+
+
+- `bitrise run deploy`: will execute the Steps of the Workflows in the following order:
+
+
+
+1. `setup`
+
+2. `test`
+
+3. `deploy`
+
+4. `send-notifications`
+
+
+This means that you can define what a `setup` and `test` should do in your project in the `setup` and `test` Workflows only once, and then you can reuse those in other Workflows. There’s no need to duplicate Steps between
+Workflows.
+
+The Bitrise CLI supports a small notation, called utility Workflow: a Workflow whose ID starts with an underscore character, for example, `_setup`. A utility Workflow can't be executed directly with a `bitrise run` command: they can be referenced with `before_run` and `after_run` properties.
+
+You can find utility Workflows at the end of the Workflow list if you run `bitrise run` or `bitrise workflows`:
+
+```
+The following workflows are available:
+ * ci
+ * deploy
+
+You can run a selected workflow with:
+$ bitrise run WORKFLOW-ID
+
+The following utility workflows are defined:
+ * _send-notifications
+ * _setup
+ * _test
+Copy
+```
+
+See also:
+
+- [Build machine types](https://devcenter.bitrise.io/en/infrastructure/build-machines/build-machine-types.html "Build machine types")
+- [Workflows and Pipelines](https://devcenter.bitrise.io/en/steps-and-workflows.html "Workflows and Pipelines")
+- [Workflow recipes for Android apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-android-apps.html "Workflow recipes for Android apps")
+- [Workflow recipes for iOS apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-ios-apps.html "Workflow recipes for iOS apps")
+- [Workflow recipes for cross-platform apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-cross-platform-apps.html "Workflow recipes for cross-platform apps")
+- [Steps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html "Steps")
+- [Step inputs](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/step-inputs.html "Step inputs")
+- [Storing an app's configuration YAML](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html "Storing an app's configuration YAML")
+- [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html "Secrets")
+- [Basics of configuration YAML](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html "Basics of configuration YAML")
+- [Customizing your configuration YAML](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html "Customizing your configuration YAML")
+
+A Workflow is a collection of Steps, Environment Variables, and other configurations. When Bitrise starts a build, it runs one or more Workflows according to the configuration defined in the `bitrise.yml` file.
+
+A Step is a block of script execution that encapsulates a build task on Bitrise: the code to perform that task, the inputs and parameters you can define for the task, and the outputs the task generates.
+
+## Search results
+
+No results found
+
+[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
+
+- [Prev](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
+- [Next](https://devcenter.bitrise.io/en/references/steps-reference.html)
+
+---

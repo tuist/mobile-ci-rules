@@ -1,0 +1,115 @@
+name: Update Mobile CI Documentation
+
+on:
+  schedule:
+    # Run every Sunday at 3 AM UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: 'Specific provider to update (optional)'
+        required: false
+        type: choice
+        options:
+          - 'all'
+          - 'bitrise'
+          - 'codemagic'
+          - 'circleci'
+          - 'github-actions'
+          - 'gitlab-ci'
+          - 'appcircle'
+          - 'azure-devops'
+          - 'jenkins'
+          - 'xcode-cloud'
+          - 'firebase-app-distribution'
+        default: 'all'
+
+jobs:
+  update-documentation:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run documentation scraper
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: |
+          if [ "${{ github.event.inputs.provider }}" == "all" ] || [ -z "${{ github.event.inputs.provider }}" ]; then
+            npm run scrape:comprehensive
+          else
+            npm run scrape:comprehensive ${{ github.event.inputs.provider }}
+          fi
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Files changed:"
+            git status --porcelain
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
+          fi
+
+      - name: Create timestamp
+        id: timestamp
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git commit -m "📚 Update mobile CI documentation - ${{ steps.timestamp.outputs.date }}"
+          git push
+
+      - name: Create summary
+        if: steps.changes.outputs.changes == 'true'
+        run: |
+          echo "## Documentation Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** ${{ steps.timestamp.outputs.date }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Provider:** ${{ github.event.inputs.provider || 'all' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Changed Files:" >> $GITHUB_STEP_SUMMARY
+          git show --name-only --pretty="" HEAD | while read file; do
+            echo "- $file" >> $GITHUB_STEP_SUMMARY
+          done
+
+      - name: No changes summary
+        if: steps.changes.outputs.changes == 'false'
+        run: |
+          echo "## Documentation Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** ${{ steps.timestamp.outputs.date }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Provider:** ${{ github.event.inputs.provider || 'all' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ No changes detected - documentation is up to date!" >> $GITHUB_STEP_SUMMARY
+
+  notify-on-failure:
+    needs: update-documentation
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create failure summary
+        run: |
+          echo "## ❌ Documentation Update Failed" >> $GITHUB_STEP_SUMMARY
+          echo "The scheduled documentation update encountered an error." >> $GITHUB_STEP_SUMMARY
+          echo "Please check the workflow logs for details." >> $GITHUB_STEP_SUMMARY

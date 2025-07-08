@@ -1,0 +1,7544 @@
+---
+title: Firebase App Distribution Complete Pipeline Reference
+provider: Firebase App Distribution
+generated_at: 2025-07-08T13:33:14.141Z
+pages_included: 8
+---
+
+# Firebase App Distribution Complete Pipeline Reference
+
+This comprehensive guide contains all pipeline, workflow, and build configuration documentation for Firebase App Distribution.
+
+## Table of Contents
+
+
+1. [Firebase App Distribution    bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.](#section-1)
+2. [Untitled](#section-2)
+3. [Distribute iOS apps to testers using fastlane  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.](#section-3)
+4. [Use lanes to add or remove testers from a project.](#section-4)
+5. [Distribute Android apps to testers using Gradle  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.](#section-5)
+6. [Distribute iOS apps to testers using the Firebase CLI  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.](#section-6)
+7. [Distribute Android apps to testers using the Firebase CLI  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.](#section-7)
+8. [Notify testers about new builds  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.](#section-8)
+
+
+---
+
+
+## 1. Firebase App Distribution    bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences. {#section-1}
+
+*Source: [https://firebase.google.com/docs/app-distribution](https://firebase.google.com/docs/app-distribution)*
+
+[Skip to main content](https://firebase.google.com/docs/app-distribution#main-content)
+
+[![Firebase](https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg)](https://firebase.google.com/)
+
+`/`
+
+- [English](https://firebase.google.com/docs/app-distribution)
+- [Deutsch](https://firebase.google.com/docs/app-distribution?hl=de)
+- [Español – América Latina](https://firebase.google.com/docs/app-distribution?hl=es-419)
+- [Français](https://firebase.google.com/docs/app-distribution?hl=fr)
+- [Indonesia](https://firebase.google.com/docs/app-distribution?hl=id)
+- [Italiano](https://firebase.google.com/docs/app-distribution?hl=it)
+- [Polski](https://firebase.google.com/docs/app-distribution?hl=pl)
+- [Português – Brasil](https://firebase.google.com/docs/app-distribution?hl=pt-br)
+- [Tiếng Việt](https://firebase.google.com/docs/app-distribution?hl=vi)
+- [Türkçe](https://firebase.google.com/docs/app-distribution?hl=tr)
+- [Русский](https://firebase.google.com/docs/app-distribution?hl=ru)
+- [עברית](https://firebase.google.com/docs/app-distribution?hl=he)
+- [العربيّة](https://firebase.google.com/docs/app-distribution?hl=ar)
+- [فارسی](https://firebase.google.com/docs/app-distribution?hl=fa)
+- [हिंदी](https://firebase.google.com/docs/app-distribution?hl=hi)
+- [বাংলা](https://firebase.google.com/docs/app-distribution?hl=bn)
+- [ภาษาไทย](https://firebase.google.com/docs/app-distribution?hl=th)
+- [中文 – 简体](https://firebase.google.com/docs/app-distribution?hl=zh-cn)
+- [中文 – 繁體](https://firebase.google.com/docs/app-distribution?hl=zh-tw)
+- [日本語](https://firebase.google.com/docs/app-distribution?hl=ja)
+- [한국어](https://firebase.google.com/docs/app-distribution?hl=ko)
+
+[Blog](https://firebase.blog/) [Studio](https://studio.firebase.google.com/) [Go to console](https://console.firebase.google.com/)
+
+[Sign in](https://firebase.google.com/_d/signin?continue=https%3A%2F%2Ffirebase.google.com%2Fdocs%2Fapp-distribution&prompt=select_account)
+
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+
+- On this page
+- [Key capabilities](https://firebase.google.com/docs/app-distribution#key_capabilities)
+- [Example implementation path](https://firebase.google.com/docs/app-distribution#example_implementation_path)
+- [Next steps](https://firebase.google.com/docs/app-distribution#next_steps)
+
+- [Firebase](https://firebase.google.com/)
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+- [Run](https://firebase.google.com/docs/run)
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+- On this page
+- [Key capabilities](https://firebase.google.com/docs/app-distribution#key_capabilities)
+- [Example implementation path](https://firebase.google.com/docs/app-distribution#example_implementation_path)
+- [Next steps](https://firebase.google.com/docs/app-distribution#next_steps)
+
+# Firebase App Distribution    bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.
+
+plat\_iosplat\_android
+
+Introducing Firebase App Distribution - YouTube
+
+[Photo image of Firebase](https://www.youtube.com/channel/UCP4bf6IHJJQehibu6ai__cg?embeds_referring_euri=https%3A%2F%2Ffirebase.google.com%2F&embeds_referring_origin=https%3A%2F%2Ffirebase.google.com)
+
+Firebase
+
+404K subscribers
+
+[Introducing Firebase App Distribution](https://www.youtube.com/watch?v=SiPOaV-5j9o)
+
+Firebase
+
+Search
+
+Watch later
+
+Share
+
+Copy link
+
+Info
+
+Shopping
+
+Tap to unmute
+
+If playback doesn't begin shortly, try restarting your device.
+
+More videos
+
+## More videos
+
+You're signed out
+
+Videos you watch may be added to the TV's watch history and influence TV recommendations. To avoid this, cancel and sign in to YouTube on your computer.
+
+CancelConfirm
+
+Share
+
+Include playlist
+
+An error occurred while retrieving sharing information. Please try again later.
+
+[Watch on](https://www.youtube.com/watch?v=SiPOaV-5j9o&embeds_referring_euri=https%3A%2F%2Ffirebase.google.com%2F&embeds_referring_origin=https%3A%2F%2Ffirebase.google.com)
+
+0:00
+
+0:00 / 2:35
+•Live
+
+•
+
+[Watch on YouTube](https://www.youtube.com/watch?v=SiPOaV-5j9o "Watch on YouTube")
+
+Firebase App Distribution makes distributing your apps to trusted testers painless.
+By getting your apps onto testers' devices quickly, you can get feedback early
+and often. And if you use Crashlytics in your apps, you’ll automatically
+get stability metrics for all your builds, so you know when you’re ready to
+ship.
+
+Ready to get started?
+
+Learn how to distribute your iOS apps:
+
+[Firebase console](https://firebase.google.com/docs/app-distribution/ios/distribute-console) [Firebase CLI](https://firebase.google.com/docs/app-distribution/ios/distribute-cli) [fastlane](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane)
+
+[REST API](https://firebase.google.com/docs/reference/app-distribution/rest)
+
+Learn how to distribute your Android apps:
+
+[Firebase console](https://firebase.google.com/docs/app-distribution/android/distribute-console) [Firebase CLI](https://firebase.google.com/docs/app-distribution/android/distribute-cli) [fastlane](https://firebase.google.com/docs/app-distribution/android/distribute-fastlane) [Gradle](https://firebase.google.com/docs/app-distribution/android/distribute-gradle) [REST API](https://firebase.google.com/docs/reference/app-distribution/rest)
+
+## Key capabilities
+
+|     |     |
+| --- | --- |
+| Cross-platform | Manage both your iOS and Android pre-release distributions from the same<br> place. |
+| Fast distributions | Get early releases into your testers' hands quickly, with fast<br> onboarding, no SDK to install, and instant app delivery. |
+| Fits into your workflow | Distribute builds using the Firebase console, the Firebase Command<br> Line Interface (CLI) tool, fastlane, or Gradle (Android). Automate<br> distribution by integrating the CLI into continuous integration (CI)<br> jobs. |
+| Tester management | Manage your testing teams by organizing them into groups. Easily add new<br> testers with email invitations that walk them through the onboarding<br> process. View the status of each tester for specific versions of your app,<br> which indicates who has accepted a testing invitation and downloaded the<br> app. Enable in-app feedback to make it easier to collect feedback on<br> your pre-release apps from testers. |
+| Works with Android App Bundles | Distribute releases to testers for your Android App Bundle in<br> Google Play. App Distribution integrates with Google Play's internal app<br> sharing service to streamline your app testing and launching processes. |
+| Works with Crashlytics | When combined with Crashlytics, get insights into the stability of<br> your test distributions. |
+
+## Example implementation path
+
+|     |     |     |
+| --- | --- | --- |
+|  | Upload your latest pre-release build | First, upload your latest APK, AAB, or IPA to App Distribution using the<br> Firebase console, fastlane, Gradle, or the CLI tools. |
+|  | Invite testers | Then, add the testers you want to try your app. Testers will receive an<br> email that walks them through the onboarding process. |
+|  | Get feedback | Get feedback from your testers, monitor stability data, and iterate on<br> your app. |
+|  | Release new beta builds | Whenever you have a new build ready for testing, just upload it to<br> App Distribution. Your testers will be notified that a new build is available<br> to try out. |
+
+## Next steps
+
+Learn best practices
+
+- [Best practices for distributing Apple apps to QA testers using CI/CD and fastlane](https://firebase.google.com/docs/app-distribution/best-practices-distributing-apple-apps-to-qa-testers-with-ci-cd-fastlane)
+- [Best practices for distributing Android apps to QA testers using CI/CD](https://firebase.google.com/docs/app-distribution/best-practices-distributing-android-apps-to-qa-testers-with-ci-cd)
+
+Learn how to distribute your iOS apps:
+
+[Firebase console](https://firebase.google.com/docs/app-distribution/ios/distribute-console) [Firebase CLI](https://firebase.google.com/docs/app-distribution/ios/distribute-cli) [fastlane](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane) [REST API](https://firebase.google.com/docs/reference/app-distribution/rest)
+
+Learn how to distribute your Android apps:
+
+[Firebase console](https://firebase.google.com/docs/app-distribution/android/distribute-console) [Firebase CLI](https://firebase.google.com/docs/app-distribution/android/distribute-cli) [fastlane](https://firebase.google.com/docs/app-distribution/android/distribute-fastlane) [Gradle](https://firebase.google.com/docs/app-distribution/android/distribute-gradle) [REST API](https://firebase.google.com/docs/reference/app-distribution/rest)
+
+To learn more about App Distribution, check out the following codelabs:
+
+- [Distribute app bundle releases to testers](https://firebase.google.com/codelabs/appdistribution-app-bundles).
+
+- [Alert testers about your new app releases with Firebase App Distribution Android SDK](https://firebase.google.com/codelabs/appdistribution-android).
+
+- [Alert testers about your new app releases with the Firebase App Distribution iOS SDK](https://firebase.google.com/codelabs/appdistribution-ios).
+
+- [Distribute your pre-release iOS builds faster with App Distribution and fastlane](https://firebase.google.com/codelabs/appdistribution-udid-collection).
+
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/), and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details, see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark of Oracle and/or its affiliates.
+
+Last updated 2025-07-02 UTC.
+
+Chat
+
+
+## Ask about this page
+
+bug\_reportfullscreenclose\_fullscreenclose
+
+## Chat
+
+### BETA
+
+restart\_alt
+
+Sign in
+
+---
+
+
+## 2. Untitled {#section-2}
+
+*Source: [https://firebase.google.com/docs/app-distribution/get-started](https://firebase.google.com/docs/app-distribution/get-started)*
+
+[Skip to main content](https://firebase.google.com/docs/app-distribution/get-started#main-content)
+
+[![Firebase](https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg)](https://firebase.google.com/)
+
+`/`
+
+- [English](https://firebase.google.com/docs/app-distribution/get-started)
+- [Español – América Latina](https://firebase.google.com/docs/app-distribution/get-started?hl=es-419)
+- [Indonesia](https://firebase.google.com/docs/app-distribution/get-started?hl=id)
+- [Português – Brasil](https://firebase.google.com/docs/app-distribution/get-started?hl=pt-br)
+- [中文 – 简体](https://firebase.google.com/docs/app-distribution/get-started?hl=zh-cn)
+- [日本語](https://firebase.google.com/docs/app-distribution/get-started?hl=ja)
+- [한국어](https://firebase.google.com/docs/app-distribution/get-started?hl=ko)
+
+[Blog](https://firebase.blog/) [Studio](https://studio.firebase.google.com/) [Go to console](https://console.firebase.google.com/)
+
+[Sign in](https://firebase.google.com/_d/signin?continue=https%3A%2F%2Ffirebase.google.com%2Fdocs%2Fapp-distribution%2Fget-started&prompt=select_account)
+
+### 404
+
+Sorry, we couldn't find that page.
+
+
+`/`
+
+### Maybe you were looking for...
+
+- [Our Homepage](https://firebase.google.com/)
+- [Docs & API](https://firebase.google.com/docs/)
+- [Console](https://console.firebase.google.com/)
+- [FAQs](https://firebase.google.com/support/faq/)
+- [Products](https://firebase.google.com/products/)
+- [Libraries](https://firebase.google.com/docs/libraries/)
+- [Pricing](https://firebase.google.com/pricing/)
+- [Blog](https://firebase.googleblog.com/)
+- [Use Cases](https://firebase.google.com/use-cases/)
+- [Samples](https://firebase.google.com/docs/samples/)
+- [Support](https://firebase.google.com/support/)
+
+Chat
+
+
+## Ask about this page
+
+bug\_reportfullscreenclose\_fullscreenclose
+
+## Chat
+
+### BETA
+
+restart\_alt
+
+Sign in
+
+---
+
+
+## 3. Distribute iOS apps to testers using fastlane  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences. {#section-3}
+
+*Source: [https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane)*
+
+[Skip to main content](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#main-content)
+
+[![Firebase](https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg)](https://firebase.google.com/)
+
+`/`
+
+- [English](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane)
+- [Deutsch](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=de)
+- [Español – América Latina](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=es-419)
+- [Français](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=fr)
+- [Indonesia](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=id)
+- [Italiano](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=it)
+- [Polski](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=pl)
+- [Português – Brasil](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=pt-br)
+- [Tiếng Việt](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=vi)
+- [Türkçe](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=tr)
+- [Русский](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ru)
+- [עברית](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=he)
+- [العربيّة](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ar)
+- [فارسی](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=fa)
+- [हिंदी](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=hi)
+- [বাংলা](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=bn)
+- [ภาษาไทย](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=th)
+- [中文 – 简体](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=zh-cn)
+- [中文 – 繁體](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=zh-tw)
+- [日本語](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ja)
+- [한국어](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane?hl=ko)
+
+[Blog](https://firebase.blog/) [Studio](https://studio.firebase.google.com/) [Go to console](https://console.firebase.google.com/)
+
+[Sign in](https://firebase.google.com/_d/signin?continue=https%3A%2F%2Ffirebase.google.com%2Fdocs%2Fapp-distribution%2Fios%2Fdistribute-fastlane&prompt=select_account)
+
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+
+- On this page
+- [Step 1. Set up fastlane](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#setup)
+- [Step 2. Authenticate with Firebase](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#authenticate)
+  - [Use Firebase service account credentials](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#service-acc-fastlane)
+  - [Sign in using the Firebase CLI](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#cli-fastlane)
+- [Step 3. Set up your Fastfile and distribute your app](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#distribute)
+- [Step 4 (Optional). Manage testers for the distribution](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#manage)
+- [Step 5 (Optional). Get information about your app's latest release](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#get-latest-release)
+  - [Parameters](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#parameters)
+- [Next steps](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#next_steps)
+
+- [Firebase](https://firebase.google.com/)
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+- [Run](https://firebase.google.com/docs/run)
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+# Distribute iOS apps to testers using fastlane  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.
+
+- On this page
+- [Step 1. Set up fastlane](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#setup)
+- [Step 2. Authenticate with Firebase](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#authenticate)
+  - [Use Firebase service account credentials](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#service-acc-fastlane)
+  - [Sign in using the Firebase CLI](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#cli-fastlane)
+- [Step 3. Set up your Fastfile and distribute your app](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#distribute)
+- [Step 4 (Optional). Manage testers for the distribution](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#manage)
+- [Step 5 (Optional). Get information about your app's latest release](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#get-latest-release)
+  - [Parameters](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#parameters)
+- [Next steps](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#next_steps)
+
+You can distribute builds to testers using
+[fastlane](https://fastlane.tools/),
+an open source platform that automates building and releasing iOS and Android
+apps. It follows simple instructions defined in a `Fastfile`. After you set up
+fastlane and your `Fastfile`, you can integrate App Distribution with your fastlane
+configuration.
+
+## Step 1. Set up fastlane
+
+1. [Install and set up fastlane](https://docs.fastlane.tools/getting-started/ios/setup/).
+
+2. To add App Distribution to your fastlane configuration, run the following
+command from the root of your iOS project:
+
+
+
+
+
+
+
+
+```
+fastlane add_plugin firebase_app_distribution
+```
+
+
+If the command prompts you with an option, select `Option 3: RubyGems.org`.
+
+
+## Step 2. Authenticate with Firebase
+
+Before you can use the fastlane plugin, you must first authenticate with your
+Firebase project in one of the following ways. By default, the fastlane plugin
+looks for credentials from the Firebase CLI if no other authentication
+method is used.
+
+**Use Firebase service account credentials**
+
+Authenticating with a service account allows you to flexibly use the plugin with
+your continuous integration (CI) system. There are two ways to provide service
+account credentials:
+
+- Pass your service account key file to the `firebase_app_distribution`
+action. You might find this method convenient if you already have your
+service account key file in your build environment.
+- Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS` to point to
+your service account key file. You might prefer this method if you
+already have [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/application-default-credentials)
+configured for another Google service (e.g., Google Cloud).
+
+1. On the
+[Google Cloud console,](https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts)
+select your project and create a new service account.
+2. Add the **Firebase App Distribution Admin** role.
+3. Create a private json key and move the key to a location accessible to your
+build environment.
+_Be sure to keep this file somewhere safe_, as it grants administrator
+access to App Distribution in your Firebase project.
+4. Skip this step if you created your app after September 20,
+2019: In the Google APIs console, enable the
+[Firebase App Distribution API.](https://console.developers.google.com/apis/api/firebaseappdistribution.googleapis.com/overview?project=_)
+When prompted, select the project with the same name as your Firebase
+project.
+5. Provide or locate your service account credentials:
+
+1. To pass your service account key to your lane's
+      `firebase_app_distribution` action, set the `service_credentials_file`
+      parameter with the path to your private key JSON file
+2. To locate your credentials with ADC, set the environment variable
+      `GOOGLE_APPLICATION_CREDENTIALS` to the path for the private key JSON
+      file. For example:
+
+
+
+
+
+
+
+
+
+      ```
+       export GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/credentials/file.json
+
+      ```
+
+
+
+
+      For more information on authenticating with ADC, read [Providing credentials to your\\
+      application.](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application)
+
+**Sign in using the Firebase CLI**
+
+See [Log in with the Firebase CLI](https://firebase.google.com/docs/cli#sign-in-test-cli)
+for instructions on how to authenticate your project.
+
+## Step 3. Set up your Fastfile and distribute your app
+
+1. In a `./fastlane/Fastfile` lane, add a
+    `firebase_app_distribution` block. Use the following parameters to
+    configure the distribution:
+
+
+
+
+| firebase\_app\_distribution parameters |
+| --- |
+| `app` | **Required only if your app does not contain a Firebase config file ( `GoogleService-Info.plist`)**: Your app's Firebase App ID. You<br>can find the App ID in the Firebase console, on the<br>[General Settings page](https://console.firebase.google.com/project/_/settings/general/).<br>```<br>app: "1:1234567890:ios:0a1b2c3d4e5f67890"<br>``` |
+| `googleservice_info_plist_path` | The path to your `GoogleService-Info.plist` file, relative to the archived product path. Set to `GoogleService-Info.plist` by default.<br>The file is used to get your app's Firebase App ID if the `app` parameter is unspecified. |
+| `firebase_cli_token` | A refresh token that's printed when you authenticate your CI environment with the<br>Firebase CLI (read<br>[Use the CLI with CI systems](https://firebase.google.com/docs/cli#cli-ci-systems)<br>for more information). |
+| `service_credentials_file` | The path to your Google service account json file. See above for how<br>to [authenticate using service account credentials](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#service-acc-fastlane). |
+| `ipa_path` | Replaces `apk_path` (deprecated). Absolute path to<br>the IPA file you want to upload. If<br>unspecified, fastlane determines the file's location from the lane<br>in which the file was generated. |
+| `release_notes`<br>`release_notes_file` | Release notes for this build.<br>You can either specify the release notes directly:<br>```<br>release_notes: "Text of release notes"<br>```<br>Or, specify the path to a plain text file:<br>```<br>release_notes_file: "/path/to/release-notes.txt"<br>``` |
+| `testers`<br>`testers_file` | The email addresses of the testers you want to invite.<br>You can specify the testers as a comma-separated list of email<br>addresses:<br>```<br>testers: "ali@example.com, bri@example.com, cal@example.com"<br>```<br>Or, you can specify the path to a plain text file containing a<br>comma-separated list of email addresses:<br>```<br>testers_file: "/path/to/testers.txt"<br>``` |
+| `groups`<br>`groups_file` | The tester groups you want to invite (refer to<br>[Manage testers](https://firebase.google.com/docs/app-distribution/manage-testers)).<br>Groups are specified using group aliases, which you can<br>look up in the Firebase console.<br>You can specify the groups as a comma-separated list:<br>```<br>groups: "qa-team, trusted-testers"<br>```<br>Or, you can specify the path to a plain text file containing a<br>comma-separated list of group names:<br>```<br>groups_file: "/path/to/groups.txt"<br>``` |
+| `test_devices`<br>`test_devices_file` | The following distribution types are part of the **Automated tester beta feature**.<br>The test devices you want to distribute builds to (refer to<br>[Automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester)).<br>You can specify the test devices as a semicolon-separated list of test<br>devices:<br>```<br>test_devices: "model=shiba,version=34,locale=en,orientation=portrait;model=b0q,version=33,locale=en,orientation=portrait"<br>```<br>Or, you can specify the path to a plain text file containing a<br>semicolon-separated list of test devices:<br>```<br>test_devices_file: "/path/to/test-devices.txt"<br>``` |
+| `test_username` | The username for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `test_password`<br>`test_password_file` | The password for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester).<br>Or, you can specify the path to a plain text file containing a password:<br>```<br>test_password_file: "/path/to/test-password.txt"<br>``` |
+| `test_username_resource` | Resource name for the username field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `test_password_resource` | Resource name for the password field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `test_non_blocking` | Run [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester) asynchronously. Visit the Firebase console for the automatic test results. |
+| `debug` | A boolean flag. You can set this to `true`<br>to print verbose debug output. |
+
+
+For example:
+
+```
+platform :ios do
+    desc "My awesome app"
+    lane :distribute do
+        build_ios_app(...)
+        # build_ios_app is a built-in fastlane action.
+
+        release = firebase_app_distribution(
+            app: "1:123456789:ios:abcd1234",
+            testers: "tester1@company.com, tester2@company.com",
+            release_notes: "Lots of amazing new features to test out!"
+        )
+
+    end
+end
+```
+
+To make the build available to testers, run your lane:
+
+```
+fastlane <lane>
+```
+
+The return value of the action is a hash representing the uploaded release.
+This hash is also available using `lane_context[SharedValues::FIREBASE_APP_DISTRO_RELEASE]`.
+For more information about the available fields in this hash, see the
+[REST API documentation](https://firebase.google.com/docs/reference/app-distribution/rest/v1/projects.apps.releases#resource:-release).
+
+The fastlane plugin outputs the following links after the release upload. These
+links help you manage binaries and ensure that testers and other developers
+have the right release:
+
+- A link to the Firebase console displaying a
+single release. You can share this link with other developers in your
+org.
+- A link to the release in the tester experience
+(iOS web clip) that lets testers view release notes and install the app
+onto their device. The tester needs access to the release in order to use
+the link.
+- A signed link that directly downloads and
+installs the app binary (IPA file). The link expires after one hour.
+
+After you distribute your build, it is available in the
+App Distribution dashboard of the Firebase console for 150 days.
+When the build is 30 days from expiring, an expiration notice appears in
+the console and in the tester's list of builds on their test device.
+
+Testers who weren't previously invited to test the app receive email
+invitations to get started. Existing testers receive email notifications
+that a new build is ready to test. To learn how to install the test
+app, see [Get set up as a tester](https://firebase.google.com/docs/app-distribution/get-set-up-as-a-tester?platform=ios).
+You can monitor
+the status of each tester to determine whether they accepted the
+invitation and whether they downloaded the app in the
+Firebase console.
+
+(Optional) To automatically increment your build number every time you create
+a new release in App Distribution, you can use the
+`firebase_app_distribution_get_latest_release` action and the
+[`increment_build_number` action](https://docs.fastlane.tools/actions/increment_build_number/).
+The following code provides an example of how to automatically increment your
+build number:
+
+```
+lane :increment_version do
+  latest_release = firebase_app_distribution_get_latest_release(
+    app: "<your Firebase app ID>"
+  )
+  increment_build_number({ build_number: latest_release[:buildVersion].to_i + 1 })
+end
+
+```
+
+To learn more about this fastlane plugin feature, see
+[Get information about your app's latest release](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#get-latest-release).
+
+## Step 4 (Optional). Manage testers for the distribution
+
+You can add and remove testers from your project or group using your `Fastfile`
+file or by directly running fastlane actions. Running actions directly
+overrides the values set in your `Fastfile`.
+
+Once a tester is added to your Firebase project, you can add them to
+individual releases. Testers who are removed from your Firebase project no
+longer have access to releases in your project, but they might retain access
+to your releases for a window of time.
+
+If you have a large number of testers you should consider using groups.
+
+#### Use `Fastfile`
+
+```
+# Use lanes to add or remove testers from a project.
+lane(:add_testers) do
+  firebase_app_distribution_add_testers(
+    emails: "foo@google.com,bar@google.com"
+    # or file: "/path/to/testers.txt"
+    group_alias: "qa-team" # (Optional) add testers to this group
+  )
+end
+
+lane(:remove_testers) do
+  firebase_app_distribution_remove_testers(
+    emails: "foo@google.com,bar@google.com"
+    # or file: "/path/to/testers.txt"
+    group_alias: "qa-team" # (Optional) remove testers from this group only
+  )
+end
+```
+
+```
+# Add or remove testers with the terminal
+$ fastlane add_testers
+$ fastlane remove_testers
+```
+
+#### Run fastlane actions
+
+```devsite-terminal
+fastlane run firebase_app_distribution_create_group display_name:"QA Team" alias:"qa-team"
+fastlane run firebase_app_distribution_add_testers group_alias:"qa-team" emails:"foo@google.com,bar@google.com"
+fastlane run firebase_app_distribution_remove_testers group_alias:"qa-team" emails:"foo@google.com,bar@google.com"
+fastlane run firebase_app_distribution_delete_group alias:"qa-team"
+```
+
+You can also specify testers using `--file="/path/to/testers.txt` instead of
+`--emails`.
+
+The `firebase_app_distribution_add_testers` and
+`firebase_app_distribution_remove_testers` tasks also accept the following
+arguments:
+
+- `project_name`: Your Firebase project number.
+- `group_alias` (optional): If specified, the testers are added to (or removed from)
+specified group.
+- `service_credentials_file`: The path to your Google service credentials file.
+- `firebase_cli_token`: Auth token for Firebase CLI.
+
+The `service_credentials_file` and the `firebase_cli_token` are the same
+arguments used by the upload action.
+
+## Step 5 (Optional). Get information about your app's latest release
+
+You can use the `firebase_app_distribution_get_latest_release` action
+to fetch information about your app's latest release in App Distribution,
+including app version information, release notes, and creation time. Use cases
+include automatically increasing the version and carrying over the release
+notes from the previous release.
+
+The return value of the action is a hash representing the latest release.
+This hash is also available using `lane_context[SharedValues::FIREBASE_APP_DISTRO_LATEST_RELEASE]`.
+For more information about the available fields in this hash, see the
+[REST API documentation](https://firebase.google.com/docs/reference/app-distribution/rest/v1/projects.apps.releases#resource:-release).
+
+### Parameters
+
+| firebase\_app\_distribution\_get\_latest\_release parameters |
+| --- |
+| `app` | **Required only if your app does not contain a Firebase config file ( `GoogleService-Info.plist`)**: Your app's Firebase App ID. You<br>can find the App ID in the Firebase console, on the<br>[General Settings page](https://console.firebase.google.com/project/_/settings/general/).<br>```<br>app: "1:1234567890:ios:0a1b2c3d4e5f67890"<br>``` |
+| `googleservice_info_plist_path` | The path to your `GoogleService-Info.plist` file, relative to the archived product path. Set to `GoogleService-Info.plist` by default.<br>The file is used to get your app's Firebase App ID if the `app` parameter is unspecified. |
+| `firebase_cli_token` | A refresh token that's printed when you authenticate your CI environment with the<br>Firebase CLI (read<br>[Use the CLI with CI systems](https://firebase.google.com/docs/cli#cli-ci-systems)<br>for more information). |
+| `service_credentials_file` | The path to your Google service account json file. See earlier documentation for how<br>to [authenticate using service account credentials](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#service-acc-fastlane). |
+| `service_credentials_json_data` | Google service account json file content. See earlier documentation for how<br>to [authenticate using service account credentials](https://firebase.google.com/docs/app-distribution/ios/distribute-fastlane#service-acc-fastlane). |
+| `debug` | A boolean flag. You can set this to `true`<br>to print verbose debug output. |
+
+## Next steps
+
+- To register more devices manually or programmatically, see
+[Register additional iOS devices](https://firebase.google.com/docs/app-distribution/register-additional-devices).
+
+- Learn best practices for [distributing Apple apps to QA testers using CI/CD and fastlane](https://firebase.google.com/docs/app-distribution/best-practices-distributing-apple-apps-to-qa-testers-with-ci-cd-fastlane).
+
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/), and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details, see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark of Oracle and/or its affiliates.
+
+Last updated 2025-07-02 UTC.
+
+Chat
+
+
+## Ask about this page
+
+bug\_reportfullscreenclose\_fullscreenclose
+
+## Chat
+
+### BETA
+
+restart\_alt
+
+Sign in
+
+---
+
+
+## 4. Use lanes to add or remove testers from a project. {#section-4}
+
+*Source: [https://firebase.google.com/docs/app-distribution/android/distribute-fastlane](https://firebase.google.com/docs/app-distribution/android/distribute-fastlane)*
+
+```json
+
+    
+  
+    
+      
+      Skip to main content
+    
+    
+      
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+      
+        
+        
+        
+
+
+  
+  
+  
+    
+    
+    
+    
+  
+  
+
+
+
+
+  
+  
+  
+    
+  
+  
+    
+    
+    
+      
+      
+    
+  
+  
+
+  
+
+
+        
+          
+            
+              
+              
+  
+
+    
+      
+        
+          
+  
+    
+    Build
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+  
+    
+    Run
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+            
+    
+    Solutions
+  
+    
+    
+  
+          
+        
+      
+        
+          
+            
+    
+    Pricing
+  
+    
+    
+  
+          
+        
+      
+        
+          
+  
+    
+    Docs
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+  
+    
+    Community
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+            
+    
+    Support
+  
+    
+    
+  
+          
+        
+      
+    
+          More
+          
+        
+
+  
+
+            
+           
+          
+
+  
+    
+      
+      
+        
+          
+            
+          
+          
+            /
+          
+      
+    
+  
+  
+
+
+        
+
+        
+
+          
+
+          
+
+          
+
+          
+
+  
+    
+    
+    
+      English
+    
+    
+    
+      Deutsch
+    
+    
+    
+      Español – América Latina
+    
+    
+    
+      Français
+    
+    
+    
+      Indonesia
+    
+    
+    
+      Italiano
+    
+    
+    
+      Polski
+    
+    
+    
+      Português – Brasil
+    
+    
+    
+      Tiếng Việt
+    
+    
+    
+      Türkçe
+    
+    
+    
+      Русский
+    
+    
+    
+      עברית
+    
+    
+    
+      العربيّة
+    
+    
+    
+      فارسی
+    
+    
+    
+      हिंदी
+    
+    
+    
+      বাংলা
+    
+    
+    
+      ภาษาไทย
+    
+    
+    
+      中文 – 简体
+    
+    
+    
+      中文 – 繁體
+    
+    
+    
+      日本語
+    
+    
+    
+      한국어
+    
+    
+  
+
+
+
+          
+            
+  Blog
+
+          
+            
+  Studio
+
+          
+            
+  Go to console
+
+          
+
+        
+
+        
+          
+  Sign in
+
+        
+        
+        
+      
+    
+  
+
+
+
+  
+    
+      
+        
+          
+            
+              
+                
+                
+                  
+                  
+                  
+                    
+  
+  
+    
+    
+    
+      
+  
+    
+        Documentation
+      
+  
+  
+    
+  
+  
+  
+    
+      
+      
+    
+    
+    
+      
+  
+    
+        App Distribution
+      
+  
+  
+    
+  
+  
+
+                
+                
+              
+              
+            
+            
+          
+          
+        
+      
+      
+        
+          
+          
+            
+            
+  
+
+    
+      
+        
+          
+            
+    
+    Overview
+  
+    
+    
+  
+          
+        
+      
+        
+          
+  
+    
+    Fundamentals
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+  
+    
+    AI
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+  
+    
+    Build
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+  
+    
+    Run
+  
+    
+    
+      
+    
+  
+  
+
+        
+      
+        
+          
+            
+    
+    Reference
+  
+    
+    
+  
+          
+        
+      
+        
+          
+            
+    
+    Samples
+  
+    
+    
+  
+          
+        
+      
+    
+          More
+          
+        
+
+  
+
+          
+          
+        
+      
+    
+  
+
+
+
+
+
+  
+
+  
+
+      
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+
+
+  
+    
+    
+    
+
+  
+  
+  
+    
+    
+    
+    
+  
+  
+
+
+
+  
+      
+        
+        
+        
+  
+  
+    
+    
+    
+      
+      
+    
+  
+  
+
+      
+    
+
+
+  
+
+  
+    
+      
+        
+          
+            
+              
+  
+  
+  
+    
+      Build
+   
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+              
+            
+          
+            
+              
+  
+  
+  
+    
+      Run
+   
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+              
+            
+          
+            
+              
+  
+  
+  
+    
+      Solutions
+   
+    
+    
+    
+    
+  
+  
+  
+
+  
+              
+            
+          
+            
+              
+  
+  
+  
+    
+      Pricing
+   
+    
+  
+  
+  
+
+  
+              
+            
+          
+            
+              
+  
+  
+  
+    
+      Docs
+   
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+              
+                
+                  
+                    
+                    
+                    
+                    
+                      
+  
+  
+  
+    
+      Overview
+   
+    
+  
+  
+  
+
+  
+                    
+                  
+                    
+                    
+                    
+                    
+                      
+  
+  
+  
+    
+      Fundamentals
+   
+    
+    
+    
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+                    
+                  
+                    
+                    
+                    
+                    
+                      
+  
+  
+  
+    
+      AI
+   
+    
+    
+    
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+                    
+                  
+                    
+                    
+                    
+                    
+                      
+  
+  
+  
+    
+      Build
+   
+    
+    
+    
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+                    
+                  
+                    
+                    
+                    
+                    
+                      
+  
+  
+  
+    
+      Run
+   
+    
+    
+    
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+                    
+                  
+                    
+                    
+                    
+                    
+                      
+  
+  
+  
+    
+      Reference
+   
+    
+  
+  
+  
+
+  
+                    
+                  
+                    
+                    
+                    
+                    
+                      
+  
+  
+  
+    
+      Samples
+   
+    
+  
+  
+  
+
+  
+                    
+                  
+                
+              
+            
+          
+            
+              
+  
+  
+  
+    
+      Community
+   
+    
+    
+    
+    
+  
+  
+  
+
+  
+    
+      
+
+
+  
+  
+  
+    
+      More
+   
+    
+    
+    
+    
+  
+  
+  
+
+
+
+    
+  
+              
+            
+          
+            
+              
+  
+  
+  
+    
+      Support
+   
+    
+  
+  
+  
+
+  
+              
+            
+          
+          
+    
+    
+
+
+  
+  
+  
+    
+      Blog
+   
+    
+  
+  
+  
+
+
+
+  
+    
+    
+
+
+  
+  
+  
+    
+      Studio
+   
+    
+  
+  
+  
+
+
+
+  
+    
+    
+
+
+  
+  
+  
+    
+      Go to console
+   
+    
+  
+  
+  
+
+
+
+  
+          
+        
+      
+    
+    
+      
+        
+          
+          
+            Overview
+
+  
+        Release
+      
+
+  
+      
+        Test Lab
+      IntroductionIntegration testing with Flutter
+      
+        iOS+
+      Get startedRun a Robo testRun a Robo scriptRun a Game Loop testRun an XCTestTest with the Firebase consoleTest with the gcloud CLITest on available devicesAnalyze test results
+      
+        Android
+      Get startedRun an instrumentation testRun a Robo testRun a Robo scriptRun a Game Loop testTest with the Firebase consoleTest with the gcloud CLITest with Android StudioTest on available devicesTest with virtual devicesAnalyze test resultsUsage, quotas, & pricingTest with CI systemsExtend with Cloud FunctionsTest with Android Device Streaming
+        Reference
+      Robo scripts reference guide
+      
+        REST API reference
+      Testing (submit test & monitor)ToolResults (retrieve results)Test Lab IAM permissions reference guideTroubleshooting & FAQ
+
+  
+      
+        App Distribution
+      Introduction
+        Distribute iOS apps
+      Use the Firebase consoleUse the Firebase CLIUse fastlane
+        Distribute Android apps
+      Use the Firebase consoleUse the Firebase CLIUse fastlaneUse GradleUse the App Testing agent (Android)Use Automated tester
+        Manage testers
+      Add, remove, and search for testersImport testers from CSV filesRegister additional iOS devicesCreate invite links
+        Install & test apps
+      Get set up as a testerCollect feedback from testersNotify testers about new builds
+        Solutions
+      Best practices for distributing Apple apps to QA testers using CI/CD and fastlaneBest practices for distributing Android apps to QA testers using CI/CDTroubleshooting & FAQ
+
+  
+        Monitor
+      
+
+  
+      
+        Crashlytics
+      IntroductionGet startedTest your implementationGet readable crash reportsCustomize crash reportsUnderstand crash-free metricsFilter events by Play trackDebug ANR errors in Android appMonitor your latest releaseCustomize velocity alertsGet AI assistanceExport data to BigQueryUpgrade to Gradle plugin v3Troubleshooting & FAQ for setup
+
+  
+      
+        Performance Monitoring
+      Introduction
+      
+        Get started
+      iOS+AndroidWebFlutter
+        Learn about automatically collected data
+      App start, foreground, background (iOS+ & Android)Screen rendering (iOS+ & Android)Page loading (web)HTTP/S network requests
+        Customize data collection and aggregation
+      Add monitoring for specific codeAdd monitoring for specific network requestsCustomize network request data aggregationDisable Performance Monitoring
+        Track, view, and filter data
+      Overview of the consoleFilter data using attributesSet up alerts for performance issuesExport data to BigQueryTroubleshooting & FAQ
+
+  
+        Iterate
+      
+
+  
+      
+        Remote Config
+      IntroductionGet startedUnderstand real-time Remote ConfigExplore use casesUnderstand parameters and conditionsManage Remote Config templatesModify Remote Config programmaticallyExplore loading strategiesUse Remote Config with AnalyticsExtend with Cloud FunctionsCase studies
+      
+        Rollouts
+      IntroductionGet startedAbout Remote Config rollouts
+      
+        Personalization
+      IntroductionGet startedAbout Remote Config personalizationExplore use casesExport to BigQueryCase studies
+      
+        Server environments
+      Use Remote Config in server environmentsUse Remote Config for server-side rendering in web applications
+        Solutions
+      Use server-side Remote Config with Cloud Functions and Vertex AIDynamically update your Firebase AI Logic app with Remote Config
+      
+        API reference
+      REST API referenceConditional expression referenceAndroid SDK referenceSwift SDK referenceObj-C SDK referenceFlutter referenceUnity referenceC++ referenceWeb modular referenceWeb namespaced reference
+
+  
+      
+        A/B Testing
+      IntroductionAbout Firebase A/B testsCreate Remote Config Experiments with A/B TestingCreate Messaging Experiments with A/B TestingCreate In-App Messaging Experiments with A/B TestingExport to BigQueryCase studies
+
+  
+        Engage
+      
+
+  
+      
+        Analytics
+      IntroductionGet startedUnderstand your reportsLog eventsSet user propertiesDebug eventsMeasure screenviewsSet a user IDMeasure ecommerceMeasure ad revenueMeasure in-app purchasesUse in a WebViewExtend with Cloud FunctionsConfigure data collection and usageError codes
+      
+        C++
+      Get startedLog eventsSet user properties
+      
+        Unity
+      Get startedLog eventsSet user properties
+
+  
+      
+        Cloud Messaging
+      Introduction
+      
+        Concepts and best practices
+      FCM Architectural OverviewAbout FCM messagesUnderstanding message deliverySend messages at scaleManage FCM registration tokensGet AI insights for messaging campaigns
+      
+        iOS+
+      Set up an Apple platforms clientSend a test messageSend messages to multiple devicesSend an image in the notification payloadReceive messagesGet started with Live ActivitySend messages to topicsSend to device groupsSend messages with the Firebase Console
+      
+        Android
+      Set up an Android clientSend a test messageSend messages to multiple devicesSend an image in the notification payloadReceive messagesSet and manage message prioritySend messages to topicsSend to device groupsSend messages with the Firebase Console
+      
+        Flutter
+      Set up a Flutter clientSend a test messageReceive messagesSubscribe to topics
+      
+        C++
+      Set up a C++ clientReceive messagesSend messages to topicsSend to device groupsSend messages with the Firebase Console
+      
+        Unity
+      Set up a Unity clientReceive messagesSend messages to topicsSend to device groupsSend messages with the Firebase Console
+      
+        Web (JavaScript)
+      Set up a JavaScript clientSend a test messageSend messages to multiple devicesReceive messagesSend messages to topicsSend to device groupsSend messages with the Firebase Console
+      
+        Server environments
+      Your server environment and FCMAuthorize send requestsBuild send requestsManage topics from the server
+
+  
+      
+        In-App Messaging
+      IntroductionGet startedExplore use casesCompose a campaignModify message behaviorCustomize messages
+
+  
+      
+        Google AdMob
+      IntroductionGet started for iOSGet started for AndroidUse Analytics and Firebase with AdMob apps
+        Use AdMob in a game
+      
+      
+        C++
+      Get startedAdMob Migration Guide
+      
+        Unity
+      Get started
+        Solutions
+      
+      
+        Test adoption of new ad formats
+      Solution overviewSolution tutorial
+      
+        Optimize ad frequency
+      Solution overviewSolution tutorial
+      
+        Optimize hybrid monetization
+      Solution tutorial
+
+  
+      
+        Google Ads
+      Introduction
+        Solutions
+      
+      
+        Measure iOS Ads conversions
+      Using iOS on-device conversion measurement solutionsFirst-party solution tutorialEvent-driven solution tutorial
+
+  
+      
+        Dynamic Links
+      IntroductionOperating system integrations
+      
+        Create Dynamic Links
+      IntroductioniOSAndroidFlutterC++UnityRESTManual URL Construction
+      
+        Receive Dynamic Links
+      iOSAndroidFlutterC++UnityUse a custom domainAllow specific URL patternsView analytics dataDebug Dynamic LinksGenerate link previews & social metadata
+
+  
+      
+        App Indexing
+      Overview
+
+  
+        Related products
+      
+
+  Authentication
+
+  Extensions
+          
+        
+        
+          
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+  
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+  
+        
+        
+          
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+      
+      
+    
+  
+    
+  
+    
+  
+        
+      
+    
+  
+
+        
+      
+      
+        
+          
+            
+                
+                On this pageBefore you beginStep 1. Set up fastlaneStep 2. Authenticate with FirebaseUse Firebase service account credentialsSign in using the Firebase CLIStep 3. Set up your Fastfile and distribute your appStep 4 (Optional). Managing testers for the distributionStep 5 (Optional). Get information about your app's latest releaseParametersNext steps
+                
+                
+            
+          
+          
+            
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+
+  
+    
+    
+    
+  
+  
+    
+    
+    
+      
+  
+    
+        Firebase
+      
+  
+  
+    
+  
+  
+  
+    
+      
+      
+    
+    
+    
+      
+  
+    
+        Documentation
+      
+  
+  
+    
+  
+  
+  
+    
+      
+      
+    
+    
+    
+      
+  
+    
+        App Distribution
+      
+  
+  
+    
+  
+  
+  
+    
+      
+      
+    
+    
+    
+      
+  
+    
+        Run
+      
+  
+  
+    
+  
+  
+
+    
+      
+    Was this helpful?
+  
+    
+  
+  
+    
+
+  
+  
+    
+    Send feedback
+  
+  
+
+  
+    
+      Distribute Android apps to testers using fastlane
+
+    
+    
+      bookmark_border
+    
+
+    
+      
+      Stay organized with collections
+    
+    
+      
+      Save and categorize content based on your preferences.
+    
+  
+  
+      
+    
+  
+  
+
+  On this pageBefore you beginStep 1. Set up fastlaneStep 2. Authenticate with FirebaseUse Firebase service account credentialsSign in using the Firebase CLIStep 3. Set up your Fastfile and distribute your appStep 4 (Optional). Managing testers for the distributionStep 5 (Optional). Get information about your app's latest releaseParametersNext steps
+  
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  APK
+  AAB
+
+
+
+
+
+
+
+
+
+This document describes how to distribute APK builds to testers using
+fastlane,
+an open source platform that automates building and releasing iOS and Android
+apps. This document follows instructions defined in a Fastfile. After you set
+up fastlane and your Fastfile, you can integrate App Distribution with your
+fastlane configuration.
+
+
+
+Before you begin
+
+
+
+If you haven't already, add Firebase to your Android
+project.
+
+If you aren't using any other Firebase products, you only have to create a
+project and register your app. However, if you decide to use additional
+products in the future, be sure to complete all of the steps on the page
+linked above.
+Caution: When you register your app with Firebase, make sure to enter the same
+package name as the app you're distributing. The package name value is
+case-sensitive and cannot be changed for your app in Firebase after it's
+registered with your Firebase project.
+
+
+Step 1. Set up fastlane
+
+
+Install and set up fastlane.
+To add App Distribution to your fastlane configuration, run the following
+command from the root of your Android project:
+
+fastlane add_plugin firebase_app_distribution
+
+If the command prompts you with an option, select Option 3: RubyGems.org.
+
+
+Step 2. Authenticate with Firebase
+
+Before you can use the fastlane plugin, you must first authenticate with your
+Firebase project in one of the following ways. By default, the fastlane plugin
+looks for credentials from the Firebase CLI if no other authentication
+method is used.
+
+Use Firebase service account credentials
+
+
+Authenticating with a service account allows you to flexibly use the plugin with
+your continuous integration (CI) system. There are two ways to provide service
+account credentials:
+
+
+Pass your service account key file to the firebase_app_distribution
+action. You might find this method convenient if you already have your
+service account key file in your build environment.
+Set the environment variable GOOGLE_APPLICATION_CREDENTIALS to point to
+your service account key file. You might prefer this method if you
+already have Application Default Credentials (ADC) 
+configured for another Google service (e.g., Google Cloud).
+
+
+
+On the
+Google Cloud console, 
+select your project and create a new service account.
+Add the Firebase App Distribution Admin role.
+Create a private json key and move the key to a location accessible to your
+build environment.
+Be sure to keep this file somewhere safe, as it grants administrator
+access to App Distribution in your Firebase project.
+Skip this step if you created your app after September 20,
+2019: In the Google APIs console, enable the
+Firebase App Distribution API.
+When prompted, select the project with the same name as your Firebase
+project.
+Provide or locate your service account credentials:
+
+
+To pass your service account key to your lane's
+firebase_app_distribution action, set the service_credentials_file
+parameter with the path to your private key JSON file
+To locate your credentials with ADC, set the environment variable
+GOOGLE_APPLICATION_CREDENTIALS to the path for the private key JSON
+file. For example:
+ export GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/credentials/file.json
+
+
+For more information on authenticating with ADC, read Providing credentials to your
+application.
+
+
+
+
+
+Sign in using the Firebase CLI
+
+
+See Log in with the Firebase CLI
+for instructions on how to authenticate your project.
+
+
+
+Step 3. Set up your Fastfile and distribute your app
+
+
+  In a ./fastlane/Fastfile lane, add a
+   firebase_app_distribution block. Use the following parameters to
+   configure the distribution:
+  
+      
+        
+          firebase_app_distribution parameters
+        
+      
+      
+        
+          
+            app
+          
+          
+            Required: Your app's Firebase App ID. You
+              can find the App ID in the Firebase console, on the
+              General Settings page.
+            app: "1:1234567890:android:0a1b2c3d4e5f67890"
+          
+        
+        
+        
+          
+            firebase_cli_token
+          
+          
+          A refresh token that's printed when you authenticate your CI environment with the
+              Firebase CLI (read
+              Use the CLI with CI systems
+              for more information).
+          
+        
+      
+      
+        
+          service_credentials_file
+        
+        
+          
+            The path to your Google service account json file. See above for how
+            to authenticate using service account credentials.
+          
+        
+      
+      
+  
+     android_artifact_type
+        Specifies the Android file type (APK or AAB).
+   
+
+      
+        
+          android_artifact_path
+        
+        
+          
+            Replaces apk_path (deprecated). Absolute path to
+            the APK or AAB file you want to upload. If
+            unspecified, fastlane determines the file's location from the lane
+            in which the file was generated.
+          
+        
+      
+      
+        
+          release_notes
+          release_notes_file
+        
+        
+          Release notes for this build.
+          You can either specify the release notes directly:
+          release_notes: "Text of release notes"
+          Or, specify the path to a plain text file:
+          release_notes_file: "/path/to/release-notes.txt"
+        
+      
+      
+        
+          testers
+          testers_file
+        
+        
+          The email addresses of the testers you want to invite.
+          You can specify the testers as a comma-separated list of email
+            addresses:
+          testers: "ali@example.com, bri@example.com, cal@example.com"
+          Or, you can specify the path to a plain text file containing a
+            comma-separated list of email addresses:
+          testers_file: "/path/to/testers.txt"
+        
+      
+      
+        
+          groups
+          groups_file
+        
+        
+          The tester groups you want to invite (refer to
+            Manage testers).
+            Groups are specified using group aliases, which you can
+            look up in the Firebase console.
+          You can specify the groups as a comma-separated list:
+          groups: "qa-team, trusted-testers"
+          Or, you can specify the path to a plain text file containing a
+            comma-separated list of group names:
+          groups_file: "/path/to/groups.txt"
+        
+      
+      
+        
+          test_devices
+          test_devices_file
+        
+        
+          The following distribution types are part of the Automated tester beta feature.
+          The test devices you want to distribute builds to (refer to
+            Automated tests).
+          You can specify the test devices as a semicolon-separated list of test
+            devices:
+          test_devices: "model=shiba,version=34,locale=en,orientation=portrait;model=b0q,version=33,locale=en,orientation=portrait"
+          Or, you can specify the path to a plain text file containing a
+            semicolon-separated list of test devices:
+          test_devices_file: "/path/to/test-devices.txt"
+        
+      
+      
+        test_username
+        
+          The username for automatic login to be used during automated tests.
+        
+      
+      
+        
+          test_password
+          test_password_file
+        
+        
+          The password for automatic login to be used during automated tests.
+          Or, you can specify the path to a plain text file containing a password:
+          test_password_file: "/path/to/test-password.txt"
+        
+      
+      
+        test_username_resource
+        
+          Resource name for the username field for automatic login to be used during automated tests.
+        
+      
+      
+        test_password_resource
+        
+          Resource name for the password field for automatic login to be used during automated tests.
+        
+      
+      
+        test_non_blocking
+        
+          Run automated tests asynchronously. Visit the Firebase console for the automatic test results.
+        
+      
+      
+        
+          debug
+        
+        
+          
+            A boolean flag. You can set this to true
+            to print verbose debug output.
+          
+        
+      
+    
+   
+  
+
+
+
+
+platform :android do
+    desc "My awesome app"
+    lane :distribute do
+        build_android_app(...)
+        # build_android_app is a built-in fastlane action.
+        release = firebase_app_distribution(
+            app: "1:123456789:android:abcd1234",
+            testers: "tester1@company.com, tester2@company.com",
+            release_notes: "Lots of amazing new features to test out!"
+        )
+    end
+end
+
+
+
+To make the build available to testers, run your lane:
+fastlane <lane>
+
+The return value of the action is a hash representing the uploaded release.
+This hash is also available using lane_context[SharedValues::FIREBASE_APP_DISTRO_RELEASE].
+For more information about the available fields in this hash, see the
+REST API documentation.
+
+The fastlane plugin outputs the following links after the release upload. These
+links help you manage binaries and ensure that testers and other developers
+have the right release:
+
+
+A link to the Firebase console displaying a
+single release. You can share this link with other developers in your
+org.
+A link to the release in the tester experience
+(Android native app) that lets testers view release
+notes and install the app onto their device. The tester needs access to the
+release in order to use the link.
+A signed link that directly downloads and
+installs the app binary (APK or AAB file). The link expires after one
+hour.
+
+
+After you distribute your build, it is available in the
+App Distribution dashboard of the Firebase console for 150 days.
+When the build is 30 days from expiring, an expiration notice appears in
+the console and in the tester's list of builds on their test device.
+
+Testers who weren't previously invited to test the app receive email
+invitations to get started. Existing testers receive email notifications
+that a new build is ready to test. To learn how to install the test app,
+see tester set up guide. You can monitor
+the status of each tester to determine whether they accepted the
+invitation and whether they downloaded the app in the
+Firebase console.
+Note: Testers have 30 days to accept an invitation to test the app before
+the invitation expires. When an invitation is 5 days from expiring, an
+expiration notice appears in the Firebase console next to the tester
+on a release. You can resend an invitation using the dropdown menu on the
+tester row.
+(Optional) To automatically increment your build number every time you create
+a new release in App Distribution, you can use the
+firebase_app_distribution_get_latest_release action
+and, for example, the increment_version_code fastlane plugin.
+The following code provides an example of how to automatically increment your
+build number:
+lane :increment_version do
+  latest_release = firebase_app_distribution_get_latest_release(
+    app: "<your Firebase app ID>"
+  )
+  increment_version_code({ version_code: latest_release[:buildVersion].to_i + 1 })
+end
+
+To learn more about the firebase_app_distribution_get_latest_release action,
+see Get information about your app's latest release.
+
+Step 4 (Optional). Managing testers for the distribution
+
+You can add and remove testers from your project or group using your Fastfile
+file or by directly running fastlane actions. Running actions directly
+overrides the values set in your Fastfile.
+
+Once a tester is added to your Firebase project, you can add them to
+individual releases. Testers who are removed from your Firebase project no
+longer have access to releases in your project, but they might retain access
+to your releases for a window of time.
+
+If you have a large number of testers you should consider using groups.
+
+Use Fastfile
+
+# Use lanes to add or remove testers from a project.
+lane(:add_testers) do
+  firebase_app_distribution_add_testers(
+    emails: "foo@google.com,bar@google.com"
+    # or file: "/path/to/testers.txt"
+    group_alias: "qa-team" # (Optional) add testers to this group
+  )
+end
+
+lane(:remove_testers) do
+  firebase_app_distribution_remove_testers(
+    emails: "foo@google.com,bar@google.com"
+    # or file: "/path/to/testers.txt"
+    group_alias: "qa-team" # (Optional) remove testers from this group only
+  )
+end
+
+# Add or remove testers with the terminal
+$ fastlane add_testers
+$ fastlane remove_testers
+
+Run fastlane actions
+
+fastlane run firebase_app_distribution_create_group display_name:"QA Team" alias:"qa-team"
+fastlane run firebase_app_distribution_add_testers group_alias:"qa-team" emails:"foo@google.com,bar@google.com"
+fastlane run firebase_app_distribution_remove_testers group_alias:"qa-team" emails:"foo@google.com,bar@google.com"
+fastlane run firebase_app_distribution_delete_group alias:"qa-team"
+
+You can also specify testers using --file="/path/to/testers.txt instead of
+--emails.
+
+The firebase_app_distribution_add_testers and
+firebase_app_distribution_remove_testers tasks also accept the following
+arguments:
+
+
+project_name: Your Firebase project number.
+group_alias (optional): If specified, the testers are added to (or removed from)
+specified group.
+service_credentials_file: The path to your Google service credentials file.
+firebase_cli_token: Auth token for Firebase CLI.
+
+
+The service_credentials_file and the firebase_cli_token are the same
+arguments used by the upload action.
+
+Step 5 (Optional). Get information about your app's latest release
+
+You can use the firebase_app_distribution_get_latest_release action
+to fetch information about your app's latest release in App Distribution,
+including app version information, release notes, and creation time. Use cases
+include automatically increasing the version and carrying over the release
+notes from the previous release.
+
+The return value of the action is a hash representing the latest release.
+This hash is also available using lane_context[SharedValues::FIREBASE_APP_DISTRO_LATEST_RELEASE].
+For more information about the available fields in this hash, see the
+REST API documentation.
+
+Parameters
+
+
+      
+        
+          firebase_app_distribution_get_latest_release parameters
+        
+      
+      
+        
+          
+            app
+          
+          
+            Required: Your app's Firebase App ID. You
+              can find the App ID in the Firebase console, on the
+              General Settings page.
+            app: "1:1234567890:android:0a1b2c3d4e5f67890"
+          
+        
+        
+        
+          
+            firebase_cli_token
+          
+          
+          A refresh token that's printed when you authenticate your CI environment with the
+              Firebase CLI (read
+              Use the CLI with CI systems
+              for more information).
+          
+        
+      
+      
+        
+          service_credentials_file
+        
+        
+          
+            The path to your Google service account json file. See above for how
+            to authenticate using service account credentials.
+          
+        
+      
+      
+        
+          debug
+        
+        
+          
+            A boolean flag. You can set this to true
+            to print verbose debug output.
+          
+        
+      
+    
+   
+
+Next steps
+
+
+Implement in-app feedback
+to make it easy for testers to send feedback about your app (including
+screenshots).
+Learn how to display in-app alerts
+to your testers when new builds of your app are available to install.
+Learn best practices for distributing Android apps to QA testers using CI/CD.
+
+  
+
+  
+    
+  
+
+
+  
+    
+    
+      
+    Was this helpful?
+  
+       
+         
+
+  
+  
+    
+    Send feedback
+  
+  
+
+       
+    
+    
+  
+
+  
+
+
+
+  Except as otherwise noted, the content of this page is licensed under the Creative Commons Attribution 4.0 License, and code samples are licensed under the Apache 2.0 License. For details, see the Google Developers Site Policies. Java is a registered trademark of Oracle and/or its affiliates.
+  Last updated 2025-07-02 UTC.
+
+
+
+
+
+
+
+  
+
+  
+    
+    
+    
+  
+  
+    
+  
+
+            
+          
+        
+        
+          
+            
+          
+        
+        
+          
+            
+
+  
+  
+    
+    
+    Learn
+      
+        
+        
+          
+          
+            
+          
+            Developer guides
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            SDK & API reference
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Samples
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Libraries
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+              
+              
+            
+          
+            GitHub
+          
+          
+          
+          
+        
+        
+      
+    
+    
+    
+    Stay connected
+      
+        
+        
+          
+          
+            
+          
+            Check out the blog
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Find us on Reddit
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Follow on X
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Subscribe on YouTube
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+              
+              
+            
+          
+            Attend an event
+          
+          
+          
+          
+        
+        
+      
+    
+    
+    
+    Support
+      
+        
+        
+          
+          
+            
+          
+            Contact support
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Stack Overflow
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Slack community
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Google group
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Release notes
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+          
+            Brand guidelines
+          
+          
+          
+          
+        
+        
+        
+          
+          
+            
+              
+              
+            
+          
+            FAQs
+          
+          
+          
+          
+        
+        
+      
+    
+    
+  
+  
+
+          
+        
+        
+          
+            
+
+
+  
+  
+  
+    
+      
+        
+        
+        
+        
+      
+    
+    
+      
+      
+        
+          Android
+        
+      
+      
+      
+        
+          Chrome
+        
+      
+      
+      
+        
+          Firebase
+        
+      
+      
+      
+        
+          Google Cloud Platform
+        
+      
+      
+      
+        
+          All products
+        
+      
+      
+    
+  
+  
+
+  
+  
+    
+    
+      
+      
+        
+        
+        
+          Terms
+        
+        
+      
+      
+      
+        
+        
+        
+          Privacy
+        
+        
+      
+      
+      
+        
+        
+        
+          Manage cookies
+        
+        
+      
+      
+    
+    
+    
+
+  
+    
+    
+    
+      English
+    
+    
+    
+      Deutsch
+    
+    
+    
+      Español – América Latina
+    
+    
+    
+      Français
+    
+    
+    
+      Indonesia
+    
+    
+    
+      Italiano
+    
+    
+    
+      Polski
+    
+    
+    
+      Português – Brasil
+    
+    
+    
+      Tiếng Việt
+    
+    
+    
+      Türkçe
+    
+    
+    
+      Русский
+    
+    
+    
+      עברית
+    
+    
+    
+      العربيّة
+    
+    
+    
+      فارسی
+    
+    
+    
+      हिंदी
+    
+    
+    
+      বাংলা
+    
+    
+    
+      ภาษาไทย
+    
+    
+    
+      中文 – 简体
+    
+    
+    
+      中文 – 繁體
+    
+    
+    
+      日本語
+    
+    
+    
+      한국어
+    
+    
+  
+
+
+  
+
+          
+        
+        
+          
+        
+        
+          
+ 
+       
+      
+      
+      
+        
+          
+        
+        
+          Chat
+        
+        
+      
+      
+      
+      
+     
+      
+       
+        
+       
+      
+        Ask about this page
+        bug_reportfullscreen close_fullscreen close
+      
+    
+        
+      
+        
+          Chat
+          BETA
+        
+         restart_alt
+      
+      
+        
+         
+        
+          Sign in
+        
+       
+      
+     
+    
+      
+      
+      
+    
+    
+        
+      
+    
+    
+    
+    
+    
+      
+        []
+{&#34;at&#34;: &#34;True&#34;, &#34;ga4&#34;: [], &#34;ga4p&#34;: [], &#34;gtm&#34;: [{&#34;id&#34;: &#34;GTM-N84485&#34;, &#34;purpose&#34;: 0}], &#34;parameters&#34;: {&#34;internalUser&#34;: &#34;False&#34;, &#34;language&#34;: {&#34;machineTranslated&#34;: &#34;False&#34;, &#34;requested&#34;: &#34;en&#34;, &#34;served&#34;: &#34;en&#34;}, &#34;pageType&#34;: &#34;guide&#34;, &#34;projectName&#34;: &#34;Firebase App Distribution&#34;, &#34;signedIn&#34;: &#34;False&#34;, &#34;tenant&#34;: &#34;firebase&#34;, &#34;recommendations&#34;: {&#34;sourcePage&#34;: &#34;&#34;, &#34;sourceType&#34;: 0, &#34;sourceRank&#34;: 0, &#34;sourceIdenticalDescriptions&#34;: 0, &#34;sourceTitleWords&#34;: 0, &#34;sourceDescriptionWords&#34;: 0, &#34;experiment&#34;: &#34;&#34;}, &#34;experiment&#34;: {&#34;ids&#34;: &#34;&#34;}}}
+      
+    
+    
+      
+    
+    
+    
+    
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KFPLMHC');
+  
+  
+    
+      window.addEventListener('message', function(event) {
+        
+        if (event.origin != 'https://firebase.google.com'
+            && event.origin != 'https://firebase.google.cn') {
+          return;
+        };
+        window['dataLayer'].push(event.data);
+      });
+    
+  
+
+
+
+
+
+    
+
+  
+  (function(d,e,v,s,i,t,E){d['GoogleDevelopersObject']=i;
+    t=e.createElement(v);t.async=1;t.src=s;E=e.getElementsByTagName(v)[0];
+    E.parentNode.insertBefore(t,E);})(window, document, 'script',
+    'https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/js/app_loader.js', '[4,"en",null,"/js/devsite_app_module.js","https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376","https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase","https://firebase-dot-devsite-v2-prod.appspot.com",null,null,["/_pwa/firebase/manifest.json","https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/images/video-placeholder.svg","https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/favicon.png","https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg","https://fonts.googleapis.com/css?family=Google+Sans:400,500|Roboto:400,400italic,500,500italic,700,700italic|Roboto+Mono:400,500,700&display=swap"],1,null,[1,6,8,12,14,17,21,25,50,52,63,70,75,76,80,87,91,92,93,97,98,100,101,102,103,104,105,107,108,109,110,112,113,117,118,120,122,124,125,126,127,129,130,131,132,133,134,135,136,138,140,141,147,148,149,151,152,156,157,158,159,161,163,164,168,169,170,179,180,182,183,186,191,193,196],"AIzaSyAP-jjEJBzmIyKR4F-3XITp8yM9T1gEEI8","AIzaSyB6xiKGDR5O3Ak2okS4rLkauxGUG7XP0hg","firebase.google.com","AIzaSyAQk0fBONSGUqCNznf6Krs82Ap1-NV6J4o","AIzaSyCCxcqdrZ_7QMeLCRY20bh_SXdAYqy70KY",null,null,null,["MiscFeatureFlags__developers_footer_image","DevPro__enable_enterprise","Profiles__enable_recognition_badges","MiscFeatureFlags__enable_framebox_badge_methods","Profiles__enable_profile_collections","Cloud__enable_cloud_shell_fte_user_flow","Significatio__enable_by_tenant","Profiles__enable_awarding_url","DevPro__enable_code_assist","Profiles__enable_complete_playlist_endpoint","MiscFeatureFlags__developers_footer_dark_image","DevPro__enable_cloud_innovators_plus","MiscFeatureFlags__enable_explain_this_code","Concierge__enable_actions_menu","Cloud__enable_cloud_dlp_service","Profiles__enable_dashboard_curated_recommendations","Concierge__enable_pushui","Search__enable_page_map","Search__enable_suggestions_from_borg","MiscFeatureFlags__gdp_dashboard_reskin_enabled","BookNav__enable_tenant_cache_key","DevPro__enable_developer_subscriptions","Cloud__enable_llm_concierge_chat","Concierge__enable_concierge","Profiles__enable_completequiz_endpoint","Analytics__enable_clearcut_logging","Profiles__enable_public_developer_profiles","DevPro__enable_firebase_workspaces_card","Profiles__enable_developer_profiles_callout","Profiles__enable_page_saving","Search__enable_ai_eligibility_checks","Cloud__enable_free_trial_server_call","EngEduTelemetry__enable_engedu_telemetry","MiscFeatureFlags__enable_variable_operator","Cloud__enable_cloudx_experiment_ids","Profiles__require_profile_eligibility_for_signin","TpcFeatures__enable_unmirrored_page_left_nav","DevPro__enable_google_one_card","MiscFeatureFlags__enable_llms_txt","MiscFeatureFlags__enable_dark_theme","MiscFeatureFlags__enable_firebase_utm","MiscFeatureFlags__enable_project_variables","MiscFeatureFlags__enable_view_transitions","Search__enable_ai_search_summaries","CloudShell__cloud_shell_button","Profiles__enable_stripe_subscription_management","Cloud__enable_legacy_calculator_redirect","DevPro__enable_devpro_offers","Cloud__enable_cloud_shell","Profiles__enable_join_program_group_endpoint","DevPro__enable_vertex_credit_card","MiscFeatureFlags__emergency_css","Experiments__reqs_query_experiments","Profiles__enable_release_notes_notifications","Profiles__enable_completecodelab_endpoint","MiscFeatureFlags__enable_variable_operator_index_yaml","DevPro__enable_google_payments_buyflow","CloudShell__cloud_code_overflow_menu","Cloud__fast_free_trial","Search__enable_dynamic_content_confidential_banner"],null,null,"AIzaSyBLEMok-5suZ67qRPzx0qUtbnLmyT_kCVE","https://developerscontentserving-pa.clients6.google.com","AIzaSyCM4QpTRSqP5qI4Dvjt4OAScIN8sOUlO-k","https://developerscontentsearch-pa.clients6.google.com",1,4,null,"https://developerprofiles-pa.clients6.google.com",[4,"firebase","Firebase","firebase.google.com",null,"firebase-dot-devsite-v2-prod.appspot.com",null,null,[1,1,null,null,null,null,null,null,null,null,null,[1],null,null,null,null,null,null,[1],[1,null,null,[1]],null,null,null,[1,null,1],[1,null,null,null,1]],null,[68,null,null,null,null,null,"/images/lockup.svg","/images/touchicon-180.png",null,null,null,1,1,1,null,null,null,null,null,null,null,2,null,null,null,"/images/lockup.svg",[]],[],null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,[6,1,20,22,23,29,37],null,[[],[1,1]],[[null,null,null,null,["UA-24532603-9"],["GTM-N84485"],null,null,null,null,[["UA-24532603-9",1]],[["GTM-N84485",1]],1],[[17,1],[46,8],[2,5],[36,4],[16,2]],null,1],null,4],null,"pk_live_5170syrHvgGVmSx9sBrnWtA5luvk9BwnVcvIi7HizpwauFG96WedXsuXh790rtij9AmGllqPtMLfhe2RSwD6Pn38V00uBCydV4m",1,1,"https://developerscontentinsights-pa.clients6.google.com","AIzaSyCg-ZUslalsEbXMfIo9ZP8qufZgo3LSBDU","AIzaSyDxT0vkxnY_KeINtA4LSePJO-4MAZPMRsE","https://developers.clients6.google.com"]')
+  
+
+
+    
+  
+
+
+
+
+  window['startup'] = function() {
+    googleapis.server.init();
+  };
+
+
+
+
+
+
+
+
+
+```
+
+---
+
+
+## 5. Distribute Android apps to testers using Gradle  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences. {#section-5}
+
+*Source: [https://firebase.google.com/docs/app-distribution/android/distribute-gradle](https://firebase.google.com/docs/app-distribution/android/distribute-gradle)*
+
+[Skip to main content](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#main-content)
+
+[![Firebase](https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg)](https://firebase.google.com/)
+
+`/`
+
+- [English](https://firebase.google.com/docs/app-distribution/android/distribute-gradle)
+- [Deutsch](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=de)
+- [Español – América Latina](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=es-419)
+- [Français](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=fr)
+- [Indonesia](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=id)
+- [Italiano](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=it)
+- [Polski](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=pl)
+- [Português – Brasil](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=pt-br)
+- [Tiếng Việt](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=vi)
+- [Türkçe](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=tr)
+- [Русский](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=ru)
+- [עברית](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=he)
+- [العربيّة](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=ar)
+- [فارسی](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=fa)
+- [हिंदी](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=hi)
+- [বাংলা](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=bn)
+- [ภาษาไทย](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=th)
+- [中文 – 简体](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=zh-cn)
+- [中文 – 繁體](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=zh-tw)
+- [日本語](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=ja)
+- [한국어](https://firebase.google.com/docs/app-distribution/android/distribute-gradle?hl=ko)
+
+[Blog](https://firebase.blog/) [Studio](https://studio.firebase.google.com/) [Go to console](https://console.firebase.google.com/)
+
+[Sign in](https://firebase.google.com/_d/signin?continue=https%3A%2F%2Ffirebase.google.com%2Fdocs%2Fapp-distribution%2Fandroid%2Fdistribute-gradle&prompt=select_account)
+
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+
+- On this page
+- [Before you begin](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#before-you-begin)
+- [Step 1. Set up your Android project](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#step_1_set_up_your_android_project)
+- [Step 2. Authenticate with Firebase](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#authenticate)
+  - [Use Firebase service account credentials](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#service-acc-gradle)
+  - [Sign in using the Firebase CLI](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#cli-gradle)
+- [Step 3. Configure your distribution properties](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#step_3_configure_your_distribution_properties)
+- [Step 4. Distribute your app to testers](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#step_4_distribute_your_app_to_testers)
+- [Next steps](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#next-steps)
+
+- [Firebase](https://firebase.google.com/)
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+- [Run](https://firebase.google.com/docs/run)
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+# Distribute Android apps to testers using Gradle  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.
+
+- On this page
+- [Before you begin](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#before-you-begin)
+- [Step 1. Set up your Android project](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#step_1_set_up_your_android_project)
+- [Step 2. Authenticate with Firebase](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#authenticate)
+  - [Use Firebase service account credentials](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#service-acc-gradle)
+  - [Sign in using the Firebase CLI](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#cli-gradle)
+- [Step 3. Configure your distribution properties](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#step_3_configure_your_distribution_properties)
+- [Step 4. Distribute your app to testers](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#step_4_distribute_your_app_to_testers)
+- [Next steps](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#next-steps)
+
+APKAAB
+
+You can integrate App Distribution into your Android build process using the
+App Distribution Gradle plugin. The plugin lets you specify your testers and
+release notes in your app's Gradle file, letting you configure distributions
+for different build types and variants of your app.
+
+This guide describes how to distribute APKs to testers using the
+App Distribution Gradle plugin.
+
+## Before you begin
+
+If you haven't already, [add Firebase to your Android\\
+project](https://firebase.google.com/docs/android/setup#console).
+
+If you aren't using any other Firebase products, you only have to create a
+project and register your app. However, if you decide to use additional
+products in the future, be sure to complete all of the steps on the page
+linked above.
+
+## Step 1. Set up your Android project
+
+1. In your **root-level (project-level)** Gradle file
+( `<project>/build.gradle.kts` or `<project>/build.gradle`), add the
+App Distribution Gradle plugin as a dependency:
+
+
+[Kotlin](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#kotlin-build.gradle.kts)[Groovy](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#groovy-build.gradle)More
+
+
+
+
+
+
+
+
+
+
+
+```
+plugins {
+       // ...
+       id("com.android.application") version "7.3.0" apply false
+
+       // Make sure that you have the Google services Gradle plugin dependency
+       id("com.google.gms.google-services") version "4.4.3" apply false
+
+       // Add the dependency for the App Distribution Gradle plugin
+       id("com.google.firebase.appdistribution") version "5.1.1" apply false
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+```
+plugins {
+       // ...
+       id 'com.android.application' version '7.3.0' apply false
+
+       // Make sure that you have the Google services Gradle plugin dependency
+       id 'com.google.gms.google-services' version '4.4.3' apply false
+
+       // Add the dependency for the App Distribution Gradle plugin
+       id 'com.google.firebase.appdistribution' version '5.1.1' apply false
+}
+```
+
+2. In your **module (app-level)** Gradle file (usually
+`<project>/<app-module>/build.gradle.kts` or
+`<project>/<app-module>/build.gradle`),
+add the App Distribution Gradle plugin:
+
+
+[Kotlin](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#kotlin-build.gradle.kts)[Groovy](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#groovy-build.gradle)More
+
+
+
+
+
+
+
+
+
+
+
+```
+plugins {
+     id("com.android.application")
+
+     // Make sure that you have the Google services Gradle plugin
+     id("com.google.gms.google-services")
+
+     // Add the App Distribution Gradle plugin
+     id("com.google.firebase.appdistribution")
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+```
+plugins {
+     id 'com.android.application'
+
+     // Make sure that you have the Google services Gradle plugin
+     id 'com.google.gms.google-services'
+
+     // Add the App Distribution Gradle plugin
+     id 'com.google.firebase.appdistribution'
+}
+```
+
+3. If you're behind a corporate proxy or firewall, add the following
+[Java system property](https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_system_properties)
+that enables App Distribution to upload your distributions to Firebase:
+
+
+
+
+
+
+
+
+```
+   -Djavax.net.ssl.trustStore=/path/to/truststore -Djavax.net.ssl.trustStorePassword=password
+
+```
+
+
+## Step 2. Authenticate with Firebase
+
+Before you can use the Gradle plugin, you must first authenticate with your
+Firebase project in one of the following ways. By default, the Gradle plugin
+looks for credentials from the Firebase CLI if no other authentication
+method is used.
+
+**Use Firebase service account credentials**
+
+Authenticating with a service account allows you to flexibly use the plugin with
+your continuous integration (CI) system. There are two ways to provide service
+account credentials:
+
+- Pass your service account key file to `build.gradle`. You might find this
+method convenient if you already have your service account key file in your
+build environment.
+- Set the environment variable `GOOGLE_APPLICATION_CREDENTIALS` to point to
+your service account key file. You might prefer this method if you
+already have Application Default Credentials (ADC)
+configured for another Google service (e.g., Google Cloud).
+
+To authenticate using service account credentials:
+
+1. On the
+[Google Cloud console,](https://console.cloud.google.com/projectselector2/iam-admin/serviceaccounts)
+select your project and create a new service account.
+2. Add the **Firebase App Distribution Admin** role.
+3. Create a private json key and move the key to a location accessible to your
+build environment.
+_Be sure to keep this file somewhere safe_, as it grants administrator
+access to App Distribution in your Firebase project.
+4. Skip this step if you created your app after September 20,
+2019: In the Google APIs console, enable the
+[Firebase App Distribution API.](https://console.developers.google.com/apis/api/firebaseappdistribution.googleapis.com/overview?project=_)
+When prompted, select the project with the same name as your Firebase
+project.
+5. Provide or locate your service account credentials:
+
+1. To pass Gradle your service account key, in your `build.gradle`
+      file, set the property `serviceCredentialsFile` to the private key JSON
+      file.
+2. To locate your credentials with ADC, set the environment variable
+      `GOOGLE_APPLICATION_CREDENTIALS` to the path for the private key JSON
+      file. For example:
+
+
+
+
+
+
+
+
+
+      ```
+       export GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/credentials/file.json
+
+      ```
+
+
+
+
+      For more information on authenticating with ADC, read [Providing credentials to your\\
+      application.](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application)
+
+**Sign in using the Firebase CLI**
+
+See [Log in with the Firebase CLI](https://firebase.google.com/docs/cli#sign-in-test-cli)
+for instructions on how to authenticate your project.
+
+## Step 3. Configure your distribution properties
+
+In your **module (app-level)** Gradle file (usually
+`<project>/<app-module>/build.gradle.kts` or
+`<project>/<app-module>/build.gradle`), configure App Distribution by adding at
+least one `firebaseAppDistribution` section.
+
+For example, to distribute the `release` build to testers, follow these
+instructions::
+
+[Kotlin](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#kotlin-build.gradle.kts)[Groovy](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#groovy-build.gradle)More
+
+```
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+
+android {
+
+  // ...
+
+  buildTypes {
+      getByName("release") {
+          firebaseAppDistribution {
+              artifactType = "APK"
+              releaseNotesFile = "/path/to/releasenotes.txt"
+              testers = "ali@example.com, bri@example.com, cal@example.com"
+          }
+      }
+  }
+
+  // ...
+}
+```
+
+```
+android {
+
+  // ...
+
+  buildTypes {
+      release {
+          firebaseAppDistribution {
+              artifactType="APK"
+              releaseNotesFile="/path/to/releasenotes.txt"
+              testers="ali@example.com, bri@example.com, cal@example.com"
+          }
+      }
+  }
+
+  // ...
+}
+```
+
+You can configure App Distribution for
+[build types and product flavors](https://developer.android.com/studio/build/build-variants).
+
+For example, to distribute `debug` and `release` builds in "demo" and "full"
+product flavors, follow these instructions:
+
+[Kotlin](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#kotlin-build.gradle.kts)[Groovy](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#groovy-build.gradle)More
+
+```
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
+
+android {
+
+  // ...
+
+  buildTypes {
+      getByName("debug") {...}
+      getByName("release") {...}
+  }
+
+  flavorDimensions += "version"
+  productFlavors {
+      create("demo") {
+          dimension = "version"
+          firebaseAppDistribution {
+              releaseNotes = "Release notes for demo version"
+              testers = "demo@testers.com"
+          }
+      }
+      create("full") {
+          dimension = "version"
+          firebaseAppDistribution {
+              releaseNotes = "Release notes for full version"
+              testers = "full@testers.com"
+          }
+      }
+  }
+
+  // ...
+}
+```
+
+```
+android {
+
+  // ...
+
+  buildTypes {
+      debug {...}
+      release {...}
+  }
+
+  flavorDimensions "version"
+  productFlavors {
+      demo {
+          dimension "version"
+          firebaseAppDistribution {
+              releaseNotes="Release notes for demo version"
+              testers="demo@testers.com"
+          }
+      }
+      full {
+          dimension "version"
+          firebaseAppDistribution {
+              releaseNotes="Release notes for full version"
+              testers="full@testers.com"
+          }
+      }
+  }
+
+  // ...
+}
+```
+
+Use the following parameters to configure the distribution:
+
+| App Distribution Build Parameters |
+| --- |
+| `appId` | Your app's Firebase App ID. Required only if you don't have the<br>Google Services Gradle plugin installed. You can find the App ID in<br>the `google-services.json` file or in the<br>Firebase console on the<br>[General Settings page](https://console.firebase.google.com/project/_/settings/general/). The value in your `build.gradle`<br>file overrides the value output from the `google-services`<br>plugin.<br>```<br>appId="1:1234567890:android:321abc456def7890"<br>``` |
+| `serviceCredentialsFile` | The path to your service account private key JSON file. Required only<br>if you use service account authentication. |
+| `artifactType` | Specifies your app's file type. Can be set to<br>`"AAB"` or `"APK"`. |
+| `artifactPath` | Absolute path to the APK or AAB file you want to upload. |
+| `releaseNotes` or `releaseNotesFile` | Release notes for this build.<br>You can either specify the release notes directly or the<br>path to a plain text file. |
+| `testers` or `testersFile` | The email addresses of the testers you want to distribute builds<br>to.<br>You can specify the testers as a comma-separated list of email<br>addresses:<br>```<br>testers="ali@example.com, bri@example.com, cal@example.com"<br>```<br>Or, you can specify the path to a file containing a comma-separated<br>list of email addresses:<br>```<br>testersFile="/path/to/testers.txt"<br>``` |
+| `groups` or `groupsFile` | The tester groups you want to distribute builds to (see<br>[Manage testers](https://firebase.google.com/docs/app-distribution/manage-testers)).<br>Groups are specified using group aliases, which you can<br>find in the **Testers** tab in the Firebase<br>App Distribution console.<br>You can specify the groups as a comma-separated list of group<br>aliases:<br>```<br>groups="qa-team, android-testers"<br>```<br>Or, you can specify the path to a file containing a comma-separated<br>list of group aliases:<br>```<br>groupsFile="/path/to/tester-groups.txt"<br>``` |
+| `testDevices` or `testDevicesFile` | The following distribution types are part of the **Automated tester beta feature**.<br>The test devices you want to distribute builds to (see [Automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester)).<br>You can specify the test devices as a semicolon-separated list of<br>device specifications:<br>```<br>testDevices="model=shiba,version=34,locale=en,orientation=portrait;model=b0q,version=33,locale=en,orientation=portrait"<br>```<br>Or, you can specify the path to a file containing a semicolon-separated<br>list of device specifications:<br>```<br>testDevicesFile="/path/to/testDevices.txt"<br>``` |
+| `testUsername` | The username for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `testPassword` or `testPasswordFile` | The password for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester).<br>Or, you can specify the path to a plain text file containing a password:<br>```<br>testPasswordFile="/path/to/testPassword.txt"<br>``` |
+| `testUsernameResource` | Resource name for the username field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `testPasswordResource` | Resource name for the password field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `testNonBlocking` | Run [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester) asynchronously. Visit the Firebase console for the automatic test results. |
+| `stacktrace` | Prints out the stacktrace for user exceptions. This is helpful when<br>debugging issues. |
+
+## Step 4. Distribute your app to testers
+
+1. Finally, to package your test app and invite testers, build the targets
+`BUILD-VARIANT` and
+`appDistributionUploadBUILD-VARIANT` with your
+project's Gradle wrapper, where BUILD-VARIANT is the optional
+product flavor and build type you configured in the previous step.
+For more information about product flavors, see
+[Configure build variants](https://developer.android.com/studio/build/build-variants).
+
+For example, to distribute your app using the `release` build variant, run the
+following command:
+
+
+
+
+
+
+
+
+```
+./gradlew assembleRelease appDistributionUploadRelease
+
+```
+
+
+Or, if you authenticated with your [Google Account](https://firebase.google.com/docs/app-distribution/android/distribute-gradle#google-acc-gradle)
+and didn't provide credentials in your Gradle build file, include the
+`FIREBASE_TOKEN` variable:
+
+
+
+
+
+
+
+
+```
+export FIREBASE_TOKEN=1/a1b2c3d4e5f67890
+./gradlew --stop // Only needed for environment variable changes
+./gradlew assembleRelease appDistributionUploadRelease
+
+```
+
+2. You can also override the values set in your `build.gradle` file by passing
+command line arguments in the form of
+`--<property-name>=<property-value>`. For example:
+
+
+   - To upload a debug build to App Distribution:
+
+
+
+
+
+
+
+
+     ```devsite-terminal
+     ./gradlew bundleDebug appDistributionUploadDebug
+         --artifactType="APK"
+     ```
+
+   - To invite additional testers or remove existing testers from your Firebase
+     project:
+
+
+
+
+
+
+
+
+     ```devsite-terminal
+     ./gradlew appDistributionAddTesters
+         --projectNumber=<project_number>
+         --emails="anothertester@email.com, moretesters@email.com"
+     ./gradlew appDistributionRemoveTesters
+         --projectNumber=<project_number>
+         --emails="anothertester@email.com, moretesters@email.com"
+     ```
+
+
+     Once a tester has been added to your Firebase project, you can add them to
+     individual releases. Testers who are removed will no longer have access to
+     releases in your project, but may still retain access to your releases
+     for a window of time.
+
+
+You can also specify testers using `--file="/path/to/testers.txt"` instead of
+`--emails`.
+
+The `appDistributionAddTesters` and `appDistributionRemoveTesters` tasks
+also accept the following arguments:
+
+   - `projectNumber`: Your Firebase project number.
+
+   - `serviceCredentialsFile`: The path to your Google service credentials file.
+     This is the same argument used by the upload action.
+
+The Gradle plugin outputs the following links after the release upload. These
+links help you manage binaries and ensure that testers and other developers
+have the right release:
+
+- `firebase_console_uri` \- A link to the Firebase console displaying a
+single release. You can share this link with other developers in your
+org.
+- `testing_uri` \- A link to the release in the tester experience
+(Android native app) that lets testers view release
+notes and install the app onto their device. The tester needs access to
+the release in order to use the link.
+- `binary_download_uri` \- A signed link that directly downloads and
+installs the app binary (APK or AAB file). The link expires after one
+hour.
+
+Once you distribute your build, it becomes available in the
+App Distribution dashboard of the Firebase console for 150 days (five months).
+When the build is 30 days from expiring, an expiration notice appears in both
+the console and your tester's list of builds on their test device.
+
+Testers who haven't been invited to test the app receive email invitations to
+get started, and existing testers receive email notifications that a new build
+is ready to test (read the
+[tester set up guide](https://firebase.google.com/docs/app-distribution/android/set-up-for-testing)
+for instructions on how to install the test
+app). You can monitor the status of each tester-whether they accepted the
+invitation and whether they downloaded the app-in the Firebase console.
+
+Testers have 30 days to accept an invitation to test the app before it expires.
+When an invitation is 5 days from expiring, an expiration notice appears in the
+Firebase console next to the tester on a release. An invitation can be
+renewed by resending it using the drop-down menu on the tester row.
+
+## Next steps
+
+- Implement [in-app feedback](https://firebase.google.com/docs/app-distribution/collect-feedback-from-testers)
+to make it easy for testers to send feedback about your app (including
+screenshots).
+
+- Learn how to display [in-app alerts](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=android)
+to your testers when new builds of your app are available to install.
+
+- Visit the [Android App Bundle codelab](https://firebase.google.com/codelabs/appdistribution-app-bundles)
+to learn how to distribute app bundle releases step by step.
+
+- Learn best practices for [distributing Android apps to QA testers using CI/CD](https://firebase.google.com/docs/app-distribution/best-practices-distributing-android-apps-to-qa-testers-with-ci-cd).
+
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/), and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details, see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark of Oracle and/or its affiliates.
+
+Last updated 2025-07-02 UTC.
+
+Chat
+
+
+## Ask about this page
+
+bug\_reportfullscreenclose\_fullscreenclose
+
+## Chat
+
+### BETA
+
+restart\_alt
+
+Sign in
+
+---
+
+
+## 6. Distribute iOS apps to testers using the Firebase CLI  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences. {#section-6}
+
+*Source: [https://firebase.google.com/docs/app-distribution/ios/distribute-cli](https://firebase.google.com/docs/app-distribution/ios/distribute-cli)*
+
+[Skip to main content](https://firebase.google.com/docs/app-distribution/ios/distribute-cli#main-content)
+
+[![Firebase](https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg)](https://firebase.google.com/)
+
+`/`
+
+- [English](https://firebase.google.com/docs/app-distribution/ios/distribute-cli)
+- [Español – América Latina](https://firebase.google.com/docs/app-distribution/ios/distribute-cli?hl=es-419)
+- [Indonesia](https://firebase.google.com/docs/app-distribution/ios/distribute-cli?hl=id)
+- [Português – Brasil](https://firebase.google.com/docs/app-distribution/ios/distribute-cli?hl=pt-br)
+- [中文 – 简体](https://firebase.google.com/docs/app-distribution/ios/distribute-cli?hl=zh-cn)
+- [日本語](https://firebase.google.com/docs/app-distribution/ios/distribute-cli?hl=ja)
+- [한국어](https://firebase.google.com/docs/app-distribution/ios/distribute-cli?hl=ko)
+
+[Blog](https://firebase.blog/) [Studio](https://studio.firebase.google.com/) [Go to console](https://console.firebase.google.com/)
+
+[Sign in](https://firebase.google.com/_d/signin?continue=https%3A%2F%2Ffirebase.google.com%2Fdocs%2Fapp-distribution%2Fios%2Fdistribute-cli&prompt=select_account)
+
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+
+- On this page
+- [Manage testers and groups](https://firebase.google.com/docs/app-distribution/ios/distribute-cli#manage-testers-and-groups)
+- [Next steps](https://firebase.google.com/docs/app-distribution/ios/distribute-cli#next_steps)
+
+- [Firebase](https://firebase.google.com/)
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+- [Run](https://firebase.google.com/docs/run)
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+# Distribute iOS apps to testers using the Firebase CLI  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.
+
+- On this page
+- [Manage testers and groups](https://firebase.google.com/docs/app-distribution/ios/distribute-cli#manage-testers-and-groups)
+- [Next steps](https://firebase.google.com/docs/app-distribution/ios/distribute-cli#next_steps)
+
+You can distribute builds to testers using the Firebase CLI. The CLI
+tool lets you specify testers and release notes for a build, and distributes the
+build accordingly.
+
+To distribute your app to testers, upload the IPA file using the
+Firebase CLI:
+
+1. Install or update to the latest version of the [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli)
+    (we recommend downloading the standalone binary for the CLI specific to your OS).
+    Make sure to [sign in](https://firebase.google.com/docs/cli#sign-in-test-cli) and test that you can access your
+    projects.
+
+
+2. Run the `appdistribution:distribute` command to upload your app and
+    distribute it to testers. Use the following parameters to configure the
+    distribution:
+
+
+
+
+| appdistribution:distribute options |
+| --- |
+| `--app` | **Required**: Your app's Firebase App ID. You can find the App<br>ID in the Firebase console, on the<br>[General\<br>Settings page](https://console.firebase.google.com/project/_/settings/general/).<br>```<br>--app 1:1234567890:ios:0a1b2c3d4e5f67890<br>``` |
+| `--token` | A refresh token that's printed when you authenticate your CI<br>environment with the Firebase CLI (read<br>[Use the CLI with CI\<br>systems](https://firebase.google.com/docs/cli#cli-ci-systems)<br>for more information).<br> <br>```<br>--token "$FIREBASE_TOKEN"<br>``` |
+| `--release-notes`<br>`--release-notes-file` | Release notes for this build.<br>You can either specify the release notes directly:<br>```<br>--release-notes "Text of release notes"<br>```<br>Or, specify the path to a plain text file:<br>```<br>--release-notes-file "/path/to/release-notes.txt"<br>``` |
+| `--testers`<br>`--testers-file` | The email addresses of the testers you want to invite.<br>You can specify the testers as a comma-separated list of email<br>addresses:<br>```<br>--testers "ali@example.com, bri@example.com, cal@example.com"<br>```<br>Or, you can specify the path to a plain text file containing a<br>comma-separated list of email addresses:<br>```<br>--testers-file "/path/to/testers.txt"<br>``` |
+| `--groups`<br>`--groups-file` | The tester groups you want to invite (refer to<br>[Manage testers](https://firebase.google.com/docs/app-distribution/manage-testers)).<br>Groups are specified using group aliases, which you can<br>look up in the Firebase console.<br>You can specify the groups as a comma-separated list:<br>```<br>--groups "qa-team, trusted-testers"<br>```<br>Or, you can specify the path to a plain text file containing a<br>comma-separated list of group names:<br>```<br>--groups-file "/path/to/groups.txt"<br>``` |
+| `--debug` | A flag you can include to print verbose log output. |
+| `--test-devices`<br>`--test-devices-file` | The following distribution types are part of the **Automated tester beta feature**.<br>The test devices you want to distribute builds to (refer to<br>[Automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester)).<br>You can specify the testers as a comma-separated list of email<br>addresses:<br>```<br>--test-devices: "model=shiba,version=34,locale=en,orientation=portrait;model=b0q,version=33,locale=en,orientation=portrait"<br>```<br>Or, you can specify the path to a plain text file containing a<br>semicolon-separated list of test devices:<br>```<br>--test-devices-file: "/path/to/test-devices.txt"<br>``` |
+| `--test-username` | The username for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `--test-password`<br>`--test-password-file` | The password for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester).<br>Or, you can specify the path to a plain text file containing a password:<br>```<br>--test-password-file: "/path/to/test-password.txt"<br>``` |
+| `--test-username-resource` | Resource name for the username field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `--test-password-resource` | Resource name for the password field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `--test-non-blocking` | Run [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester) asynchronously. Visit the Firebase console for the automatic test results. |
+
+
+
+For example:
+
+
+
+
+
+
+
+
+```
+firebase appdistribution:distribute test.ipa  \
+       --app 1:1234567890:ios:0a1b2c3d4e5f67890  \
+       --release-notes "Bug fixes and improvements" --testers-file testers.txt
+```
+
+
+The Firebase CLI outputs the following links after the release upload.
+    These links help you manage binaries and ensure that testers and other
+    developers have the right release:
+
+
+
+   - `firebase_console_uri` \- A link to the
+      Firebase console displaying a single release. You can share this
+      link with other developers in your org.
+
+   - `testing_uri` \- A link to the release in the tester
+      experience
+
+      (iOS web clip)
+
+      that lets testers view release
+      notes and install the app onto their device. The tester needs
+      access to the release in order to use the link.
+
+   - `binary_download_uri` \- A signed link that directly
+      downloads and installs the app binary
+
+      (IPA file)
+      . The link expires after one hour.
+
+
+### Manage testers and groups
+
+In addition to distributing releases, you can also use
+`appdistribution:testers:add` and
+`appdistribution:testers:remove` to invite new testers or remove
+existing testers from your Firebase project.
+
+Once a tester has been added
+to your Firebase project, you can add them to individual releases.
+Once you remove a tester, they will no longer have access to
+releases in your project. Note that testers who are recently removed can
+still retain access to your releases for a window of time.
+
+For example:
+
+```devsite-terminal
+firebase appdistribution:testers:add anothertester@email.com moretesters@email.com
+
+firebase appdistribution:testers:remove anothertester@email.com moretesters@email.com
+```
+
+Tester emails must be separated by a space. You can also specify testers
+using `--file /path/to/testers.txt`.
+
+
+If you have a large number of testers you should consider using groups:
+You can use `appdistribution:group:create` and
+`appdistribution:group:delete` to create or delete groups in your Firebase
+project.
+
+Use `--group-alias` to specify a group for the
+`appdistribution:testers:add` and
+`appdistribution:testers:remove` commands.
+
+For example:
+
+```devsite-terminal
+firebase appdistribution:group:create "QA team" qa-team
+
+firebase appdistribution:testers:add --group-alias=qa-team anothertester@email.com moretesters@email.com
+
+firebase appdistribution:testers:remove --group-alias=qa-team anothertester@email.com moretesters@email.com
+
+firebase appdistribution:group:delete qa-team
+```
+
+Once you distribute your build, it becomes available in the
+App Distribution dashboard of the Firebase console for 150 days (five months).
+When the build is 30 days from expiring, an expiration notice appears in both
+the console and your tester's list of builds on their test device.
+
+Testers who haven't been invited to test the app receive email invitations to
+get started, and existing testers receive email notifications that a new build
+is ready to test. To learn how to install the test
+app, see [Get set up as a tester](https://firebase.google.com/docs/app-distribution/get-set-up-as-a-tester?platform=ios).
+You can monitor the status of each tester-whether they accepted the
+invitation and whether they downloaded the app-in the Firebase console.
+
+Testers have 30 days to accept an invitation to test the app before it expires.
+When an invitation is 5 days from expiring, an expiration notice appears in the
+Firebase console next to the tester on a release. An invitation can be
+renewed by resending it using the drop-down menu on the tester row.
+
+## Next steps
+
+- To register more devices manually or programmatically, see
+[Register additional iOS devices](https://firebase.google.com/docs/app-distribution/register-additional-devices).
+
+- Learn best practices for [distributing Apple apps to QA testers using CI/CD and fastlane](https://firebase.google.com/docs/app-distribution/best-practices-distributing-apple-apps-to-qa-testers-with-ci-cd-fastlane).
+
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/), and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details, see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark of Oracle and/or its affiliates.
+
+Last updated 2025-07-02 UTC.
+
+Chat
+
+
+## Ask about this page
+
+bug\_reportfullscreenclose\_fullscreenclose
+
+## Chat
+
+### BETA
+
+restart\_alt
+
+Sign in
+
+---
+
+
+## 7. Distribute Android apps to testers using the Firebase CLI  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences. {#section-7}
+
+*Source: [https://firebase.google.com/docs/app-distribution/android/distribute-cli](https://firebase.google.com/docs/app-distribution/android/distribute-cli)*
+
+[Skip to main content](https://firebase.google.com/docs/app-distribution/android/distribute-cli#main-content)
+
+[![Firebase](https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg)](https://firebase.google.com/)
+
+`/`
+
+- [English](https://firebase.google.com/docs/app-distribution/android/distribute-cli)
+- [Deutsch](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=de)
+- [Español – América Latina](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=es-419)
+- [Français](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=fr)
+- [Indonesia](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=id)
+- [Italiano](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=it)
+- [Polski](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=pl)
+- [Português – Brasil](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=pt-br)
+- [Tiếng Việt](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=vi)
+- [Türkçe](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=tr)
+- [Русский](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=ru)
+- [עברית](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=he)
+- [العربيّة](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=ar)
+- [فارسی](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=fa)
+- [हिंदी](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=hi)
+- [বাংলা](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=bn)
+- [ภาษาไทย](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=th)
+- [中文 – 简体](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=zh-cn)
+- [中文 – 繁體](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=zh-tw)
+- [日本語](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=ja)
+- [한국어](https://firebase.google.com/docs/app-distribution/android/distribute-cli?hl=ko)
+
+[Blog](https://firebase.blog/) [Studio](https://studio.firebase.google.com/) [Go to console](https://console.firebase.google.com/)
+
+[Sign in](https://firebase.google.com/_d/signin?continue=https%3A%2F%2Ffirebase.google.com%2Fdocs%2Fapp-distribution%2Fandroid%2Fdistribute-cli&prompt=select_account)
+
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+
+- On this page
+- [Before you begin](https://firebase.google.com/docs/app-distribution/android/distribute-cli#before-you-begin)
+- [Step 1. Build your app](https://firebase.google.com/docs/app-distribution/android/distribute-cli#step_1_build_your_app)
+- [Step 2. Distribute your app to testers](https://firebase.google.com/docs/app-distribution/android/distribute-cli#step_2_distribute_your_app_to_testers)
+  - [Manage testers and groups](https://firebase.google.com/docs/app-distribution/android/distribute-cli#manage-testers-and-groups_1)
+- [Next steps](https://firebase.google.com/docs/app-distribution/android/distribute-cli#next-steps)
+
+- [Firebase](https://firebase.google.com/)
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+- [Run](https://firebase.google.com/docs/run)
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+# Distribute Android apps to testers using the Firebase CLI  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.
+
+- On this page
+- [Before you begin](https://firebase.google.com/docs/app-distribution/android/distribute-cli#before-you-begin)
+- [Step 1. Build your app](https://firebase.google.com/docs/app-distribution/android/distribute-cli#step_1_build_your_app)
+- [Step 2. Distribute your app to testers](https://firebase.google.com/docs/app-distribution/android/distribute-cli#step_2_distribute_your_app_to_testers)
+  - [Manage testers and groups](https://firebase.google.com/docs/app-distribution/android/distribute-cli#manage-testers-and-groups_1)
+- [Next steps](https://firebase.google.com/docs/app-distribution/android/distribute-cli#next-steps)
+
+APKAAB
+
+This guide describes how to distribute APKs to testers
+using the Firebase CLI. The CLI tool lets you specify testers and
+release notes for a build, then distributes the build accordingly.
+
+## Before you begin
+
+If you haven't already, [add Firebase to your Android\\
+project](https://firebase.google.com/docs/android/setup#console).
+
+If you aren't using any other Firebase products, you only have to create a
+project and register your app. However, if you decide to use additional
+products in the future, be sure to complete all of the steps on the page
+linked above.
+
+## Step 1. Build your app
+
+When you're ready to distribute a pre-release version of your app to testers,
+build your APK using your normal process. You must sign the APK with your debug
+key or app signing key.
+
+## Step 2. Distribute your app to testers
+
+To distribute your app to testers, upload your app's file using the
+Firebase CLI:
+
+1. Install or update to the latest version of the [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli)
+    (we recommend downloading the standalone binary for the CLI specific to your OS).
+    Make sure to [sign in](https://firebase.google.com/docs/cli#sign-in-test-cli) and test that you can access your
+    projects.
+
+
+2. Run the `appdistribution:distribute` command to upload your app and
+    distribute it to testers. Use the following parameters to configure the
+    distribution:
+
+
+
+
+| appdistribution:distribute options |
+| --- |
+| `--app` | **Required**: Your app's Firebase App ID. You can find the App<br>ID in the Firebase console, on the<br>[General\<br>Settings page](https://console.firebase.google.com/project/_/settings/general/).<br>```<br>--app 1:1234567890:android:0a1b2c3d4e5f67890<br>``` |
+| `--token` | A refresh token that's printed when you authenticate your CI<br>environment with the Firebase CLI (read<br>[Use the CLI with CI\<br>systems](https://firebase.google.com/docs/cli#cli-ci-systems)<br>for more information).<br> <br>```<br>--token "$FIREBASE_TOKEN"<br>``` |
+| `--release-notes`<br>`--release-notes-file` | Release notes for this build.<br>You can either specify the release notes directly:<br>```<br>--release-notes "Text of release notes"<br>```<br>Or, specify the path to a plain text file:<br>```<br>--release-notes-file "/path/to/release-notes.txt"<br>``` |
+| `--testers`<br>`--testers-file` | The email addresses of the testers you want to invite.<br>You can specify the testers as a comma-separated list of email<br>addresses:<br>```<br>--testers "ali@example.com, bri@example.com, cal@example.com"<br>```<br>Or, you can specify the path to a plain text file containing a<br>comma-separated list of email addresses:<br>```<br>--testers-file "/path/to/testers.txt"<br>``` |
+| `--groups`<br>`--groups-file` | The tester groups you want to invite (refer to<br>[Manage testers](https://firebase.google.com/docs/app-distribution/manage-testers)).<br>Groups are specified using group aliases, which you can<br>look up in the Firebase console.<br>You can specify the groups as a comma-separated list:<br>```<br>--groups "qa-team, trusted-testers"<br>```<br>Or, you can specify the path to a plain text file containing a<br>comma-separated list of group names:<br>```<br>--groups-file "/path/to/groups.txt"<br>``` |
+| `--debug` | A flag you can include to print verbose log output. |
+| `--test-devices`<br>`--test-devices-file` | The following distribution types are part of the **Automated tester beta feature**.<br>The test devices you want to distribute builds to (refer to<br>[Automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester)).<br>You can specify the testers as a comma-separated list of email<br>addresses:<br>```<br>--test-devices: "model=shiba,version=34,locale=en,orientation=portrait;model=b0q,version=33,locale=en,orientation=portrait"<br>```<br>Or, you can specify the path to a plain text file containing a<br>semicolon-separated list of test devices:<br>```<br>--test-devices-file: "/path/to/test-devices.txt"<br>``` |
+| `--test-username` | The username for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `--test-password`<br>`--test-password-file` | The password for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester).<br>Or, you can specify the path to a plain text file containing a password:<br>```<br>--test-password-file: "/path/to/test-password.txt"<br>``` |
+| `--test-username-resource` | Resource name for the username field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `--test-password-resource` | Resource name for the password field for automatic login to be used during [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester). |
+| `--test-non-blocking` | Run [automated tests](https://firebase.google.com/docs/app-distribution/android-automated-tester) asynchronously. Visit the Firebase console for the automatic test results. |
+
+
+
+For example:
+
+
+
+
+
+
+
+
+```
+firebase appdistribution:distribute test.apk  \
+       --app 1:1234567890:android:0a1b2c3d4e5f67890  \
+       --release-notes "Bug fixes and improvements" --testers-file testers.txt
+```
+
+
+The Firebase CLI outputs the following links after the release upload.
+    These links help you manage binaries and ensure that testers and other
+    developers have the right release:
+
+
+
+   - `firebase_console_uri` \- A link to the
+      Firebase console displaying a single release. You can share this
+      link with other developers in your org.
+
+   - `testing_uri` \- A link to the release in the tester
+      experience
+
+      (Android native app)
+
+      that lets testers view release
+      notes and install the app onto their device. The tester needs
+      access to the release in order to use the link.
+
+   - `binary_download_uri` \- A signed link that directly
+      downloads and installs the app binary
+
+      (APK or AAB file)
+      . The link expires after one hour.
+
+
+### Manage testers and groups
+
+In addition to distributing releases, you can also use
+`appdistribution:testers:add` and
+`appdistribution:testers:remove` to invite new testers or remove
+existing testers from your Firebase project.
+
+Once a tester has been added
+to your Firebase project, you can add them to individual releases.
+Once you remove a tester, they will no longer have access to
+releases in your project. Note that testers who are recently removed can
+still retain access to your releases for a window of time.
+
+For example:
+
+```devsite-terminal
+firebase appdistribution:testers:add anothertester@email.com moretesters@email.com
+
+firebase appdistribution:testers:remove anothertester@email.com moretesters@email.com
+```
+
+Tester emails must be separated by a space. You can also specify testers
+using `--file /path/to/testers.txt`.
+
+
+If you have a large number of testers you should consider using groups:
+You can use `appdistribution:group:create` and
+`appdistribution:group:delete` to create or delete groups in your Firebase
+project.
+
+Use `--group-alias` to specify a group for the
+`appdistribution:testers:add` and
+`appdistribution:testers:remove` commands.
+
+For example:
+
+```devsite-terminal
+firebase appdistribution:group:create "QA team" qa-team
+
+firebase appdistribution:testers:add --group-alias=qa-team anothertester@email.com moretesters@email.com
+
+firebase appdistribution:testers:remove --group-alias=qa-team anothertester@email.com moretesters@email.com
+
+firebase appdistribution:group:delete qa-team
+```
+
+Once you distribute your build, it becomes available in the
+App Distribution dashboard of the Firebase console for 150 days (five months).
+When the build is 30 days from expiring, an expiration notice appears in both
+the console and your tester's list of builds on their test device.
+
+Testers who haven't been invited to test the app receive email invitations to
+get started, and existing testers receive email notifications that a new build
+is ready to test (read the
+[tester set up guide](https://firebase.google.com/docs/app-distribution/android/set-up-for-testing)
+for instructions on how to install the test
+app). You can monitor the status of each tester-whether they accepted the
+invitation and whether they downloaded the app-in the Firebase console.
+
+Testers have 30 days to accept an invitation to test the app before it expires.
+When an invitation is 5 days from expiring, an expiration notice appears in the
+Firebase console next to the tester on a release. An invitation can be
+renewed by resending it using the drop-down menu on the tester row.
+
+## Next steps
+
+- Implement [in-app feedback](https://firebase.google.com/docs/app-distribution/collect-feedback-from-testers)
+to make it easy for testers to send feedback about your app (including
+screenshots).
+
+- Learn how to display [in-app alerts](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=android)
+to your testers when new builds of your app are available to install.
+
+- Learn best practices for [distributing Android apps to QA testers using CI/CD](https://firebase.google.com/docs/app-distribution/best-practices-distributing-android-apps-to-qa-testers-with-ci-cd).
+
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/), and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details, see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark of Oracle and/or its affiliates.
+
+Last updated 2025-07-02 UTC.
+
+Chat
+
+
+## Ask about this page
+
+bug\_reportfullscreenclose\_fullscreenclose
+
+## Chat
+
+### BETA
+
+restart\_alt
+
+Sign in
+
+---
+
+
+## 8. Notify testers about new builds  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences. {#section-8}
+
+*Source: [https://firebase.google.com/docs/app-distribution/set-up-alerts](https://firebase.google.com/docs/app-distribution/set-up-alerts)*
+
+[Skip to main content](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#main-content)
+
+[![Firebase](https://www.gstatic.com/devrel-devsite/prod/v46d043083f27fa7361aea8506dabbd161e0b84f5a7c6df8d5e3cfad447dd4376/firebase/images/lockup.svg)](https://firebase.google.com/)
+
+`/`
+
+- [English](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios)
+- [Deutsch](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=de)
+- [Español – América Latina](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=es-419)
+- [Français](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=fr)
+- [Indonesia](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=id)
+- [Italiano](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=it)
+- [Polski](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=pl)
+- [Português – Brasil](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=pt-br)
+- [Tiếng Việt](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=vi)
+- [Türkçe](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=tr)
+- [Русский](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=ru)
+- [עברית](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=he)
+- [العربيّة](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=ar)
+- [فارسی](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=fa)
+- [हिंदी](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=hi)
+- [বাংলা](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=bn)
+- [ภาษาไทย](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=th)
+- [中文 – 简体](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=zh-cn)
+- [中文 – 繁體](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=zh-tw)
+- [日本語](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=ja)
+- [한국어](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios&hl=ko)
+
+[Blog](https://firebase.blog/) [Studio](https://studio.firebase.google.com/) [Go to console](https://console.firebase.google.com/)
+
+[Sign in](https://firebase.google.com/_d/signin?continue=https%3A%2F%2Ffirebase.google.com%2Fdocs%2Fapp-distribution%2Fset-up-alerts%3Fplatform%3Dios&prompt=select_account)
+
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+
+- On this page
+- [Before you begin](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#before_you_begin_2)
+- [Step 1: Enable the App Distribution Tester API](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#enable-api)
+- [Step 2: Add App Distribution to your app](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#add-appdistro)
+- [Step 3: Configure in-app alerts](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#configure-alerts)
+  - [Basic configuration](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#basic-config)
+  - [Advanced configuration](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#advanced-config)
+- [Step 4: Build and test your implementation](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#build-app)
+
+- [Firebase](https://firebase.google.com/)
+- [Documentation](https://firebase.google.com/docs)
+- [App Distribution](https://firebase.google.com/docs/app-distribution)
+- [Run](https://firebase.google.com/docs/run)
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+# Notify testers about new builds  bookmark\_border   Stay organized with collections     Save and categorize content based on your preferences.
+
+- On this page
+- [Before you begin](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#before_you_begin_2)
+- [Step 1: Enable the App Distribution Tester API](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#enable-api)
+- [Step 2: Add App Distribution to your app](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#add-appdistro)
+- [Step 3: Configure in-app alerts](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#configure-alerts)
+  - [Basic configuration](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#basic-config)
+  - [Advanced configuration](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#advanced-config)
+- [Step 4: Build and test your implementation](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#build-app)
+
+iOS+Android
+
+The optional Firebase App Distribution iOS and Android SDKs let you display
+in-app alerts to your testers when new builds of your app are available to
+install. This guide explains how to use the App Distribution iOS and Android SDKs
+to create and customize new build alerts for your testers.
+
+## Before you begin
+
+If you haven't already, [add Firebase to your iOS project](https://firebase.google.com/docs/ios/setup).
+
+## **Step 1**: Enable the App Distribution Tester API
+
+1. Select your project in the
+[Google Cloud console](https://console.cloud.google.com/apis/library/firebaseapptesters.googleapis.com).
+
+2. Under **Firebase App Testers API**, click **Enable**.
+
+
+## **Step 2**: Add App Distribution to your app
+
+1. Open the Podfile you created for the project (or run `pod init` to create
+one), then add the following line inside the target section:
+
+
+
+
+
+
+
+
+```
+pod 'FirebaseAppDistribution'
+```
+
+2. In the directory of your podfile, run `pod install`, then open the
+created `.xcworkspace` file.
+
+3. Import the Firebase module in your `App` struct or `UIApplicationDelegate`:
+
+
+[Swift](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#swift)[Objective-C](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#objective-c)More
+
+
+
+
+
+
+
+
+
+
+
+```
+import FirebaseCore
+import FirebaseAppDistribution
+
+```
+
+
+
+
+
+
+
+
+
+
+
+```
+@import FirebaseCore;
+@import FirebaseAppDistribution;
+
+```
+
+4. Configure a `FirebaseApp` shared instance in your app delegate's
+`application(_:didFinishLaunchingWithOptions:)` method:
+
+
+[Swift](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#swift)[Objective-C](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#objective-c)More
+
+
+
+
+
+
+
+
+
+
+
+```
+// Use Firebase library to configure APIs
+FirebaseApp.configure()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+```
+// Use Firebase library to configure APIs
+[FIRApp configure];
+
+```
+
+5. If swizzling is disabled, pass any opened URLs to the App Distribution SDK in
+your implementation of `application(_:open:options:)`:
+
+
+[Swift](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#swift)[Objective-C](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#objective-c)More
+
+
+
+
+
+
+
+
+
+
+
+```
+func application(_ app: UIApplication,
+                    open url: URL,
+                    options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+      if AppDistribution.appDistribution().application(application, open: url, options: options) {
+         return true
+      }
+
+      // Handle other non-Firebase URLs here.
+
+      return false
+}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+```
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+if ([[FIRAppDistribution appDistribution] application:app openURL:url options:options]) {
+      return YES;
+}
+
+// Handle other non-Firebase URLs here.
+
+return NO;
+}
+
+```
+
+6. Finally, recompile your app.
+
+
+## **Step 3**: Configure in-app alerts
+
+The App Distribution SDK provides two ways of setting up in-app build alerts for
+your testers: a basic alert configuration, which comes with pre-built app update
+and sign-in dialogues to display to testers, and an advanced alert
+configuration, which allows you to customize your own user interface. We
+recommend first using the basic alert configuration if you're new to the
+App Distribution SDK.
+
+### **Basic configuration**
+
+Use `checkForUpdate` to display a pre-built enable alerts dialogue to
+testers who haven't yet enabled alerts, and then check if a new build is
+available. When called, the method enacts the following sequence:
+
+1. Checks if a tester has enabled alerts by prompting them to sign into
+   App Distribution with their Google account.
+
+2. If the tester has not yet enabled alerts, displays a pre-built dialogue.
+
+   Enabling alerts is a one-time process on the test device and persists across
+   updates of your app. Alerts remain enabled on the test device until
+   either the app is uninstalled, or until the `signOutTester` method is called.
+   See the method's reference documentation
+   ( [Swift](https://firebase.google.com/docs/reference/swift/firebaseappdistribution/api/reference/Classes)
+   or [Objective-C](https://firebase.google.com/docs/reference/ios/firebaseappdistribution/api/reference/Classes))
+   for more information.
+
+3. Checks for newly available builds for the tester to install.
+
+
+You can invoke `checkForUpdate()` at any point in your app. For example, you
+can prompt your testers to install newly available builds at startup by
+including `checkForUpdate()` in the `onAppear(perform:)` of your app's root
+view.
+
+The following example checks whether or not the tester has enabled alerts
+and has access to a new build, and if so, displays a dialogue when the
+build is available to install:
+
+[Swift](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#swift)[Objective-C](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#objective-c)More
+
+**Note:** This product is not available on macOS, Mac Catalyst, tvOS or watchOS targets.
+
+```
+AppDistribution.appDistribution().checkForUpdate(completion: { release, error in
+if error != nil {
+      // Handle error
+      return
+}
+
+guard let release = release else {
+    return
+}
+
+// Customize your alerts here.
+let title = "New Version Available"
+let message = "Version \(release.displayVersion)(\(release.buildVersion)) is available."
+let uialert = UIAlertController(title: title,message: message, preferredStyle: .alert)
+
+uialert.addAction(UIAlertAction(title: "Update", style: UIAlertAction.Style.default) {
+    _ in
+    UIApplication.shared.open(release.downloadURL)
+})
+uialert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
+    _ in
+})
+
+// self should be a UIViewController.
+self.present(uialert, animated: true, completion: nil)
+})
+
+```
+
+**Note:** This product is not available on macOS, Mac Catalyst, tvOS or watchOS targets.
+
+```
+[[FIRAppDistribution appDistribution]\
+checkForUpdateWithCompletion:^(FIRAppDistributionRelease *_Nullable release,\
+                                 NSError *_Nullable error) {\
+if (error) {\
+    // Handle error\
+    return;\
+}\
+\
+if (release) {\
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"New Version Available"\
+message:[NSString stringWithFormat:@"Version %@ (%@) is available.", release.displayVersion,\
+release.buildVersion] preferredStyle:UIAlertControllerStyleAlert];\
+\
+    UIAlertAction *updateAction = [UIAlertAction actionWithTitle:@"Update"\
+style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {\
+      [[UIApplication sharedApplication] openURL:release.downloadURL options:@{}\
+completionHandler:nil];\
+    }];\
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel"\
+style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {}];\
+    [alert addAction:updateAction];\
+    [alert addAction:cancelAction];\
+    [self presentViewController:alert animated:YES completion:nil];\
+}\
+}];
+
+```
+
+### **Advanced configuration**
+
+The methods `signInTester()` and `isTesterSignedIn` give you more flexibility
+customizing your tester's sign-in experience, so it can better match your
+app's look and feel.
+
+The following example checks whether the tester has already signed into their
+Firebase App Distribution tester account, so you can choose to display your
+sign-in UI only for testers who haven't yet signed in. After the tester has
+signed in, you can then call `checkForUpdate()` to check whether the tester has
+access to a new build.
+
+[Swift](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#swift)[Objective-C](https://firebase.google.com/docs/app-distribution/set-up-alerts?platform=ios#objective-c)More
+
+**Note:** This product is not available on macOS, Mac Catalyst, tvOS or watchOS targets.
+
+```
+// Sign in a tester without automatically checking for update
+if (!AppDistribution.appDistribution().isTesterSignedIn) {
+AppDistribution.appDistribution().signInTester (completion: { error in
+    // completion block for signInTester
+     if (error != nil) {
+       // handle failed sign in
+      return
+     }
+    // handle successful sign in
+})
+}
+
+// Only check for update if tester is already signed in - do not prompt
+if (AppDistribution.appDistribution().isTesterSignedIn) {
+AppDistribution.appDistribution().checkForUpdate(completion: { release, error in
+      // completion block for check for update
+})
+}
+
+```
+
+**Note:** This product is not available on macOS, Mac Catalyst, tvOS or watchOS targets.
+
+```
+// Sign in a tester without automatically checking for update
+if(![[FIRAppDistribution appDistribution] isTesterSignedIn]) {
+[[FIRAppDistribution appDistribution]\
+    signInTesterWithCompletion:^(NSError *_Nullable error) {\
+      // completion block for signInTester\
+     if (error) {\
+       // handle failed sign in\
+       return;\
+     }\
+      // handle successful sign in\
+}];
+}
+
+// only check for update if tester is already signed in - do not prompt
+if([[FIRAppDistribution appDistribution] isTesterSignedIn]) {
+[[FIRAppDistribution appDistribution]\
+        checkForUpdateWithCompletion:^(FIRAppDistributionRelease *_Nullable release,\
+                                       NSError *_Nullable error) {\
+     // completion block for check for update\
+}];
+}
+
+```
+
+For information on additional methods, including `signOutTester()`,
+see the App Distribution reference documentation for
+[Swift](https://firebase.google.com/docs/reference/swift/firebaseappdistribution/api/reference/Classes)
+and [Objective-C](https://firebase.google.com/docs/reference/ios/firebaseappdistribution/api/reference/Classes).
+
+## **Step 4**: Build and test your implementation
+
+Finally, build your app and test your implementation by
+[distributing the build](https://firebase.google.com/docs/app-distribution/ios/distribute-console)
+to testers using the Firebase console.
+
+Visit the
+[App Distribution Troubleshooting guide](https://firebase.google.com/docs/app-distribution/troubleshooting?platform=ios#enable-alerts)
+for help with common issues, such as:
+
+- Tester not receiving in-app alerts
+- Tester being prompted to sign in to Google more than once
+
+Was this helpful?
+
+
+
+ Send feedback
+
+
+
+Except as otherwise noted, the content of this page is licensed under the [Creative Commons Attribution 4.0 License](https://creativecommons.org/licenses/by/4.0/), and code samples are licensed under the [Apache 2.0 License](https://www.apache.org/licenses/LICENSE-2.0). For details, see the [Google Developers Site Policies](https://developers.google.com/site-policies). Java is a registered trademark of Oracle and/or its affiliates.
+
+Last updated 2025-07-02 UTC.
+
+Chat
+
+
+## Ask about this page
+
+bug\_reportfullscreenclose\_fullscreenclose
+
+## Chat
+
+### BETA
+
+restart\_alt
+
+Sign in
+
+
+The new page has loaded.
+
+---

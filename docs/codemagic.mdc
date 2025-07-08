@@ -1,0 +1,4438 @@
+---
+title: Codemagic Complete Pipeline Reference
+provider: Codemagic
+generated_at: 2025-07-08T13:23:46.394Z
+pages_included: 9
+---
+
+# Codemagic Complete Pipeline Reference
+
+This comprehensive guide contains all pipeline, workflow, and build configuration documentation for Codemagic.
+
+## Table of Contents
+
+
+1. [Flutter apps](#section-1)
+2. [React Native apps](#section-2)
+3. [iOS native apps](#section-3)
+4. [Android native apps](#section-4)
+5. [Using codemagic.yaml](#section-5)
+6. [404](#section-6)
+7. [Starting builds automatically with codemagic.yaml](#section-7)
+8. [Running tests](#section-8)
+9. [404](#section-9)
+
+
+---
+
+
+## 1. Flutter apps {#section-1}
+
+*Source: [https://docs.codemagic.io/yaml-quick-start/building-a-flutter-app/](https://docs.codemagic.io/yaml-quick-start/building-a-flutter-app/)*
+
+# Flutter apps
+
+How to build a Flutter app with codemagic.yaml
+
+This guide will illustrate all of the necessary steps to successfully build and publish a Flutter app with Codemagic. It will cover the basic steps such as build versioning, code signing and publishing.
+
+You can find a complete project showcasing these steps in our [Sample projects repository](https://github.com/codemagic-ci-cd/codemagic-sample-projects/tree/main/flutter).
+
+## Adding the app to Codemagic
+
+The apps you have available on Codemagic are listed on the Applications page. Click **Add application** to add a new app.
+
+1. If you have more than one team configured in Codemagic, select the team you wish to add the app to.
+2. Connect the repository where the source code is hosted. Detailed instructions that cover some advanced options are available [here](https://docs.codemagic.io/getting-started/adding-apps).
+3. Select the repository from the list of available repositories. Select the appropriate project type.
+4. Click **Finish: Add application**
+
+## Creating codemagic.yaml
+
+`codemagic.yaml` is a highly customizable configuration file that you can use to build, test and publish Flutter apps, widgets, and Flutter or Dart packages. The Workflow Editor is a quick way to get started building standard Flutter applications.
+
+You can simultaneously set up workflows both in `codemagic.yaml` and the Workflow Editor. However, when a `codemagic.yaml` is detected in the repository, it is automatically used for configuring builds that are triggered in response to the events defined in the file and any configuration in the Flutter workflow editor is ignored.
+
+**Note:** For documentation on building Flutter projects using the workflow editor, please refer to [**Building Flutter apps via the workflow editor**](https://docs.codemagic.io/flutter-configuration/flutter-projects).
+
+In order to use `codemagic.yaml` for build configuration on Codemagic, it has to be committed to your repository. The name of the file must be `codemagic.yaml` and it must be located in the root directory of the repository. Detailed explanation can be found [here](https://docs.codemagic.io/yaml/yaml-getting-started).
+
+**Tip**
+You can find codemagic.yaml examples in [Codemagic Sample Projects](https://github.com/codemagic-ci-cd/codemagic-sample-projects/) repository.
+
+If you prefer to write your `codemagic.yaml` file from scratch, you can start with this minimal configuration.
+
+```yaml
+workflows:
+    sample-workflow:
+        name: Codemagic Sample Workflow
+        max_build_duration: 120
+        instance_type: mac_mini_m2
+```
+
+**Tip**
+You can have more than one workflow in the same `codemagic.yaml` file. If you are building for both the Android and iOS, simply enter both workflows as:
+
+```yaml
+workflows:
+    android-workflow-id:
+        name: Android Sample Workflow
+        # .......
+        # .......
+        # .......
+    ios-workflow-id:
+        name: iOS Sample Workflow
+        # ......
+```
+
+Scan for the `codemagic.yaml` file by selecting a branch to scan and clicking the **Check for configuration** file button at the top of the page. Note that you can have different configuration files in different branches.
+
+## Setting the Flutter version
+
+When building a Flutter application with Codemagic, you can customize your build environment by configuring various settings. One such setting is the option to choose the Flutter version or channel for the build process. Codemagic provides several options: defining a specific channel or version, or alternatively, you can leverage [Flutter Version Management (FVM)](https://fvm.app/documentation/getting-started) for version management.
+
+- Specific Flutter channel or version
+- Flutter Version Management (FVM)
+
+```yaml
+workflows:
+    sample-workflow:
+        environment:
+            flutter: stable
+```
+
+**Note**: The possible versions are `stable`, `beta`, and `master`, along with any specific versions, e.g., `3.7.6`. If not specified, the version preinstalled on the machine will be used by default.
+
+If you wish to use Flutter Version Management (FVM) in your Codemagic project, you must define the flutter version as `fvm` under the environment settings in your workflow.
+
+```yaml
+workflows:
+    sample-workflow:
+        environment:
+            flutter: fvm
+```
+
+**Note**: This automatically sets the Flutter version from your project’s `.fvmrc` file (or from `.fvm/fvm_config.json` if you’re using an older version of FVM). If this file does not exist, the build will fail.
+
+Moreover, when using FVM, Codemagic allows you to set the specific FVM flavor in your `codemagic.yaml` to provide all the needed flexibility when managing the Flutter version.
+
+```yaml
+workflows:
+    sample-workflow:
+        environment:
+            flutter:
+                version: fvm
+                flavor: dev
+```
+
+**Note**: If the requested flavor does not exist in the config file, the build will fail.
+
+**Note**: When using Melos for managing monorepos in conjuction with FVM, and **sdkPath** is set to **.fvm/flutter\_sdk** inside **melos.yaml**, then the `sourceFile` needs to be linked to the `targetFile` by running the following command:
+
+```
+ln -s $FLUTTER_ROOT $CM_BUILD_DIR/.fvm/flutter_sdk
+
+```
+
+## Code signing
+
+All applications have to be digitally signed before they are made available to the public to confirm their author and guarantee that the code has not been altered or corrupted since it was signed.
+
+- Android
+- iOS
+- macOS
+- Windows
+
+#### Generating a keystore
+
+You can create a keystore for signing your release builds with the Java Keytool utility by running the following command:
+
+```Shell
+keytool -genkey -v -keystore codemagic.keystore -storetype JKS \
+        -keyalg RSA -keysize 2048 -validity 10000 -alias codemagic
+```
+
+Keytool then prompts you to enter your personal details for creating the certificate, as well as provide passwords for the keystore and the key. It then generates the keystore as a file called **codemagic.keystore** in the directory you’re in. The key is valid for 10,000 days.
+
+#### Uploading a keystore
+
+1. Open your Codemagic Team settings, and go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **Android keystores** tab.
+3. Upload the keystore file by clicking on **Choose a file** or by dragging it into the indicated frame.
+4. Enter the **Keystore password**, **Key alias** and **Key password** values as indicated.
+5. Enter the keystore **Reference name**. This is a unique name used to reference the file in `codemagic.yaml`
+6. Click the **Add keystore** button to add the keystore.
+
+For each of the added keystore, its common name, issuer, and expiration date are displayed.
+
+**Note**: The uploaded keystore cannot be downloaded from Codemagic. It is crucial that you independently store a copy of the keystore file as all subsequent builds released to Google Play should be signed with the same keystore.
+
+However, keep the keystore file private and do not check it into a public repository.
+
+#### Referencing keystores in codemagic.yaml
+
+To tell Codemagic to fetch the uploaded keystores from the **Code signing identities** section during the build, list the reference of the uploaded keystore under the `android_signing` field.
+
+Add the following code to the `environment` section of your `codemagic.yaml` file:
+
+```yaml
+workflows:
+  android-workflow:
+    name: Android Workflow
+    # ....
+    environment:
+      android_signing:
+        - keystore_reference
+```
+
+Default environment variables are assigned by Codemagic for the values on the build machine:
+
+- Keystore path: `CM_KEYSTORE_PATH`
+- Keystore password: `CM_KEYSTORE_PASSWORD`
+- Key alias: `CM_KEY_ALIAS`
+- Key alias password: `CM_KEY_PASSWORD`
+
+#### Signing Android apps using Gradle
+
+To sign your Android app, simply modify your **`android/app/build.gradle`** or **`android/app/build.gradle.kts`** as follows:
+
+- build.gradle
+- build.gradle.kts
+
+```Groovy
+...
+  android {
+      ...
+      defaultConfig { ... }
+      signingConfigs {
+          release {
+              if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
+                  storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
+                  storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
+                  keyAlias System.getenv()["CM_KEY_ALIAS"]
+                  keyPassword System.getenv()["CM_KEY_PASSWORD"]
+              } else {
+                  keyAlias keystoreProperties['keyAlias']
+                  keyPassword keystoreProperties['keyPassword']
+                  storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                  storePassword keystoreProperties['storePassword']
+              }
+          }
+      }
+      buildTypes {
+          release {
+              ...
+              signingConfig signingConfigs.release
+          }
+      }
+  }
+  ...
+```
+
+```groovy
+import java.io.File
+import java.util.*
+
+val keystoreProperties =
+    Properties().apply {
+        var file = File("key.properties")
+        if (file.exists()) load(file.reader())
+    }
+
+plugins { ... }
+
+android {
+    ...
+    val appVersionCode = (System.getenv()["NEW_BUILD_NUMBER"] ?: "1")?.toInt()
+    defaultConfig {
+        ...
+        versionCode = appVersionCode
+        ...
+    }
+    signingConfigs {
+        create("release") {
+            if (System.getenv()["CI"].toBoolean()) { // CI=true is exported by Codemagic
+                storeFile = file(System.getenv()["CM_KEYSTORE_PATH"])
+                storePassword = System.getenv()["CM_KEYSTORE_PASSWORD"]
+                keyAlias = System.getenv()["CM_KEY_ALIAS"]
+                keyPassword = System.getenv()["CM_KEY_PASSWORD"]
+            } else {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies { ... }
+```
+
+#### Creating the App Store Connect API key
+
+Signing iOS applications requires [Apple Developer Program](https://developer.apple.com/programs/enroll/) membership.
+
+It is recommended to create a dedicated App Store Connect API key for Codemagic in [App Store Connect](https://appstoreconnect.apple.com/access/integrations/api). To do so:
+
+1. Log in to App Store Connect and navigate to **Users and Access > Integrations » App Store Connect API**.
+2. Click on the + sign to generate a new API key.
+3. Enter the name for the key and select an access level. We recommend choosing `App Manager` access rights, read more about Apple Developer Program role permissions [here](https://help.apple.com/app-store-connect/#/deve5f9a89d7).
+4. Click **Generate**.
+5. As soon as the key is generated, you can see it added to the list of active keys. Click **Download API Key** to save the private key for later. Note that the key can only be downloaded once.
+
+Take note of the **Issuer ID** above the table of active keys as well as the **Key ID** of the generated key as these will be required when setting up the Apple Developer Portal integration in the Codemagic UI.
+
+#### Adding the App Store Connect API key to Codemagic
+
+1. Open your Codemagic Team settings, go to **Team integrations** \> **Developer Portal** \> **Manage keys**.
+2. Click the **Add key** button.
+3. Enter the `App Store Connect API key name`. This is a human readable name for the key that will be used to refer to the key later in application settings.
+4. Enter the `Issuer ID` and `Key ID` values.
+5. Click on **Choose a .p8 file** or drag the file to upload the App Store Connect API key downloaded earlier.
+6. Click **Save**.
+
+#### Adding the code signing certificate
+
+Codemagic lets you upload code signing certificates as PKCS#12 archives containing both the certificate and the private key which is needed to use it. When uploading, Codemagic will ask you to provide the certificate password (if the certificate is password-protected) along with a unique **Reference name**, which can then be used in the `codemagic.yaml` configuration to fetch the specific file.
+
+- Upload certificate
+- Generate new certificate
+- Fetch from Developer Portal
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Upload the certificate file by clicking on **Choose a .p12 or .pem file** or by dragging it into the indicated frame.
+4. Enter the **Certificate password** and choose a **Reference name**.
+5. Click **Add certificate**
+
+If you have added the **App Store Connect API key** to Codemagic, you can also generate a new `Apple Development` or `Apple Distribution` certificate.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Click **Generate certificate**.
+4. Provide a **Reference name** for the certificate.
+5. Choose the **Certificate type**.
+6. Select the **App Store Connect API key** to use.
+7. Click **Create certificate**.
+
+Once the certificate has been created, Codemagic will allow you to download the certificate and provides the password for it.
+
+After downloading, please follow the steps in the **Upload certificate** tab to upload the certificate to Codemagic.
+
+**Note**: The certificate can be downloaded **only once**, right after creating it.
+
+**Note**: Apple limits the number of `Apple Distribution` certificates to 3. If you have already reached the maximum number of certificates, the following error will be displayed:
+
+```bash
+There is a problem with the request entity - You already have a current Distribution certificate or a pending certificate request.
+```
+
+Similar errors can also arise in rarer cases with `Apple Development` certificates. To resolve the error, either remove some old certificate from the Apple Developer Portal or upload an existing certificate manually.
+
+Existing signing certificates previously generated by Codemagic can be automatically fetched from Apple Developer Portal based on your team’s App Store Connect API key.
+
+Fetching a certificate that was not generated by Codemagic is not possible because each certificate is linked with a private signing key to which Codemagic has no access.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Click **Fetch certificate**.
+4. Select a certificate from the **Development certificates** or **Distribution certificates** list.
+5. Click **Fetch selected**.
+
+#### Adding the provisioning profile
+
+Codemagic allows you to upload a provisioning profile to be used for the application or to fetch a profile from the Apple Developer Portal.
+
+The profile’s type, team, bundle id, and expiration date are displayed for each profile added to Code signing identities. Furthermore, Codemagic will let you know whether a matching code signing certificate is available in Code signing identities (a green checkmark in the **Certificate** field) or not.
+
+**Note:** If your app contains app extensions, an additional provisioning profile is required for each extension. Codemagic will use the bundle identifier to find the relevant provisioning profiles. If your bundle identifier is `com.example.app`, the matching profiles are the ones with `com.example.app` and `com.example.app.*` as bundle identifier.
+
+- Upload a profile
+- Fetch from Developer Portal
+
+You can upload provisioning profiles with the `.mobileprovision` extension, providing a unique **Reference name** is required for each uploaded profile.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS provisioning profiles** tab.
+3. Upload the provisioning profile file by clicking on **Choose a .mobileprovision file** or by dragging it into the indicated frame.
+4. Enter the **Reference name** for the profile.
+5. Click **Add profile**.
+
+You can automatically fetch the provisioning profiles from the Apple Developer Portal based on your team’s App Store Connect API key. The bundle identifier is listed for every available profile along with it’s name.
+
+The profiles are displayed grouped by category: `Development profiles`, `Ad Hoc profiles`, `App Store profiles`, and `Enterprise profiles`. For each selected profile, it is necessary to provide a unique **Reference name**, which can be later used in `codemagic.yaml` to fetch the profile.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS provisioning profiles** tab.
+3. Click **Fetch profiles**
+4. Select the desired profile(s) and enter a **Reference name** for each one.
+5. Click **Download selected**. (scroll down if necessary)
+
+**Note:** When you make essential changes to a provisioning profile, such as modifying the app ID, adding/removing capabilities from the profile identifier, or changing the certificates assigned to that profile, the provisioning profile becomes invalid. In such situations, you need to generate a new provisioning profile with these updates and then re-upload it to Codemagic.
+
+#### Referencing certificates and profiles in codemagic.yaml
+
+To fetch all uploaded signing files matching a specific distribution type and bundle identifier during the build, define the `distribution_type` and `bundle_identifier` fields in your `codemagic.yaml` configuration. Note that it is necessary to configure **both** of the fields.
+
+```yaml
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    # ....
+    environment:
+      ios_signing:
+        distribution_type: app_store # or: ad_hoc | development | enterprise
+        bundle_identifier: com.example.id
+```
+
+**Note:** If you are publishing to the **App Store** or you are using **TestFlight** to distribute your app to test users, set the `distribution_type` to `app_store`.
+
+When using a **third party app distribution service** such as Firebase App Distribution, set the `distribution_type` to `ad_hoc`
+
+When defining the bundle identifier `com.example.id`, Codemagic will fetch any uploaded certificates and profiles matching the extensions as well (e.g. `com.example.id.NotificationService`).
+
+##### Using provisioning profiles
+
+To apply the profiles to your project during the build, add the following script before your build scripts:
+
+```yaml
+  scripts:
+    # ... your dependencies installation
+
+    - name: Set up code signing settings on Xcode project
+      script: xcode-project use-profiles
+
+    # ... your build commands
+```
+
+See additional configuration options for setting up code signing settings to use given provisioning profiles [here](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/xcode-project/use-profiles.md)
+
+To distribute signed iOS applications solely to internal testers without the need for Apple’s beta review (TestFlight Internal Testing Only):
+
+```yaml
+
+  scripts:
+    # ... your dependencies installation
+    - name: Set up code signing settings on Xcode project
+      script: xcode-project use-profiles
+                --custom-export-options='{"testFlightInternalTestingOnly": true}'
+    # ... your build commands
+```
+
+**Note:** Builds marked as TestFlight Internal Only will display “internal” next to the build number and can exclusively be added to internal tester groups. They cannot be submitted for external testing or distributed to customers.
+
+#### Creating the App Store Connect API key
+
+Signing macOS applications requires [Apple Developer Program](https://developer.apple.com/programs/enroll/) membership.
+
+It is recommended to create a dedicated App Store Connect API key for Codemagic in [App Store Connect](https://appstoreconnect.apple.com/access/integrations/api). To do so:
+
+1. Log in to App Store Connect and navigate to **Users and Access > Integrations » App Store Connect API**.
+2. Click on the + sign to generate a new API key.
+3. Enter the name for the key and select an access level. We recommend choosing `App Manager` access rights, read more about Apple Developer Program role permissions [here](https://help.apple.com/app-store-connect/#/deve5f9a89d7).
+4. Click **Generate**.
+5. As soon as the key is generated, you can see it added to the list of active keys. Click **Download API Key** to save the private key for later. Note that the key can only be downloaded once.
+
+Take note of the **Issuer ID** above the table of active keys as well as the **Key ID** of the generated key as these will be required when setting up the Apple Developer Portal integration in the Codemagic UI.
+
+### Automatic vs Manual code signing
+
+Signing macOS apps requires a `Signing certificate` (App Store **development** or **distribution** certificate in `.p12` format) and a `Provisioning profile`. In **Manual code signing** you save these files as Codemagic `Environment variables` and manually reference them in the appropriate build steps.
+
+In **Automatic code signing**, Codemagic takes care of Certificate and Provisioning profile management for you. Based on the `certificate private key` that you provide, Codemagic will automatically fetch the correct certificate from the App Store or create a new one if necessary.
+
+#### Certificate types
+
+There are several certificate types you can choose to sign your macOS app, depending on the distribution method you plan to use.
+
+- `MAC_APP_DEVELOPMENT` certificate allows you to build your app for internal testing and debugging.
+- `MAC_APP_DISTRIBUTION` certificate is used to sign a Mac app before submitting it to the Mac App Store
+- `MAC_INSTALLER_DISTRIBUTION` is used to sign and submit a Mac Installer Package to the Mac App Store
+- `DEVELOPER_ID_APPLICATION` is used to sign a Mac app before distributing it outside the Mac App Store
+- `DEVELOPER_ID_INSTALLER` is used to sign a Mac Installer Package before distributing it outside the Mac App Store
+
+For example, in order to publish to Mac App Store, the application must be signed with a `Mac App Distribution` certificate using a `Mac App Store` provisioning profile. If you want to create a `.pkg` Installer package, you must use a `Mac Installer Distribution` certificate.
+
+#### Obtaining the certificate private key
+
+To enable Codemagic to automatically fetch or create the correct signing certificate on your behalf, you need to provide the corresponding `certificate private key`. You then have to save that key as a Codemagic environment variable.
+
+- Create a new key
+- Use an existing key
+
+You can create a new 2048 bit RSA key by running the command below in your terminal:
+
+```Shell
+ssh-keygen -t rsa -b 2048 -m PEM -f ~/Desktop/mac_distribution_private_key -q -N ""
+```
+
+This new private key will be used to create a new Mac App Distribution certificate in your Apple Developer Program account if there isn’t one that already matches this private key.
+
+1. On the Mac which created the `Mac App Distribution` certificate, open the **Keychain Access**, located in the **Applications and Utilities** folder.
+2. Select the appropriate certificate entry.
+3. Right-click on it to select “Export.”
+4. In the export prompt window that appears, make sure the file format is set to **Personal Information Exchange (.p12)**"\*\*.
+5. Give the file a name such as “MAC\_DISTRIBUTION”, choose a location and click **Save**.
+6. On the next prompt, leave the password empty and click **OK**.
+7. Use the following `openssl` command to export the private key:
+
+```Shell
+openssl pkcs12 -in MAC_DISTRIBUTION.p12 -nodes -nocerts | openssl rsa -out mac_distribution_private_key
+```
+
+8. When prompted for the import password, just press enter. The private key will be written to a file called **mac\_distribution\_private\_key** in the directory where you ran the command.
+
+#### Configuring environment variables
+
+01. Open your Codemagic app settings, and go to the **Environment variables** tab.
+
+02. Enter `CERTIFICATE_PRIVATE_KEY` as the **_Variable name_**.
+
+03. Open the file `mac_distribution_private_key` with a text editor and copy the **entire contents** of the file, including the `-----BEGIN RSA PRIVATE KEY-----` and `-----END RSA PRIVATE KEY-----` tags. Alternatively, you can run the following command on the file:
+
+
+
+
+
+    ```bash
+      cat mac_distribution_private_key | pbcopy
+    ```
+
+04. Paste into the **_Variable value_** field.
+
+05. Enter a variable group name, e.g. **_appstore\_credentials_**. Click the button to create the group.
+
+06. Make sure the **Secret** option is selected so that the variable can be protected by encryption.
+
+07. Click the **Add** button to add the variable.
+
+08. Run the following command on the **App Store Connect API key** file that you downloaded earlier (in our example saved as `codemagic_api_key.p8`) to copy its content to clipboard:
+
+
+
+
+
+    ```Shell
+    cat codemagic_api_key.p8 | pbcopy
+    ```
+
+09. Create a new Environment variable `APP_STORE_CONNECT_PRIVATE_KEY` and paste the value from clipboard.
+
+10. Create variable `APP_STORE_CONNECT_KEY_IDENTIFIER`. The value is the **Key ID** field from **App Store Connect > Users and Access > Keys**.
+
+11. Create variable `APP_STORE_CONNECT_ISSUER_ID`. The value is the **Issuer ID** field from **App Store Connect > Users and Access > Keys**.
+
+
+**Tip**: Store all the of these variables in the same group so they can be imported to codemagic.yaml workflow at once.
+
+Environment variables have to be added to the workflow either individually or as a group. Modify your `codemagic.yaml` file by adding the following:
+
+```yaml
+workflows:
+  macos-workflow:
+    name: macOS Workflow
+    environment:
+      groups:
+        - appstore_credentials
+```
+
+#### Automatic code signing
+
+To code sign the app, add the following commands in the [`scripts`](https://docs.codemagic.io/getting-started/yaml#scripts) section of the configuration file, after all the dependencies are installed, right before the build commands.
+
+```yaml
+    scripts:
+      - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --platform MAC_OS \
+            --type MAC_APP_STORE \
+            --create
+      - name: Fetch Mac Installer Distribution certificates
+        script: |
+            app-store-connect certificates list --type MAC_APP_DISTRIBUTION --save || \
+            app-store-connect certificates create --type MAC_APP_DISTRIBUTION --save
+      - name: Set up signing certificate
+        script: keychain add-certificates
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+```
+
+Instead of specifying the exact bundle ID, you can use `"$(xcode-project detect-bundle-id)"`.
+
+Based on the specified bundle ID and [provisioning profile type](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/app-store-connect/fetch-signing-files.md#--typeios_app_adhoc--ios_app_development--ios_app_inhouse--ios_app_store--mac_app_development--mac_app_direct--mac_app_store--mac_catalyst_app_development--mac_catalyst_app_direct--mac_catalyst_app_store--tvos_app_adhoc--tvos_app_development--tvos_app_inhouse--tvos_app_store), Codemagic will fetch or create the relevant provisioning profile and certificate to code sign the build.
+
+### Creating the Installer package
+
+To package your application into an `.pkg` Installer package and sign it with the `Mac Installer Distribution` certificate, use the following script:
+
+```yaml
+  scripts:
+    - name: Package application
+      script: |
+      set -x
+
+      # Command to find the path to your generated app, may be different
+      APP_NAME=$(find $(pwd) -name "*.app")
+      cd $(dirname "$APP_NAME")
+
+      PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+      xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg  # Create and unsigned package
+
+      # Find the installer certificate common name in keychain
+      INSTALLER_CERT_NAME=$(keychain list-certificates \
+        | jq '.[]
+        | select(.common_name
+        | contains("Mac Developer Installer"))
+        | .common_name' \
+        | xargs)
+
+      xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME" # Sign the package
+
+      rm -f unsigned.pkg                                                       # Optionally remove the not needed unsigned package
+```
+
+**Note**: Don’t forget to specify the path to your generated package in the [artifacts section](https://docs.codemagic.io/getting-started/yaml/#artifacts).
+
+### Notarizing macOS applications
+
+Notarization is a process where Apple verifies your application to make sure it has a Developer ID code signature and does not contain malicious content. All apps distributed outside the Mac App Store have to be notarized.
+
+Notarizing an app during the Codemagic build process is possible using the **altool** command as follows:
+
+```bash
+xcrun altool --notarize-app -f <file> --primary-bundle-id <bundle_id>
+           {-u <username> [-p <password>] | --apiKey <api_key> --apiIssuer <issuer_id>}
+           [--asc-provider <name> | --team-id <id> | --asc-public-id <id>]
+```
+
+Normally, you would need to locally sign your app if you are going to publish it to the **Microsoft Store**. Since this is not possible when using cloud CI/CD, you need to create an **MSIX package** and publish through **Microsoft Partner Center**
+
+1. Follow [this guide](https://docs.codemagic.io/knowledge-others/partner-center-authentication) to setup **Microsoft Partner Center** authentication and create a new **Client secret**.
+2. Open your Codemagic app settings, and go to the **Environment variables** tab.
+3. Enter the desired **_Variable name_**, e.g. `CLIENT_SECRET`.
+4. Enter the API key string as **_Variable value_**.
+5. Enter the variable group name, e.g. **_windows\_credentials_**. Click the button to create the group.
+6. Make sure the **Secret** option is selected.
+7. Click the **Add** button to add the variable.
+8. Repeat the steps to also add `STORE_ID`, `TENANT_ID` and `CLIENT_ID` variables.
+9. Add the **windows\_credentials** variable group to the `codemagic.yaml`:
+
+```yaml
+  environment:
+    groups:
+      - windows_credentials
+```
+
+## Configure scripts to build the app
+
+Add the following scripts to your `codemagic.yaml` file in order to prepare the build environment and start the actual build process.
+In this step you can also define the build artifacts you are interested in. These files will be available for download when the build finishes. For more information about artifacts, see [here](https://docs.codemagic.io/yaml/yaml-getting-started/#artifacts).
+
+- Android
+- iOS
+- macOS
+- Windows
+- web
+
+```yaml
+  scripts:
+    - name: Set up local.properties
+      script: |
+        echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+    - name: Get Flutter packages
+      script: |
+        flutter pub get
+    - name: Build AAB with Flutter
+      script: |
+        flutter build appbundle --release
+  artifacts:
+    - build/**/outputs/**/*.aab
+    - build/**/outputs/**/mapping.txt
+    - flutter_drive.log
+```
+
+**Note**: To build an `.apk` version for debug, replace the build command with:
+
+```bash
+  flutter build apk --debug
+```
+
+**Note**: To build a universal `.apk` from the existing `.aab` bundle with user-specified keys, configure the environment variables as explained [here](https://docs.codemagic.io/yaml-code-signing/alternative-code-signing-methods) and add the following script after the build step:
+
+```yaml
+  scripts:
+    - name: Build universal apk
+      script: |
+        android-app-bundle build-universal-apk \
+          --bundle 'project_directory/build/**/outputs/**/*.aab' \
+          --ks /tmp/keystore.keystore \
+          --ks-pass $CM_KEYSTORE_PASSWORD \
+          --ks-key-alias $CM_KEY_ALIAS \
+          --key-pass $CM_KEY_PASSWORD
+```
+
+Please make sure to wrap the `--bundle` pattern in single quotes. If the `--bundle` option is not specified, default glob pattern `**/*.aab` will be used.
+
+```yaml
+  scripts:
+    - name: Set up code signing settings on Xcode project
+      script: |
+        xcode-project use-profiles
+    - name: Get Flutter packages
+      script: |
+        flutter pub get
+    - name: Install pods
+      script: |
+        find . -name "Podfile" -execdir pod install \;
+    - name: Flutter build ipa
+      script: |
+        flutter build ipa --release \
+          --build-name=1.0.0 \
+          --export-options-plist=/Users/builder/export_options.plist
+  artifacts:
+    - build/ios/ipa/*.ipa
+    - /tmp/xcodebuild_logs/*.log
+    - flutter_drive.log
+```
+
+**Note**: To build an unsigned `.app` version for debug, replace the build command with:
+
+```bash
+  flutter build ios --debug --no-codesign
+```
+
+```yaml
+  scripts:
+
+    # ... code signing scripts
+
+    - name: Get Flutter packages
+      script: |
+          flutter pub get
+    - name: Install pods
+      script: |
+        find . -name "Podfile" -execdir pod install \;
+    - name: Build Flutter macOS
+      script: |
+          flutter config --enable-macos-desktop && \
+          flutter build macos --release
+
+    # ... create package scripts
+
+  artifacts:
+    - build/macos/**/*.pkg
+```
+
+#### Building an unpackaged Windows executable
+
+```yaml
+  scripts:
+    - name: Get Flutter packages
+      script: |
+          flutter pub get
+    - name: Build Flutter Windows
+      script: |
+        flutter config --enable-windows-desktop
+        flutter build windows --release
+        cd build/windows/x64/runner/Release
+        7z a -r ../release.zip ./*
+  artifacts:
+    - build\windows\x64\runner\release.zip
+```
+
+🔔 Note: Flutter changed Windows build path to add the target architecture which landed in 3.15.0-0.0.pre and in stable release v3.16.0. More info can be found [here](https://docs.flutter.dev/release/breaking-changes/windows-build-architecture). So, depending on the Flutter version being used, `\x64` needs to be added to the path in order to be able to produce a zip file containing `.exe`
+
+#### Creating an MSIX package for publishing to Microsoft Store
+
+Codemagic uses the [Flutter msix package](https://pub.dev/packages/msix) for packaging the application. For publishing to the Microsoft Store, it is necessary to define certain arguments during packaging.
+
+To pass these arguments to the packaging tool, either add the parameters to the packaging command in `codemagic.yaml` or add the package to your project and [configure](https://pub.dev/packages/msix#gear-configuration-optional) the arguments inside the `pubspec.yaml` file.
+
+To generate MSIX, add the package under `dev_dependencies` in your `pubspec.yaml` file:
+
+```yaml
+  dev_dependencies:
+    msix: ^2.6.5
+```
+
+Also add the following configuration at the end of the `pubspec.yaml` file:
+
+```yaml
+  msix_config:
+    display_name: <AppName>
+    publisher_display_name: <PublisherName>
+    identity_name: <PublisherName.AppName>
+    publisher: <PublisherID>
+    msix_version: 1.0.0.0
+    logo_path: ./logo/<file_name.png>
+    store: true
+```
+
+The required values are:
+
+- `display_name`: The name of your app that will be displayed to users.
+- `publisher_display_name`: The name of the publisher to be displayed to users (can be an individual’s name or a company’s name).
+- `identity_name`: The unique identifier of the Windows app.
+- `publisher`: The Publisher ID present inside your Microsoft Partner Center app.
+- `msix_version`: Specifies the version of the app’s build. Uses the format “Major.Minor.Build.Revision”, where “Major” cannot be “0”.
+- `logo_path`: The relative path of the logo file (optional). If not provided, the default Flutter logo is used.
+- `store`: Setting this to true generates an MSIX package distributable using Microsoft Partner Center
+
+When defining the arguments inside codemagic.yaml, the necessary flags to add to the `msix:create` command are `--store`, `--display-name`, `--publisher-display-name`, `--publisher` and `--version`.
+
+The values for `--display-name`, `--publisher-display-name` and `--publisher` can be found when when logging into [Microsoft Partner Center](https://partner.microsoft.com/en-us/dashboard/home) and navigating to **Apps and games > Your application > Product Identity**.
+
+The argument `--display-name` should be set to match the value of `Package/Identity/Name`, the argument `--publisher` should be set to match the value of `Package/Identity/Publisher` and the argument `--publisher-display-name` should be set to match the value of `Package/Properties/PublisherDisplayName`.
+
+Check out how to version your package in the [Microsoft documentation](https://docs.microsoft.com/en-us/windows/uwp/publish/package-version-numbering). Note that per Microsoft Store requirements applications are not allowed to have a version with a revision number (last digit of the version) other than zero.
+
+Add the following script after the **Build Flutter Windows** step:
+
+```yaml
+  scripts:
+    - name: Build Flutter Windows
+      # ....
+    - name: Create package
+      script: |
+        # if you did not add the msix pub package to your project:
+        flutter pub add msix
+        #
+        # if you have specified configuration in pubspec.yaml:
+        flutter pub run msix:create
+        #
+        # if you did not modify `pubspec.yaml`:
+        #flutter pub run msix:create --store \
+        #  --publisher-display-name=MyName \
+        #  --display-name=MyAppName \
+        #  --publisher=CN=xx-yy-zz \
+        #  --identity-name=com.flutter.MyApp \
+        #  --version=1.0.2.0
+  artifacts:
+    - build/windows/**/*.msix
+```
+
+For all the possible flags for the `msix:create` command, check the [pub documentation](https://pub.dev/packages/msix#clipboard-available-configuration-fields). Note that when configuring the flags both in `codemagic.yaml` and `pubspec.yaml`, the ones configured in `codemagic.yaml` take precedence.
+
+```yaml
+  scripts:
+    - name: Build web
+      script: |
+        flutter config --enable-web
+        flutter build web --release
+        cd build/web
+        7z a -r ../web.zip ./*
+  artifacts:
+    - build/*.zip
+```
+
+## Build versioning
+
+If you are going to publish your app to App Store Connect or Google Play, each uploaded artifact must have a new version satisfying each app store’s requirements. Codemagic allows you to easily automate this process and increment the version numbers for each build. For more information and details, see [here](https://docs.codemagic.io/configuration/build-versioning).
+
+- Android
+- iOS
+
+One very useful method of calculating the code version is to use Codemagic command line tools to get the latest build number from Google Play and increment it by one.
+
+You can find the full sample project with the instructions on alternative ways to perform Android build versioning [in our repository](https://github.com/codemagic-ci-cd/android-versioning-example).
+
+The prerequisite is a valid **Google Cloud Service Account**. Please follow these steps:
+
+1. Go to [this link](https://docs.codemagic.io/yaml-publishing/google-play/#configure-google-play-api-access) and complete the steps.
+2. You now have a `JSON` file with the credentials.
+3. Open Codemagic UI and create a new Environment variable `GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS`.
+4. Paste the content of the downloaded `JSON` file in the **_Value_** field, set the group name (e.g. **google\_play**) and make sure the **Secret** option is checked.
+5. Add the **google\_play** variable group to the `codemagic.yaml` as well as define the `PACKAGE_NAME` and the `GOOGLE_PLAY_TRACK`:
+
+```yaml
+workflows:
+  android-workflow-id:
+    # ....
+    environment:
+      groups:
+        - keystore_credentials
+        - google_play
+      vars:
+        PACKAGE_NAME: "io.codemagic.fluttersample"
+        GOOGLE_PLAY_TRACK: alpha
+```
+
+6. Modify the build script to fetch the latest build number from Google Play, increment it and pass it as command line argument to the build command
+
+```yaml
+  scripts:
+    - name: Build AAB with Flutter
+      script: |
+        BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))
+        flutter build appbundle --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER
+```
+
+In order to get the latest build number from App Store or TestFlight, you will need the App Store credentials as well as the **Application Apple ID**. This is an automatically generated ID assigned to your app and it can be found under **General > App Information > Apple ID** under your application in App Store Connect.
+
+1. Add the **Application Apple ID** to the `codemagic.yaml` as a variable
+2. Add the script to get the latest build number using `app-store-connect`, increment it and pass it as command line argument to the build command:
+
+```yaml
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    integrations:
+      app_store_connect: <App Store Connect API key name>
+    environment:
+      vars:
+        APP_STORE_APPLE_ID: 1555555551
+    scripts:
+      - name: Flutter build ipa
+        script: |
+          BUILD_NUMBER=$(($(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID") + 1))
+          flutter build ipa --release \
+            --build-name=1.0.$BUILD_NUMBER \
+            --build-number=$BUILD_NUMBER
+```
+
+## Publishing
+
+Codemagic offers a wide array of options for app publishing and the list of partners and integrations is continuously growing. For the most up-to-date information, check the guides in the **Configuration > Publishing** section of these docs.
+To get more details on the publishing options presented in this guide, please check the [Email publishing](https://docs.codemagic.io/yaml-publishing/email), the [Google Play Store](https://docs.codemagic.io/yaml-publishing/google-play) publishing and the [App Store Connect](https://docs.codemagic.io/yaml-publishing/app-store-connect).
+
+#### Email publishing
+
+If the build finishes successfully, release notes (if passed), and the generated artifacts will be published to the provided email address(es). If the build fails, an email with a link to build logs will be sent.
+
+If you don’t want to receive an email notification on build success or failure, you can set `success` to `false` or `failure` to `false` accordingly.
+
+```yaml
+workflows:
+  sample-workflow-id:
+    environment:
+      # ...
+    scripts:
+      # ...
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+```
+
+#### Publishing to Google Play and App Store
+
+- Android
+- iOS
+
+Publishing apps to Google Play requires you to set up a service account in Google Play Console and save the content of the `JSON` key file to a secret environment variable as explained above in **Android Build Versioning** steps 1-5.
+Configuring Google Play publishing is simple as you only need to provide credentials and choose the desired track. If the app is in `draft` status, please also include the `submit_as_draft: true` or promote the app status in Google Play.
+
+```yaml
+react-native-android:
+  # ...
+  publishing:
+    # ...
+    google_play:
+      credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+      track: internal
+      submit_as_draft: true
+```
+
+Codemagic enables you to automatically publish your iOS or macOS app to [App Store Connect](https://appstoreconnect.apple.com/) for beta testing with [TestFlight](https://developer.apple.com/testflight/) or distributing the app to users via App Store. Codemagic uses the **App Store Connect API key** for authenticating communication with Apple’s services. You can read more about generating an API key from Apple’s [documentation page](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api).
+
+Please note that:
+
+1. for App Store Connect publishing, the provided key needs to have [App Manager permission](https://help.apple.com/app-store-connect/#/deve5f9a89d7),
+2. and in order to submit your iOS application to App Store Connect, it must be code signed with a distribution [certificate](https://developer.apple.com/support/certificates/).
+
+The following snippet demonstrates how to authenticate with and upload the IPA to App Store Connect, submit the build to beta tester groups in TestFlight and configure releasing the app to App Store. See additional configuration options for App Store Connect publishing [here](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/app-store-connect/publish.md).
+
+**Note:** Please note that you will need to create an **app record** in App Store Connect before you can automate publishing with Codemagic. It is recommended to upload the very first version of the app manually. Suppose you have set up an **app record** but have not manually uploaded the app’s first version. In that case, manual configuration of the settings must be done on App Store Connect after the build is complete, such as uploading the required screenshots and providing the values for the privacy policy URL and application category.
+
+```yaml
+# Integration section is required to make use of the keys stored in
+# Codemagic UI under Apple Developer Portal integration.
+integrations:
+  app_store_connect: <App Store Connect API key name>
+
+publishing:
+  app_store_connect:
+    # Use referenced App Store Connect API key to authenticate binary upload
+    auth: integration
+
+    # Configuration related to TestFlight (optional)
+
+    # Optional boolean, defaults to false. Whether or not to submit the uploaded
+    # build to TestFlight beta review. Required for distributing to beta groups.
+    # Note: This action is performed during post-processing.
+    submit_to_testflight: true
+
+    # Optional boolean, defaults to false. Set to true to automatically expire
+    # previous build in review or waiting for review in Testflight before
+    # submitting a new build to beta review. Expired builds will no longer be available for testers.
+    # Note: This action is performed during post-processing.
+    expire_build_submitted_for_review: true
+
+    # Specify the names of beta tester groups that will get access to the build
+    # once it has passed beta review.
+    beta_groups:
+      - group name 1
+      - group name 2
+
+    # Configuration related to App Store (optional)
+
+    # Optional boolean, defaults to false. Whether or not to submit the uploaded
+    # build to App Store review. Note: This action is performed during post-processing.
+    submit_to_app_store: true
+
+    # Optional boolean, defaults to false. Set to true to cancel the previous
+    # submission (if applicable) when submitting a new build to App Store review.
+    # This allows automatically submitting a new build for review if a previous submission exists.
+    # Note: This action is performed during post-processing.
+    cancel_previous_submissions: true
+
+    # Optional, defaults to MANUAL. Supported values: MANUAL, AFTER_APPROVAL or SCHEDULED
+    release_type: SCHEDULED
+
+    # Optional. Timezone-aware ISO8601 timestamp with hour precision when scheduling
+    # the release. This can be only used when release type is set to SCHEDULED.
+    # It cannot be set to a date in the past.
+    earliest_release_date: 2021-12-01T14:00:00+00:00
+
+    # Optional. The name of the person or entity that owns the exclusive rights
+    # to your app, preceded by the year the rights were obtained.
+    copyright: 2021 Nevercode Ltd
+
+    # Optional boolean. Whether or not to release an App Store version update in phases.
+    # With this option turned on, your version update will be released over a 7-day period
+    # to a percentage of your users (selected at random by their Apple ID) with automatic
+    # updates turned on. Learn more from
+    # https://developer.apple.com/help/app-store-connect/update-your-app/release-a-version-update-in-phases.
+    # If not specified, then App Store version default phased release configuration is reused.
+    phased_release: true
+```
+
+## Conclusion
+
+Having followed all of the above steps, you now have a working `codemagic.yaml` file that allows you to build, code sign, automatically version and publish your project using Codemagic CI/CD.
+Save your work, commit the changes to the repository, open the app in the Codemagic UI and start the build to see it in action.
+
+Your final `codemagic.yaml` file should look something like this:
+
+- Android
+- iOS
+- macOS
+- Windows
+
+```yaml
+workflows:
+  android-workflow:
+    name: Android Workflow
+    max_build_duration: 120
+    environment:
+      android_signing:
+        - keystore_reference
+      groups:
+        - google_play
+      vars:
+        PACKAGE_NAME: "io.codemagic.fluttersample"
+        GOOGLE_PLAY_TRACK: alpha
+      flutter: stable
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter unit tests
+        script: |
+          flutter test
+        ignore_failure: true
+      - name: Build AAB with Flutter
+        script: |
+          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))
+          flutter build appbundle --release \
+            --build-name=1.0.$BUILD_NUMBER \
+            --build-number=$BUILD_NUMBER
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: $GOOGLE_PLAY_TRACK
+        submit_as_draft: true
+```
+
+```yaml
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    max_build_duration: 120
+    integrations:
+      app_store_connect: codemagic
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: io.codemagic.fluttersample
+      vars:
+        APP_STORE_APPLE_ID: 1555555551
+      flutter: stable
+    scripts:
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter unit tests
+        script: |
+          flutter test
+        ignore_failure: true
+      - name: Flutter build ipa
+        script: |
+          flutter build ipa --release \
+            --build-name=1.0.0 \
+            --build-number=$(($(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID") + 1)) \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      app_store_connect:
+        auth: integration
+
+        # Configuration related to TestFlight (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_testflight: true
+        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+          - group name 1
+          - group name 2
+
+        # Configuration related to App Store (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_app_store: false
+```
+
+```yaml
+workflows:
+  macos-workflow:
+    name: macOS Workflow
+    max_build_duration: 120
+    environment:
+      groups:
+        - appstore_credentials
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up keychain to be used for code signing
+        script: |
+          keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --platform MAC_OS \
+            --type MAC_APP_STORE \
+            --create
+      - name: Fetch Mac Installer Distribution certificates
+        script: |
+           # You may omit the first command if you already have
+           # the installer certificate and provided the corresponding private key
+            app-store-connect certificates list --type MAC_INSTALLER_DISTRIBUTION --save || \
+            app-store-connect certificates create --type MAC_INSTALLER_DISTRIBUTION --save
+
+      - name: Set up signing certificate
+        script: keychain add-certificates
+      - name: Set up code signing settings on Xcode project
+        script: |
+          xcode-project use-profiles
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+      - name: Flutter unit tests
+        script: |
+          flutter test
+        ignore_failure: true
+      - name: Build Flutter macOS
+        script: |
+          flutter config --enable-macos-desktop && \
+          flutter build macos --release \
+            --build-name=1.0.$PROJECT_BUILD_NUMBER \
+            --build-number=$PROJECT_BUILD_NUMBER
+      - name: Package application
+        script: |
+          set -x
+
+          # Command to find the path to your generated app, may be different
+          APP_NAME=$(find $(pwd) -name "*.app")
+          cd $(dirname "$APP_NAME")
+
+          # Create and unsigned package
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+
+          # Find the installer certificate common name in keychain
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+            | jq '.[]
+            | select(.common_name
+            | contains("Mac Developer Installer"))
+            | .common_name' \
+            | xargs)
+
+          # Sign the package
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+
+          rm -f unsigned.pkg
+    artifacts:
+      - build/macos/**/*.pkg
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+
+        # Configuration related to TestFlight (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_testflight: true
+        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+          - group name 1
+          - group name 2
+
+        # Configuration related to App Store (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_app_store: false
+```
+
+```yaml
+workflows:
+  # This workflow is for a normal windows build consisting of the `.exe` file
+  windows-workflow:
+    name: Windows workflow
+    instance_type: windows_x2
+    max_build_duration: 60
+    environment:
+      flutter: master
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Configure for Windows
+        script: flutter config --enable-windows-desktop
+      - name: Build Windows
+        script: flutter build windows
+      - name: Export bundle
+        script: |
+          cd build/windows/runner/Release
+          7z a -r ../release.zip ./*
+    artifacts:
+      - build/windows/runner/*.zip
+    publishing:
+      email:
+        recipients:
+          - email@example.com
+
+  # This workflow is for a MSIX package build that can be
+  # published to Microsoft Store using Partner Center
+  windows-release-workflow:
+    name: Windows release workflow
+    instance_type: windows_x2
+    max_build_duration: 60
+    environment:
+      groups:
+        - windows-signing
+      flutter: master
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Configure for Windows
+        script: flutter config --enable-windows-desktop
+      - name: Build Windows
+        script: flutter build windows
+      - name: Package Windows
+        script: flutter pub run msix:create
+
+        # If you don't have the configurations created inside pubspec.yaml, then you need
+        # to pass the configurations as parameters. Use the following script in that case:
+        # ----------------------------------------------------------------------------------
+        # - name: Package Windows
+        #   script: |
+        #     flutter pub add msix
+        #     flutter pub run msix:create --display-name='<AppName>' \
+        #       --publisher-display-name='<PublisherName>' \
+        #       --publisher='<PublisherID>' \
+        #       --identity-name='<PublisherName.AppName>' \
+        #       --version=1.0.0.0 \
+        #       --logo-path='./logo/<file_name.png>' \
+        #       --store=true
+        # ----------------------------------------------------------------------------------
+    artifacts:
+      - build/windows/**/*.msix
+    publishing:
+      partner_center:
+        store_id: $STORE_ID
+        tenant_id: $TENANT_ID
+        client_id: $CLIENT_ID
+        client_secret: $CLIENT_SECRET
+      email:
+        recipients:
+          - email@example.com
+```
+
+## Next steps
+
+While this basic workflow configuration is incredibly useful, it is certainly not the end of the road and there are numerous advanced actions that Codemagic can help you with.
+
+We encourage you to investigate [Running tests with Codemagic](https://docs.codemagic.io/yaml-testing/testing) to get you started with testing, as well as additional guides such as the one on running tests on [Firebase Test Lab](https://docs.codemagic.io/yaml-testing/firebase-test-lab) or [Registering iOS test devices](https://docs.codemagic.io/testing/ios-provisioning).
+
+Documentation on [using codemagic.yaml](https://docs.codemagic.io/yaml/yaml-getting-started) teaches you to configure additional options such as [changing the instance type](https://docs.codemagic.io/yaml/yaml-getting-started/#instance-type) on which to build, or configuring builds to be [automatically triggered](https://docs.codemagic.io/yaml/yaml-getting-started/#triggering) on repository events.
+
+## Getting help and support
+
+If you have a technical question or need help with some particular issue, you can get help in our GitHub Discussions community
+[here](https://github.com/codemagic-ci-cd/codemagic-docs/discussions).
+
+Alternatively, join the Codemagic Community Discord Server
+[here](https://discord.gg/pefznye93R).
+
+If you're a paying customer, use the in-app chat widget to get support.
+You have to be logged in to see the chat icon at the bottom right corner (please note that some ad blockers might block the chat widget).
+
+---
+
+
+## 2. React Native apps {#section-2}
+
+*Source: [https://docs.codemagic.io/yaml-quick-start/building-a-react-native-app/](https://docs.codemagic.io/yaml-quick-start/building-a-react-native-app/)*
+
+# React Native apps
+
+How to build a React Native app with codemagic.yaml
+
+React Native is a cross-platform solution that allows you to build apps for both iOS and Android faster using a single language. Pairing it with Codemagic’s CI/CD pipeline creates a powerful tool that automates all phases of mobile app development.
+
+## Setting up a React Native project
+
+If you do not have an existing React Native project or if you just want to quickly test Codemagic using a sample project, follow these steps to get started:
+
+- Clone a sample
+- New Expo project
+- New React Native CLI project
+
+For a quick start, you can clone the appropriate project from our [Sample projects repository](https://github.com/codemagic-ci-cd/codemagic-sample-projects/tree/main/react-native) to a version control platform of your choice and proceed with the next steps.
+
+If you are new to mobile development, the easiest way to get started is with Expo. Expo is a set of tools built around React Native and, while it has many features, the most relevant feature for us right now is that it can get you writing a React Native app within minutes. You will only need a recent version of Node.js and a phone or emulator. The following steps must be completed on your local machine before pushing the repository to Codemagic for building and publishing to the stores:
+
+1. If necessary, install [Node LTS](https://nodejs.org/en/download/).
+
+2. Create a new project
+
+
+```Shell
+npx create-expo-app CodemagicSample
+cd CodemagicSample
+```
+
+3. Configure the Git repository for the app.
+
+If you are already familiar with mobile development, you may want to use React Native CLI. It requires Xcode or Android Studio to get started. The required steps are outlined at the [official React Native site](https://reactnative.dev/docs/environment-setup).
+
+* * *
+
+## Using Expo without prebuild
+
+To run a build on CI/CD we need to have the `ios` and `android` project folders. If you can’t or don’t want to permanently prebuild Expo from your app, then you can do it on the build server each time you run a build. Follow the steps below to get started. You can check the finished sample app in our [samples repository](https://github.com/codemagic-ci-cd/codemagic-sample-projects/blob/main/react-native/expo-react-native-not-ejected/codemagic.yaml).
+
+1. Clone your repository to a temporary new location or create a new branch. in order to prebuild Expo once and get the `android/app/build.gradle` file.
+2. Generates native projects by running the following command:
+
+
+
+
+```Shell
+npx expo prebuild
+```
+
+3. Make sure that `namespace` and `applicationId` under `android{` section in `app/build.gradle` file uses the same package name. It will be used as a reference for the `app.json` file.
+4. Copy the `android/app/build.gradle` file from the generated project and add it to your main repository. In our example, we create a `support-files` folder and store the `build.gradle` inside.
+5. Whenever this guide calls for making changes to the `android/app/build.gradle`, apply these changes to the `support-files/build.gradle` file instead.
+6. Follow the steps in other **Expo without prebuild** sections in this guide to install the expo cli tools on the VM, run the scripts to copy the `build.gradle` file to the correct location and use other tools to adjust iOS settings in the `info.plist` file.
+
+* * *
+
+## Adding the app to Codemagic
+
+The apps you have available on Codemagic are listed on the Applications page. Click **Add application** to add a new app.
+
+1. If you have more than one team configured in Codemagic, select the team you wish to add the app to.
+2. Connect the repository where the source code is hosted. Detailed instructions that cover some advanced options are available [here](https://docs.codemagic.io/getting-started/adding-apps).
+3. Select the repository from the list of available repositories. Select the appropriate project type.
+4. Click **Finish: Add application**
+
+## Creating codemagic.yaml
+
+In order to use `codemagic.yaml` for build configuration on Codemagic, it has to be committed to your repository. The name of the file must be `codemagic.yaml` and it must be located in the root directory of the repository. Detailed explanation can be found [here](https://docs.codemagic.io/yaml/yaml-getting-started).
+
+**Tip**
+You can find codemagic.yaml examples in [Codemagic Sample Projects](https://github.com/codemagic-ci-cd/codemagic-sample-projects/) repository.
+
+If you prefer to write your `codemagic.yaml` file from scratch, you can start with this minimal configuration.
+
+```yaml
+workflows:
+    sample-workflow:
+        name: Codemagic Sample Workflow
+        max_build_duration: 120
+        instance_type: mac_mini_m2
+```
+
+**Tip**
+You can have more than one workflow in the same `codemagic.yaml` file. If you are building for both the Android and iOS, simply enter both workflows as:
+
+```yaml
+workflows:
+    android-workflow-id:
+        name: Android Sample Workflow
+        # .......
+        # .......
+        # .......
+    ios-workflow-id:
+        name: iOS Sample Workflow
+        # ......
+```
+
+Scan for the `codemagic.yaml` file by selecting a branch to scan and clicking the **Check for configuration** file button at the top of the page. Note that you can have different configuration files in different branches.
+
+## Code signing
+
+All applications have to be digitally signed before they are made available to the public to confirm their author and guarantee that the code has not been altered or corrupted since it was signed.
+
+- Android
+- iOS
+
+#### Generating a keystore
+
+You can create a keystore for signing your release builds with the Java Keytool utility by running the following command:
+
+```Shell
+keytool -genkey -v -keystore codemagic.keystore -storetype JKS \
+        -keyalg RSA -keysize 2048 -validity 10000 -alias codemagic
+```
+
+Keytool then prompts you to enter your personal details for creating the certificate, as well as provide passwords for the keystore and the key. It then generates the keystore as a file called **codemagic.keystore** in the directory you’re in. The key is valid for 10,000 days.
+
+#### Uploading a keystore
+
+1. Open your Codemagic Team settings, and go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **Android keystores** tab.
+3. Upload the keystore file by clicking on **Choose a file** or by dragging it into the indicated frame.
+4. Enter the **Keystore password**, **Key alias** and **Key password** values as indicated.
+5. Enter the keystore **Reference name**. This is a unique name used to reference the file in `codemagic.yaml`
+6. Click the **Add keystore** button to add the keystore.
+
+For each of the added keystore, its common name, issuer, and expiration date are displayed.
+
+**Note**: The uploaded keystore cannot be downloaded from Codemagic. It is crucial that you independently store a copy of the keystore file as all subsequent builds released to Google Play should be signed with the same keystore.
+
+However, keep the keystore file private and do not check it into a public repository.
+
+#### Referencing keystores in codemagic.yaml
+
+To tell Codemagic to fetch the uploaded keystores from the **Code signing identities** section during the build, list the reference of the uploaded keystore under the `android_signing` field.
+
+Add the following code to the `environment` section of your `codemagic.yaml` file:
+
+```yaml
+workflows:
+  android-workflow:
+    name: Android Workflow
+    # ....
+    environment:
+      android_signing:
+        - keystore_reference
+```
+
+Default environment variables are assigned by Codemagic for the values on the build machine:
+
+- Keystore path: `CM_KEYSTORE_PATH`
+- Keystore password: `CM_KEYSTORE_PASSWORD`
+- Key alias: `CM_KEY_ALIAS`
+- Key alias password: `CM_KEY_PASSWORD`
+
+#### Signing Android apps using Gradle
+
+To sign your Android app, simply modify your **`android/app/build.gradle`** or **`android/app/build.gradle.kts`** as follows:
+
+- build.gradle
+- build.gradle.kts
+
+```Groovy
+...
+  android {
+      ...
+      defaultConfig { ... }
+      signingConfigs {
+          release {
+              if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
+                  storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
+                  storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
+                  keyAlias System.getenv()["CM_KEY_ALIAS"]
+                  keyPassword System.getenv()["CM_KEY_PASSWORD"]
+              } else {
+                  keyAlias keystoreProperties['keyAlias']
+                  keyPassword keystoreProperties['keyPassword']
+                  storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                  storePassword keystoreProperties['storePassword']
+              }
+          }
+      }
+      buildTypes {
+          release {
+              ...
+              signingConfig signingConfigs.release
+          }
+      }
+  }
+  ...
+```
+
+```groovy
+import java.io.File
+import java.util.*
+
+val keystoreProperties =
+    Properties().apply {
+        var file = File("key.properties")
+        if (file.exists()) load(file.reader())
+    }
+
+plugins { ... }
+
+android {
+    ...
+    val appVersionCode = (System.getenv()["NEW_BUILD_NUMBER"] ?: "1")?.toInt()
+    defaultConfig {
+        ...
+        versionCode = appVersionCode
+        ...
+    }
+    signingConfigs {
+        create("release") {
+            if (System.getenv()["CI"].toBoolean()) { // CI=true is exported by Codemagic
+                storeFile = file(System.getenv()["CM_KEYSTORE_PATH"])
+                storePassword = System.getenv()["CM_KEYSTORE_PASSWORD"]
+                keyAlias = System.getenv()["CM_KEY_ALIAS"]
+                keyPassword = System.getenv()["CM_KEY_PASSWORD"]
+            } else {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies { ... }
+```
+
+#### Creating the App Store Connect API key
+
+Signing iOS applications requires [Apple Developer Program](https://developer.apple.com/programs/enroll/) membership.
+
+It is recommended to create a dedicated App Store Connect API key for Codemagic in [App Store Connect](https://appstoreconnect.apple.com/access/integrations/api). To do so:
+
+1. Log in to App Store Connect and navigate to **Users and Access > Integrations » App Store Connect API**.
+2. Click on the + sign to generate a new API key.
+3. Enter the name for the key and select an access level. We recommend choosing `App Manager` access rights, read more about Apple Developer Program role permissions [here](https://help.apple.com/app-store-connect/#/deve5f9a89d7).
+4. Click **Generate**.
+5. As soon as the key is generated, you can see it added to the list of active keys. Click **Download API Key** to save the private key for later. Note that the key can only be downloaded once.
+
+Take note of the **Issuer ID** above the table of active keys as well as the **Key ID** of the generated key as these will be required when setting up the Apple Developer Portal integration in the Codemagic UI.
+
+#### Adding the App Store Connect API key to Codemagic
+
+1. Open your Codemagic Team settings, go to **Team integrations** \> **Developer Portal** \> **Manage keys**.
+2. Click the **Add key** button.
+3. Enter the `App Store Connect API key name`. This is a human readable name for the key that will be used to refer to the key later in application settings.
+4. Enter the `Issuer ID` and `Key ID` values.
+5. Click on **Choose a .p8 file** or drag the file to upload the App Store Connect API key downloaded earlier.
+6. Click **Save**.
+
+#### Adding the code signing certificate
+
+Codemagic lets you upload code signing certificates as PKCS#12 archives containing both the certificate and the private key which is needed to use it. When uploading, Codemagic will ask you to provide the certificate password (if the certificate is password-protected) along with a unique **Reference name**, which can then be used in the `codemagic.yaml` configuration to fetch the specific file.
+
+- Upload certificate
+- Generate new certificate
+- Fetch from Developer Portal
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Upload the certificate file by clicking on **Choose a .p12 or .pem file** or by dragging it into the indicated frame.
+4. Enter the **Certificate password** and choose a **Reference name**.
+5. Click **Add certificate**
+
+If you have added the **App Store Connect API key** to Codemagic, you can also generate a new `Apple Development` or `Apple Distribution` certificate.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Click **Generate certificate**.
+4. Provide a **Reference name** for the certificate.
+5. Choose the **Certificate type**.
+6. Select the **App Store Connect API key** to use.
+7. Click **Create certificate**.
+
+Once the certificate has been created, Codemagic will allow you to download the certificate and provides the password for it.
+
+After downloading, please follow the steps in the **Upload certificate** tab to upload the certificate to Codemagic.
+
+**Note**: The certificate can be downloaded **only once**, right after creating it.
+
+**Note**: Apple limits the number of `Apple Distribution` certificates to 3. If you have already reached the maximum number of certificates, the following error will be displayed:
+
+```bash
+There is a problem with the request entity - You already have a current Distribution certificate or a pending certificate request.
+```
+
+Similar errors can also arise in rarer cases with `Apple Development` certificates. To resolve the error, either remove some old certificate from the Apple Developer Portal or upload an existing certificate manually.
+
+Existing signing certificates previously generated by Codemagic can be automatically fetched from Apple Developer Portal based on your team’s App Store Connect API key.
+
+Fetching a certificate that was not generated by Codemagic is not possible because each certificate is linked with a private signing key to which Codemagic has no access.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Click **Fetch certificate**.
+4. Select a certificate from the **Development certificates** or **Distribution certificates** list.
+5. Click **Fetch selected**.
+
+#### Adding the provisioning profile
+
+Codemagic allows you to upload a provisioning profile to be used for the application or to fetch a profile from the Apple Developer Portal.
+
+The profile’s type, team, bundle id, and expiration date are displayed for each profile added to Code signing identities. Furthermore, Codemagic will let you know whether a matching code signing certificate is available in Code signing identities (a green checkmark in the **Certificate** field) or not.
+
+**Note:** If your app contains app extensions, an additional provisioning profile is required for each extension. Codemagic will use the bundle identifier to find the relevant provisioning profiles. If your bundle identifier is `com.example.app`, the matching profiles are the ones with `com.example.app` and `com.example.app.*` as bundle identifier.
+
+- Upload a profile
+- Fetch from Developer Portal
+
+You can upload provisioning profiles with the `.mobileprovision` extension, providing a unique **Reference name** is required for each uploaded profile.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS provisioning profiles** tab.
+3. Upload the provisioning profile file by clicking on **Choose a .mobileprovision file** or by dragging it into the indicated frame.
+4. Enter the **Reference name** for the profile.
+5. Click **Add profile**.
+
+You can automatically fetch the provisioning profiles from the Apple Developer Portal based on your team’s App Store Connect API key. The bundle identifier is listed for every available profile along with it’s name.
+
+The profiles are displayed grouped by category: `Development profiles`, `Ad Hoc profiles`, `App Store profiles`, and `Enterprise profiles`. For each selected profile, it is necessary to provide a unique **Reference name**, which can be later used in `codemagic.yaml` to fetch the profile.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS provisioning profiles** tab.
+3. Click **Fetch profiles**
+4. Select the desired profile(s) and enter a **Reference name** for each one.
+5. Click **Download selected**. (scroll down if necessary)
+
+**Note:** When you make essential changes to a provisioning profile, such as modifying the app ID, adding/removing capabilities from the profile identifier, or changing the certificates assigned to that profile, the provisioning profile becomes invalid. In such situations, you need to generate a new provisioning profile with these updates and then re-upload it to Codemagic.
+
+#### Referencing certificates and profiles in codemagic.yaml
+
+To fetch all uploaded signing files matching a specific distribution type and bundle identifier during the build, define the `distribution_type` and `bundle_identifier` fields in your `codemagic.yaml` configuration. Note that it is necessary to configure **both** of the fields.
+
+```yaml
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    # ....
+    environment:
+      ios_signing:
+        distribution_type: app_store # or: ad_hoc | development | enterprise
+        bundle_identifier: com.example.id
+```
+
+**Note:** If you are publishing to the **App Store** or you are using **TestFlight** to distribute your app to test users, set the `distribution_type` to `app_store`.
+
+When using a **third party app distribution service** such as Firebase App Distribution, set the `distribution_type` to `ad_hoc`
+
+When defining the bundle identifier `com.example.id`, Codemagic will fetch any uploaded certificates and profiles matching the extensions as well (e.g. `com.example.id.NotificationService`).
+
+##### Using provisioning profiles
+
+To apply the profiles to your project during the build, add the following script before your build scripts:
+
+```yaml
+  scripts:
+    # ... your dependencies installation
+
+    - name: Set up code signing settings on Xcode project
+      script: xcode-project use-profiles
+
+    # ... your build commands
+```
+
+See additional configuration options for setting up code signing settings to use given provisioning profiles [here](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/xcode-project/use-profiles.md)
+
+To distribute signed iOS applications solely to internal testers without the need for Apple’s beta review (TestFlight Internal Testing Only):
+
+```yaml
+
+  scripts:
+    # ... your dependencies installation
+    - name: Set up code signing settings on Xcode project
+      script: xcode-project use-profiles
+                --custom-export-options='{"testFlightInternalTestingOnly": true}'
+    # ... your build commands
+```
+
+**Note:** Builds marked as TestFlight Internal Only will display “internal” next to the build number and can exclusively be added to internal tester groups. They cannot be submitted for external testing or distributed to customers.
+
+## Setting up the Android package name and iOS bundle identifier
+
+Configure Android package name and iOS bundle identifier by adding the corresponding variables in the `codemagic.yaml` and editing the `app.json` files.
+
+- Android
+- iOS
+
+```yaml
+workflows:
+  react-native-android:
+    # ....
+    environment:
+      groups:
+        # ...
+      vars:
+        PACKAGE_NAME: "io.codemagic.sample.reactnative"
+```
+
+```yaml
+workflows:
+  react-native-ios:
+    # ....
+    environment:
+      groups:
+        # ...
+      vars:
+        BUNDLE_ID: "io.codemagic.sample.reactnative"
+```
+
+Example of minimal `app.json` file. Add the `android` and/or `ios` keys:
+
+```json
+{
+  "expo": {
+    "name": "codemagicSample",
+    "slug": "codemagicSample",
+    "version": "1.0.0",
+    "assetBundlePatterns": [\
+      "**/*"\
+    ],
+    "ios": {
+      "bundleIdentifier": "io.codemagic.sample.reactnative"
+    },
+    "android": {
+      "package": "io.codemagic.sample.reactnative"
+    }
+  }
+}
+```
+
+## Configure scripts to build the app
+
+Add the following scripts to your `codemagic.yaml` file in order to prepare the build environment and start the actual build process.
+In this step you can also define the build artifacts you are interested in. These files will be available for download when the build finishes. For more information about artifacts, see [here](https://docs.codemagic.io/yaml/yaml-getting-started/#artifacts).
+
+- Android
+- iOS
+
+```yaml
+scripts:
+    # ....
+  - name: Install npm dependencies
+    script: |
+      npm install
+  - name: Set Android SDK location
+    script: |
+      echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+  - name: Build Android release
+    script: |
+      cd android
+      ./gradlew bundleRelease
+
+artifacts:
+  - android/app/build/outputs/**/*.aab
+```
+
+```yaml
+react-native-ios:
+  environment:
+    groups:
+      # ...
+    vars:
+      BUNDLE_ID: "io.codemagic.sample.reactnative"
+      XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Name of your Xcode workspace
+      XCODE_SCHEME: "CodemagicSample" # <-- Name of your Xcode scheme
+scripts:
+  # ...
+  - name: Build ipa for distribution
+    script: |
+      xcode-project build-ipa \
+        --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+        --scheme "$XCODE_SCHEME"
+artifacts:
+  - build/ios/ipa/*.ipa
+  - /tmp/xcodebuild_logs/*.log
+  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+```
+
+#### Using Expo without prebuild
+
+- Android
+- iOS
+
+Add the following scripts just after the **Install npm dependencies**
+
+```yaml
+scripts:
+  - name: Run Expo Prebuild
+    script: |
+      npx expo prebuild
+  - name: Set up app/build.gradle
+    script: |
+   mv ./support-files/build.gradle android/app
+```
+
+Add the following scripts at the start of the scripts section
+
+```yaml
+scripts:
+  - name: Run Expo Prebuild
+    script: |
+      npx expo prebuild
+  - name: Set Info.plist values
+    script: |
+      PLIST=$CM_BUILD_DIR/$XCODE_SCHEME/Info.plist
+      PLIST_BUDDY=/usr/libexec/PlistBuddy
+      $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
+  - name: Install CocoaPods dependencies
+    script: |
+    cd ios && pod install
+```
+
+## Build versioning
+
+If you are going to publish your app to App Store Connect or Google Play, each uploaded artifact must have a new version satisfying each app store’s requirements. Codemagic allows you to easily automate this process and increment the version numbers for each build. For more information and details, see [here](https://docs.codemagic.io/configuration/build-versioning).
+
+- Android
+- iOS
+
+One very useful method of calculating the code version is to use Codemagic command line tools to get the latest build number from Google Play and increment it by one.
+
+You can find the full sample project with the instructions on alternative ways to perform Android build versioning [in our repository](https://github.com/codemagic-ci-cd/android-versioning-example).
+
+The prerequisite is a valid **Google Cloud Service Account**. Please follow these steps:
+
+1. Go to [this guide](https://docs.codemagic.io/yaml-publishing/google-play/) and complete the steps in the **Google Play** section.
+2. Skip to the **Creating a service account** section in the same guide and complete those steps also.
+3. You now have a `JSON` file with the credentials.
+4. Open Codemagic UI and create a new Environment variable `GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS`.
+5. Paste the content of the downloaded `JSON` file in the **_Value_** field, set the group name (e.g. **google\_play**) and make sure the **Secret** option is checked.
+
+* * *
+
+6. Add the **google\_play** variable group to the `codemagic.yaml`
+
+
+
+
+```yaml
+workflows:
+     android-workflow-id:
+       # ....
+       environment:
+         groups:
+        - google_play
+```
+
+7. Modify the build script to calculate the build number and use it as gradlew arguments.
+
+
+
+
+```yaml
+scripts:
+       # ....
+  - name: Build Android release
+    script: |
+      LATEST_GOOGLE_PLAY_BUILD_NUMBER=$(google-play get-latest-build-number --package-name "$PACKAGE_NAME")
+      if [ -z $LATEST_GOOGLE_PLAY_BUILD_NUMBER ]; then
+        # fallback in case no build number was found from Google Play.
+        # Alternatively, you can `exit 1` to fail the build
+        # BUILD_NUMBER is a Codemagic built-in variable tracking the number
+        # of times this workflow has been built
+          UPDATED_BUILD_NUMBER=$BUILD_NUMBER
+      else
+          UPDATED_BUILD_NUMBER=$(($LATEST_GOOGLE_PLAY_BUILD_NUMBER + 1))
+      fi
+      cd android
+      ./gradlew bundleRelease \
+          -PversionCode=$UPDATED_BUILD_NUMBER \
+          -PversionName=1.0.$UPDATED_BUILD_NUMBER
+```
+
+8. Modify the `android/app/build.gradle` file to get the build number values and apply them:
+
+
+
+
+```kotlin
+// get version code from the specified property argument `-PversionCode` during the build call
+def getMyVersionCode = { ->
+       return project.hasProperty('versionCode') ? versionCode.toInteger() : -1
+}
+
+// get version name from the specified property argument `-PversionName` during the build call
+def getMyVersionName = { ->
+       return project.hasProperty('versionName') ? versionName : "1.0"
+}
+
+....
+android {
+       ....
+       defaultConfig {
+           ...
+           versionCode getMyVersionCode()
+           versionName getMyVersionName()
+```
+
+
+In order to get the latest build number from App Store or TestFlight, you will need the App Store credentials as well as the **Application Apple ID**. This is an automatically generated ID assigned to your app and it can be found under **General > App Information > Apple ID** under your application in App Store Connect.
+
+1. Add the **Application Apple ID** to the `codemagic.yaml` as a variable
+2. Add the script to get the latest build number using `app-store-connect` and configure the new build number using `agvtool`.
+3. Your `codemagic.yaml` will look like this:
+
+
+
+
+```yaml
+workflows:
+     ios-workflow:
+       name: iOS Workflow
+       integrations:
+         app_store_connect: <App Store Connect API key name>
+       environment:
+         vars:
+           APP_STORE_APPLE_ID: 1555555551
+       scripts:
+      - name: Increment build number
+        script: |
+          #!/bin/sh
+          cd $CM_BUILD_DIR
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Build ipa for distribution
+      script: |
+        # build command
+```
+
+## Publishing
+
+Codemagic offers a wide array of options for app publishing and the list of partners and integrations is continuously growing. For the most up-to-date information, check the guides in the **Configuration > Publishing** section of these docs.
+To get more details on the publishing options presented in this guide, please check the [Email publishing](https://docs.codemagic.io/yaml-publishing/email), the [Google Play Store](https://docs.codemagic.io/yaml-publishing/google-play) publishing and the [App Store Connect](https://docs.codemagic.io/yaml-publishing/app-store-connect).
+
+#### Email publishing
+
+If the build finishes successfully, release notes (if passed), and the generated artifacts will be published to the provided email address(es). If the build fails, an email with a link to build logs will be sent.
+
+If you don’t want to receive an email notification on build success or failure, you can set `success` to `false` or `failure` to `false` accordingly.
+
+```yaml
+workflows:
+  sample-workflow-id:
+    environment:
+      # ...
+    scripts:
+      # ...
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+```
+
+#### Publishing to Google Play and App Store
+
+- Android
+- iOS
+
+Publishing apps to Google Play requires you to set up a service account in Google Play Console and save the content of the `JSON` key file to a secret environment variable as explained above in **Android Build Versioning** steps 1-5.
+Configuring Google Play publishing is simple as you only need to provide credentials and choose the desired track. If the app is in `draft` status, please also include the `submit_as_draft: true` or promote the app status in Google Play.
+
+```yaml
+react-native-android:
+  # ...
+  publishing:
+    # ...
+    google_play:
+      credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+      track: internal
+      submit_as_draft: true
+```
+
+Codemagic enables you to automatically publish your iOS or macOS app to [App Store Connect](https://appstoreconnect.apple.com/) for beta testing with [TestFlight](https://developer.apple.com/testflight/) or distributing the app to users via App Store. Codemagic uses the **App Store Connect API key** for authenticating communication with Apple’s services. You can read more about generating an API key from Apple’s [documentation page](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api).
+
+Please note that:
+
+1. for App Store Connect publishing, the provided key needs to have [App Manager permission](https://help.apple.com/app-store-connect/#/deve5f9a89d7),
+2. and in order to submit your iOS application to App Store Connect, it must be code signed with a distribution [certificate](https://developer.apple.com/support/certificates/).
+
+The following snippet demonstrates how to authenticate with and upload the IPA to App Store Connect, submit the build to beta tester groups in TestFlight and configure releasing the app to App Store. See additional configuration options for App Store Connect publishing [here](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/app-store-connect/publish.md).
+
+**Note:** Please note that you will need to create an **app record** in App Store Connect before you can automate publishing with Codemagic. It is recommended to upload the very first version of the app manually. Suppose you have set up an **app record** but have not manually uploaded the app’s first version. In that case, manual configuration of the settings must be done on App Store Connect after the build is complete, such as uploading the required screenshots and providing the values for the privacy policy URL and application category.
+
+```yaml
+# Integration section is required to make use of the keys stored in
+# Codemagic UI under Apple Developer Portal integration.
+integrations:
+  app_store_connect: <App Store Connect API key name>
+
+publishing:
+  app_store_connect:
+    # Use referenced App Store Connect API key to authenticate binary upload
+    auth: integration
+
+    # Configuration related to TestFlight (optional)
+
+    # Optional boolean, defaults to false. Whether or not to submit the uploaded
+    # build to TestFlight beta review. Required for distributing to beta groups.
+    # Note: This action is performed during post-processing.
+    submit_to_testflight: true
+
+    # Optional boolean, defaults to false. Set to true to automatically expire
+    # previous build in review or waiting for review in Testflight before
+    # submitting a new build to beta review. Expired builds will no longer be available for testers.
+    # Note: This action is performed during post-processing.
+    expire_build_submitted_for_review: true
+
+    # Specify the names of beta tester groups that will get access to the build
+    # once it has passed beta review.
+    beta_groups:
+      - group name 1
+      - group name 2
+
+    # Configuration related to App Store (optional)
+
+    # Optional boolean, defaults to false. Whether or not to submit the uploaded
+    # build to App Store review. Note: This action is performed during post-processing.
+    submit_to_app_store: true
+
+    # Optional boolean, defaults to false. Set to true to cancel the previous
+    # submission (if applicable) when submitting a new build to App Store review.
+    # This allows automatically submitting a new build for review if a previous submission exists.
+    # Note: This action is performed during post-processing.
+    cancel_previous_submissions: true
+
+    # Optional, defaults to MANUAL. Supported values: MANUAL, AFTER_APPROVAL or SCHEDULED
+    release_type: SCHEDULED
+
+    # Optional. Timezone-aware ISO8601 timestamp with hour precision when scheduling
+    # the release. This can be only used when release type is set to SCHEDULED.
+    # It cannot be set to a date in the past.
+    earliest_release_date: 2021-12-01T14:00:00+00:00
+
+    # Optional. The name of the person or entity that owns the exclusive rights
+    # to your app, preceded by the year the rights were obtained.
+    copyright: 2021 Nevercode Ltd
+
+    # Optional boolean. Whether or not to release an App Store version update in phases.
+    # With this option turned on, your version update will be released over a 7-day period
+    # to a percentage of your users (selected at random by their Apple ID) with automatic
+    # updates turned on. Learn more from
+    # https://developer.apple.com/help/app-store-connect/update-your-app/release-a-version-update-in-phases.
+    # If not specified, then App Store version default phased release configuration is reused.
+    phased_release: true
+```
+
+## Conclusion
+
+Having followed all of the above steps, you now have a working `codemagic.yaml` file that allows you to build, code sign, automatically version and publish your project using Codemagic CI/CD.
+Save your work, commit the changes to the repository, open the app in the Codemagic UI and start the build to see it in action.
+
+Your final `codemagic.yaml` file should look something like this:
+
+```yaml
+workflows:
+  react-native-android:
+    name: React Native Android
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      android_signing:
+        - keystore_reference
+      groups:
+        - google_play
+      vars:
+        PACKAGE_NAME: "io.codemagic.sample.reactnative"
+    scripts:
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/android/local.properties"
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Run Expo Prebuild
+        script: |
+          npx expo prebuild
+      - name: Set up app/build.gradle
+        script: |
+          mv ./support-files/build.gradle android/app
+      - name: Build Android release
+        script: |
+          LATEST_GOOGLE_PLAY_BUILD_NUMBER=$(google-play get-latest-build-number --package-name "$PACKAGE_NAME")
+          if [ -z $LATEST_GOOGLE_PLAY_BUILD_NUMBER ]; then
+              # fallback in case no build number was found from google play. Alternatively, you can `exit 1` to fail the build
+              UPDATED_BUILD_NUMBER=$BUILD_NUMBER
+          else
+              UPDATED_BUILD_NUMBER=$(($LATEST_GOOGLE_PLAY_BUILD_NUMBER + 1))
+          fi
+          cd android
+          ./gradlew bundleRelease \
+            -PversionCode=$UPDATED_BUILD_NUMBER \
+            -PversionName=1.0.$UPDATED_BUILD_NUMBER
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: true
+
+  react-native-ios:
+    name: React Native iOS
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: codemagic
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: io.codemagic.sample.reactnative
+      vars:
+        BUNDLE_ID: "io.codemagic.sample.reactnative"
+        XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Put the name of your Xcode workspace here
+        XCODE_SCHEME: "CodemagicSample" # <-- Put the name of your Xcode scheme here
+        APP_STORE_APPLE_ID: 1555555551
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm install
+      - name: Run Expo Prebuild
+        script: |
+          npx expo prebuild
+      - name: Set Info.plist values
+        script: |
+          PLIST=$CM_BUILD_DIR/$XCODE_SCHEME/Info.plist
+          PLIST_BUDDY=/usr/libexec/PlistBuddy
+          $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Increment build number
+        script: |
+          cd $CM_BUILD_DIR/ios
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Build ipa for distribution
+        script: |
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/ios/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      app_store_connect:
+        auth: integration
+
+        # Configuration related to TestFlight (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_testflight: true
+        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+          - group name 1
+          - group name 2
+
+        # Configuration related to App Store (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_app_store: false
+```
+
+## Next steps
+
+While this basic workflow configuration is incredibly useful, it is certainly not the end of the road and there are numerous advanced actions that Codemagic can help you with.
+
+We encourage you to investigate [Running tests with Codemagic](https://docs.codemagic.io/yaml-testing/testing) to get you started with testing, as well as additional guides such as the one on running tests on [Firebase Test Lab](https://docs.codemagic.io/yaml-testing/firebase-test-lab) or [Registering iOS test devices](https://docs.codemagic.io/testing/ios-provisioning).
+
+Documentation on [using codemagic.yaml](https://docs.codemagic.io/yaml/yaml-getting-started) teaches you to configure additional options such as [changing the instance type](https://docs.codemagic.io/yaml/yaml-getting-started/#instance-type) on which to build, or configuring builds to be [automatically triggered](https://docs.codemagic.io/yaml/yaml-getting-started/#triggering) on repository events.
+
+## Getting help and support
+
+If you have a technical question or need help with some particular issue, you can get help in our GitHub Discussions community
+[here](https://github.com/codemagic-ci-cd/codemagic-docs/discussions).
+
+Alternatively, join the Codemagic Community Discord Server
+[here](https://discord.gg/pefznye93R).
+
+If you're a paying customer, use the in-app chat widget to get support.
+You have to be logged in to see the chat icon at the bottom right corner (please note that some ad blockers might block the chat widget).
+
+---
+
+
+## 3. iOS native apps {#section-3}
+
+*Source: [https://docs.codemagic.io/yaml-quick-start/building-a-native-ios-app/](https://docs.codemagic.io/yaml-quick-start/building-a-native-ios-app/)*
+
+# iOS native apps
+
+How to build an iOS app with codemagic.yaml
+
+This guide will illustrate all of the necessary steps to successfully build and publish a native iOS app with Codemagic. It will cover the basic steps such as build versioning, code signing and publishing.
+
+You can find a complete project showcasing these steps in our [Sample projects repository](https://github.com/codemagic-ci-cd/codemagic-sample-projects/tree/main/ios/ios-native-quick-start).
+
+## Adding the app to Codemagic
+
+The apps you have available on Codemagic are listed on the Applications page. Click **Add application** to add a new app.
+
+1. If you have more than one team configured in Codemagic, select the team you wish to add the app to.
+2. Connect the repository where the source code is hosted. Detailed instructions that cover some advanced options are available [here](https://docs.codemagic.io/getting-started/adding-apps).
+3. Select the repository from the list of available repositories. Select the appropriate project type.
+4. Click **Finish: Add application**
+
+## Creating codemagic.yaml
+
+In order to use `codemagic.yaml` for build configuration on Codemagic, it has to be committed to your repository. The name of the file must be `codemagic.yaml` and it must be located in the root directory of the repository. Detailed explanation can be found [here](https://docs.codemagic.io/yaml/yaml-getting-started).
+
+**Tip**
+You can find codemagic.yaml examples in [Codemagic Sample Projects](https://github.com/codemagic-ci-cd/codemagic-sample-projects/) repository.
+
+If you prefer to write your `codemagic.yaml` file from scratch, you can start with this minimal configuration.
+
+```yaml
+workflows:
+    sample-workflow:
+        name: Codemagic Sample Workflow
+        max_build_duration: 120
+        instance_type: mac_mini_m2
+```
+
+**Tip**
+You can have more than one workflow in the same `codemagic.yaml` file. If you are building for both the Android and iOS, simply enter both workflows as:
+
+```yaml
+workflows:
+    android-workflow-id:
+        name: Android Sample Workflow
+        # .......
+        # .......
+        # .......
+    ios-workflow-id:
+        name: iOS Sample Workflow
+        # ......
+```
+
+Scan for the `codemagic.yaml` file by selecting a branch to scan and clicking the **Check for configuration** file button at the top of the page. Note that you can have different configuration files in different branches.
+
+## Code signing
+
+All applications have to be digitally signed before they are made available to the public to confirm their author and guarantee that the code has not been altered or corrupted since it was signed.
+
+#### Creating the App Store Connect API key
+
+Signing iOS applications requires [Apple Developer Program](https://developer.apple.com/programs/enroll/) membership.
+
+It is recommended to create a dedicated App Store Connect API key for Codemagic in [App Store Connect](https://appstoreconnect.apple.com/access/integrations/api). To do so:
+
+1. Log in to App Store Connect and navigate to **Users and Access > Integrations » App Store Connect API**.
+2. Click on the + sign to generate a new API key.
+3. Enter the name for the key and select an access level. We recommend choosing `App Manager` access rights, read more about Apple Developer Program role permissions [here](https://help.apple.com/app-store-connect/#/deve5f9a89d7).
+4. Click **Generate**.
+5. As soon as the key is generated, you can see it added to the list of active keys. Click **Download API Key** to save the private key for later. Note that the key can only be downloaded once.
+
+Take note of the **Issuer ID** above the table of active keys as well as the **Key ID** of the generated key as these will be required when setting up the Apple Developer Portal integration in the Codemagic UI.
+
+#### Adding the App Store Connect API key to Codemagic
+
+1. Open your Codemagic Team settings, go to **Team integrations** \> **Developer Portal** \> **Manage keys**.
+2. Click the **Add key** button.
+3. Enter the `App Store Connect API key name`. This is a human readable name for the key that will be used to refer to the key later in application settings.
+4. Enter the `Issuer ID` and `Key ID` values.
+5. Click on **Choose a .p8 file** or drag the file to upload the App Store Connect API key downloaded earlier.
+6. Click **Save**.
+
+#### Adding the code signing certificate
+
+Codemagic lets you upload code signing certificates as PKCS#12 archives containing both the certificate and the private key which is needed to use it. When uploading, Codemagic will ask you to provide the certificate password (if the certificate is password-protected) along with a unique **Reference name**, which can then be used in the `codemagic.yaml` configuration to fetch the specific file.
+
+- Upload certificate
+- Generate new certificate
+- Fetch from Developer Portal
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Upload the certificate file by clicking on **Choose a .p12 or .pem file** or by dragging it into the indicated frame.
+4. Enter the **Certificate password** and choose a **Reference name**.
+5. Click **Add certificate**
+
+If you have added the **App Store Connect API key** to Codemagic, you can also generate a new `Apple Development` or `Apple Distribution` certificate.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Click **Generate certificate**.
+4. Provide a **Reference name** for the certificate.
+5. Choose the **Certificate type**.
+6. Select the **App Store Connect API key** to use.
+7. Click **Create certificate**.
+
+Once the certificate has been created, Codemagic will allow you to download the certificate and provides the password for it.
+
+After downloading, please follow the steps in the **Upload certificate** tab to upload the certificate to Codemagic.
+
+**Note**: The certificate can be downloaded **only once**, right after creating it.
+
+**Note**: Apple limits the number of `Apple Distribution` certificates to 3. If you have already reached the maximum number of certificates, the following error will be displayed:
+
+```bash
+There is a problem with the request entity - You already have a current Distribution certificate or a pending certificate request.
+```
+
+Similar errors can also arise in rarer cases with `Apple Development` certificates. To resolve the error, either remove some old certificate from the Apple Developer Portal or upload an existing certificate manually.
+
+Existing signing certificates previously generated by Codemagic can be automatically fetched from Apple Developer Portal based on your team’s App Store Connect API key.
+
+Fetching a certificate that was not generated by Codemagic is not possible because each certificate is linked with a private signing key to which Codemagic has no access.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS certificates** tab.
+3. Click **Fetch certificate**.
+4. Select a certificate from the **Development certificates** or **Distribution certificates** list.
+5. Click **Fetch selected**.
+
+#### Adding the provisioning profile
+
+Codemagic allows you to upload a provisioning profile to be used for the application or to fetch a profile from the Apple Developer Portal.
+
+The profile’s type, team, bundle id, and expiration date are displayed for each profile added to Code signing identities. Furthermore, Codemagic will let you know whether a matching code signing certificate is available in Code signing identities (a green checkmark in the **Certificate** field) or not.
+
+**Note:** If your app contains app extensions, an additional provisioning profile is required for each extension. Codemagic will use the bundle identifier to find the relevant provisioning profiles. If your bundle identifier is `com.example.app`, the matching profiles are the ones with `com.example.app` and `com.example.app.*` as bundle identifier.
+
+- Upload a profile
+- Fetch from Developer Portal
+
+You can upload provisioning profiles with the `.mobileprovision` extension, providing a unique **Reference name** is required for each uploaded profile.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS provisioning profiles** tab.
+3. Upload the provisioning profile file by clicking on **Choose a .mobileprovision file** or by dragging it into the indicated frame.
+4. Enter the **Reference name** for the profile.
+5. Click **Add profile**.
+
+You can automatically fetch the provisioning profiles from the Apple Developer Portal based on your team’s App Store Connect API key. The bundle identifier is listed for every available profile along with it’s name.
+
+The profiles are displayed grouped by category: `Development profiles`, `Ad Hoc profiles`, `App Store profiles`, and `Enterprise profiles`. For each selected profile, it is necessary to provide a unique **Reference name**, which can be later used in `codemagic.yaml` to fetch the profile.
+
+1. Open your Codemagic Team settings, go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **iOS provisioning profiles** tab.
+3. Click **Fetch profiles**
+4. Select the desired profile(s) and enter a **Reference name** for each one.
+5. Click **Download selected**. (scroll down if necessary)
+
+**Note:** When you make essential changes to a provisioning profile, such as modifying the app ID, adding/removing capabilities from the profile identifier, or changing the certificates assigned to that profile, the provisioning profile becomes invalid. In such situations, you need to generate a new provisioning profile with these updates and then re-upload it to Codemagic.
+
+#### Referencing certificates and profiles in codemagic.yaml
+
+To fetch all uploaded signing files matching a specific distribution type and bundle identifier during the build, define the `distribution_type` and `bundle_identifier` fields in your `codemagic.yaml` configuration. Note that it is necessary to configure **both** of the fields.
+
+```yaml
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    # ....
+    environment:
+      ios_signing:
+        distribution_type: app_store # or: ad_hoc | development | enterprise
+        bundle_identifier: com.example.id
+```
+
+**Note:** If you are publishing to the **App Store** or you are using **TestFlight** to distribute your app to test users, set the `distribution_type` to `app_store`.
+
+When using a **third party app distribution service** such as Firebase App Distribution, set the `distribution_type` to `ad_hoc`
+
+When defining the bundle identifier `com.example.id`, Codemagic will fetch any uploaded certificates and profiles matching the extensions as well (e.g. `com.example.id.NotificationService`).
+
+##### Using provisioning profiles
+
+To apply the profiles to your project during the build, add the following script before your build scripts:
+
+```yaml
+  scripts:
+    # ... your dependencies installation
+
+    - name: Set up code signing settings on Xcode project
+      script: xcode-project use-profiles
+
+    # ... your build commands
+```
+
+See additional configuration options for setting up code signing settings to use given provisioning profiles [here](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/xcode-project/use-profiles.md)
+
+To distribute signed iOS applications solely to internal testers without the need for Apple’s beta review (TestFlight Internal Testing Only):
+
+```yaml
+
+  scripts:
+    # ... your dependencies installation
+    - name: Set up code signing settings on Xcode project
+      script: xcode-project use-profiles
+                --custom-export-options='{"testFlightInternalTestingOnly": true}'
+    # ... your build commands
+```
+
+**Note:** Builds marked as TestFlight Internal Only will display “internal” next to the build number and can exclusively be added to internal tester groups. They cannot be submitted for external testing or distributed to customers.
+
+## Configure scripts to build the app
+
+Add the following scripts to your `codemagic.yaml` file in order to prepare the build environment and start the actual build process.
+In this step you can also define the build artifacts you are interested in. These files will be available for download when the build finishes. For more information about artifacts, see [here](https://docs.codemagic.io/yaml/yaml-getting-started/#artifacts).
+
+```yaml
+
+ios-native:
+  environment:
+    vars:
+      BUNDLE_ID: "io.codemagic.sample.iosnative"
+      XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Name of your Xcode workspace
+      XCODE_SCHEME: "CodemagicSample" # <-- Name of your Xcode scheme
+scripts:
+  # ...
+  - name: Build ipa for distribution
+    script: |
+      xcode-project build-ipa \
+        --workspace "$CM_BUILD_DIR/$XCODE_WORKSPACE" \
+        --scheme "$XCODE_SCHEME"
+artifacts:
+  - build/ios/ipa/*.ipa
+  - /tmp/xcodebuild_logs/*.log
+  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+  - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+
+```
+
+**Note**: If you don’t have a workspace, use `--project "MyXcodeProject.xcodeproj"` instead of the `--workspace "MyXcodeWorkspace.xcworkspace"` option.
+
+## Build versioning
+
+If you are going to publish your app to App Store, each uploaded artifact must have a new version. Codemagic allows you to easily automate this process and increment the version numbers for each build. For more information and details, see [here](https://docs.codemagic.io/configuration/build-versioning).
+
+In order to get the latest build number from App Store or TestFlight, you will need the App Store credentials as well as the **Application Apple ID**. This is an automatically generated ID assigned to your app and it can be found under **General > App Information > Apple ID** under your application in App Store Connect.
+
+1. Add the **Application Apple ID** to the `codemagic.yaml` as a variable
+2. Add the script to get the latest build number using `app-store-connect` and configure the new build number using `agvtool`.
+3. Your `codemagic.yaml` will look like this:
+
+
+
+
+```yaml
+workflows:
+     ios-workflow:
+       name: iOS Workflow
+       integrations:
+         app_store_connect: <App Store Connect API key name>
+       environment:
+         vars:
+           APP_STORE_APPLE_ID: 1555555551
+       scripts:
+      - name: Increment build number
+        script: |
+          #!/bin/sh
+          cd $CM_BUILD_DIR
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Build ipa for distribution
+      script: |
+        # build command
+```
+
+## Publishing
+
+Codemagic offers a wide array of options for app publishing and the list of partners and integrations is continuously growing. For the most up-to-date information, check the guides in the **Configuration > Publishing** section of these docs.
+To get more details on the publishing options presented in this guide, please check the [Email publishing](https://docs.codemagic.io/yaml-publishing/email) and the [App Store Connect](https://docs.codemagic.io/yaml-publishing/app-store-connect) publishing docs.
+
+#### Email publishing
+
+If the build finishes successfully, release notes (if passed), and the generated artifacts will be published to the provided email address(es). If the build fails, an email with a link to build logs will be sent.
+
+If you don’t want to receive an email notification on build success or failure, you can set `success` to `false` or `failure` to `false` accordingly.
+
+```yaml
+workflows:
+sample-workflow-id:
+    environment:
+      # ...
+    scripts:
+      # ...
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+```
+
+#### Publishing to App Store
+
+Codemagic enables you to automatically publish your iOS or macOS app to [App Store Connect](https://appstoreconnect.apple.com/) for beta testing with [TestFlight](https://developer.apple.com/testflight/) or distributing the app to users via App Store. Codemagic uses the **App Store Connect API key** for authenticating communication with Apple’s services. You can read more about generating an API key from Apple’s [documentation page](https://developer.apple.com/documentation/appstoreconnectapi/creating_api_keys_for_app_store_connect_api).
+
+Please note that:
+
+1. for App Store Connect publishing, the provided key needs to have [App Manager permission](https://help.apple.com/app-store-connect/#/deve5f9a89d7),
+2. and in order to submit your iOS application to App Store Connect, it must be code signed with a distribution [certificate](https://developer.apple.com/support/certificates/).
+
+The following snippet demonstrates how to authenticate with and upload the IPA to App Store Connect, submit the build to beta tester groups in TestFlight and configure releasing the app to App Store. See additional configuration options for App Store Connect publishing [here](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/app-store-connect/publish.md).
+
+**Note:** Please note that you will need to create an **app record** in App Store Connect before you can automate publishing with Codemagic. It is recommended to upload the very first version of the app manually. Suppose you have set up an **app record** but have not manually uploaded the app’s first version. In that case, manual configuration of the settings must be done on App Store Connect after the build is complete, such as uploading the required screenshots and providing the values for the privacy policy URL and application category.
+
+```yaml
+# Integration section is required to make use of the keys stored in
+# Codemagic UI under Apple Developer Portal integration.
+integrations:
+app_store_connect: <App Store Connect API key name>
+
+publishing:
+app_store_connect:
+    # Use referenced App Store Connect API key to authenticate binary upload
+    auth: integration
+
+    # Configuration related to TestFlight (optional)
+
+    # Optional boolean, defaults to false. Whether or not to submit the uploaded
+    # build to TestFlight beta review. Required for distributing to beta groups.
+    # Note: This action is performed during post-processing.
+    submit_to_testflight: true
+
+    # Optional boolean, defaults to false. Set to true to automatically expire
+    # previous build in review or waiting for review in Testflight before
+    # submitting a new build to beta review. Expired builds will no longer be available for testers.
+    # Note: This action is performed during post-processing.
+    expire_build_submitted_for_review: true
+
+    # Specify the names of beta tester groups that will get access to the build
+    # once it has passed beta review.
+    beta_groups:
+      - group name 1
+      - group name 2
+
+    # Configuration related to App Store (optional)
+
+    # Optional boolean, defaults to false. Whether or not to submit the uploaded
+    # build to App Store review. Note: This action is performed during post-processing.
+    submit_to_app_store: true
+
+    # Optional boolean, defaults to false. Set to true to cancel the previous
+    # submission (if applicable) when submitting a new build to App Store review.
+    # This allows automatically submitting a new build for review if a previous submission exists.
+    # Note: This action is performed during post-processing.
+    cancel_previous_submissions: true
+
+    # Optional, defaults to MANUAL. Supported values: MANUAL, AFTER_APPROVAL or SCHEDULED
+    release_type: SCHEDULED
+
+    # Optional. Timezone-aware ISO8601 timestamp with hour precision when scheduling
+    # the release. This can be only used when release type is set to SCHEDULED.
+    # It cannot be set to a date in the past.
+    earliest_release_date: 2021-12-01T14:00:00+00:00
+
+    # Optional. The name of the person or entity that owns the exclusive rights
+    # to your app, preceded by the year the rights were obtained.
+    copyright: 2021 Nevercode Ltd
+
+    # Optional boolean. Whether or not to release an App Store version update in phases.
+    # With this option turned on, your version update will be released over a 7-day period
+    # to a percentage of your users (selected at random by their Apple ID) with automatic
+    # updates turned on. Learn more from
+    # https://developer.apple.com/help/app-store-connect/update-your-app/release-a-version-update-in-phases.
+    # If not specified, then App Store version default phased release configuration is reused.
+    phased_release: true
+```
+
+## Conclusion
+
+Having followed all of the above steps, you now have a working `codemagic.yaml` file that allows you to build, code sign, automatically version and publish your project using Codemagic CI/CD.
+Save your work, commit the changes to the repository, open the app in the Codemagic UI and start the build to see it in action.
+
+Your final `codemagic.yaml` file should look something like this:
+
+```yaml
+
+workflows:
+ios-native-workflow:
+    name: iOS Native
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: codemagic
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: io.codemagic.sample.iosnative
+      vars:
+        BUNDLE_ID: "io.codemagic.sample.iosnative"
+        XCODE_WORKSPACE: "CodemagicSample.xcworkspace" # <-- Put the name of your Xcode workspace here
+        XCODE_SCHEME: "CodemagicSample" # <-- Put the name of your Xcode scheme here
+        APP_STORE_APPLE_ID: 1555555551
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install CocoaPods dependencies
+        script: |
+          pod install
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Increment build number
+        script: |
+          cd $CM_BUILD_DIR
+          LATEST_BUILD_NUMBER=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID")
+          agvtool new-version -all $(($LATEST_BUILD_NUMBER + 1))
+      - name: Build ipa for distribution
+        script: |
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      app_store_connect:
+        auth: integration
+
+        # Configuration related to TestFlight (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_testflight: true
+        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
+          - group name 1
+          - group name 2
+
+        # Configuration related to App Store (optional)
+        # Note: This action is performed during post-processing.
+        submit_to_app_store: false
+
+```
+
+## Next steps
+
+While this basic workflow configuration is incredibly useful, it is certainly not the end of the road and there are numerous advanced actions that Codemagic can help you with.
+
+We encourage you to investigate [Running tests with Codemagic](https://docs.codemagic.io/yaml-testing/testing) to get you started with testing, as well as additional guides such as the one on running tests on [Firebase Test Lab](https://docs.codemagic.io/yaml-testing/firebase-test-lab) or [Registering iOS test devices](https://docs.codemagic.io/testing/ios-provisioning).
+
+Documentation on [using codemagic.yaml](https://docs.codemagic.io/yaml/yaml-getting-started) teaches you to configure additional options such as [changing the instance type](https://docs.codemagic.io/yaml/yaml-getting-started/#instance-type) on which to build, or configuring builds to be [automatically triggered](https://docs.codemagic.io/yaml/yaml-getting-started/#triggering) on repository events.
+
+## Getting help and support
+
+If you have a technical question or need help with some particular issue, you can get help in our GitHub Discussions community
+[here](https://github.com/codemagic-ci-cd/codemagic-docs/discussions).
+
+Alternatively, join the Codemagic Community Discord Server
+[here](https://discord.gg/pefznye93R).
+
+If you're a paying customer, use the in-app chat widget to get support.
+You have to be logged in to see the chat icon at the bottom right corner (please note that some ad blockers might block the chat widget).
+
+---
+
+
+## 4. Android native apps {#section-4}
+
+*Source: [https://docs.codemagic.io/yaml-quick-start/building-a-native-android-app/](https://docs.codemagic.io/yaml-quick-start/building-a-native-android-app/)*
+
+# Android native apps
+
+How to build an Android app with codemagic.yaml
+
+This guide will illustrate all of the necessary steps to successfully build and publish a native Android app with Codemagic. It will cover the basic steps such as build versioning, code signing and publishing.
+
+You can find a complete project showcasing these steps in our [Sample projects repository](https://github.com/codemagic-ci-cd/codemagic-sample-projects/tree/main/android/android-native-quick-start).
+
+## Adding the app to Codemagic
+
+The apps you have available on Codemagic are listed on the Applications page. Click **Add application** to add a new app.
+
+1. If you have more than one team configured in Codemagic, select the team you wish to add the app to.
+2. Connect the repository where the source code is hosted. Detailed instructions that cover some advanced options are available [here](https://docs.codemagic.io/getting-started/adding-apps).
+3. Select the repository from the list of available repositories. Select the appropriate project type.
+4. Click **Finish: Add application**
+
+## Creating codemagic.yaml
+
+In order to use `codemagic.yaml` for build configuration on Codemagic, it has to be committed to your repository. The name of the file must be `codemagic.yaml` and it must be located in the root directory of the repository. Detailed explanation can be found [here](https://docs.codemagic.io/yaml/yaml-getting-started).
+
+**Tip**
+You can find codemagic.yaml examples in [Codemagic Sample Projects](https://github.com/codemagic-ci-cd/codemagic-sample-projects/) repository.
+
+If you prefer to write your `codemagic.yaml` file from scratch, you can start with this minimal configuration.
+
+```yaml
+workflows:
+    sample-workflow:
+        name: Codemagic Sample Workflow
+        max_build_duration: 120
+        instance_type: mac_mini_m2
+```
+
+**Tip**
+You can have more than one workflow in the same `codemagic.yaml` file. If you are building for both the Android and iOS, simply enter both workflows as:
+
+```yaml
+workflows:
+    android-workflow-id:
+        name: Android Sample Workflow
+        # .......
+        # .......
+        # .......
+    ios-workflow-id:
+        name: iOS Sample Workflow
+        # ......
+```
+
+Scan for the `codemagic.yaml` file by selecting a branch to scan and clicking the **Check for configuration** file button at the top of the page. Note that you can have different configuration files in different branches.
+
+## Code signing
+
+All applications have to be digitally signed before they are made available to the public to confirm their author and guarantee that the code has not been altered or corrupted since it was signed.
+
+#### Generating a keystore
+
+You can create a keystore for signing your release builds with the Java Keytool utility by running the following command:
+
+```Shell
+keytool -genkey -v -keystore codemagic.keystore -storetype JKS \
+        -keyalg RSA -keysize 2048 -validity 10000 -alias codemagic
+```
+
+Keytool then prompts you to enter your personal details for creating the certificate, as well as provide passwords for the keystore and the key. It then generates the keystore as a file called **codemagic.keystore** in the directory you’re in. The key is valid for 10,000 days.
+
+#### Uploading a keystore
+
+1. Open your Codemagic Team settings, and go to **codemagic.yaml settings** \> **Code signing identities**.
+2. Open **Android keystores** tab.
+3. Upload the keystore file by clicking on **Choose a file** or by dragging it into the indicated frame.
+4. Enter the **Keystore password**, **Key alias** and **Key password** values as indicated.
+5. Enter the keystore **Reference name**. This is a unique name used to reference the file in `codemagic.yaml`
+6. Click the **Add keystore** button to add the keystore.
+
+For each of the added keystore, its common name, issuer, and expiration date are displayed.
+
+**Note**: The uploaded keystore cannot be downloaded from Codemagic. It is crucial that you independently store a copy of the keystore file as all subsequent builds released to Google Play should be signed with the same keystore.
+
+However, keep the keystore file private and do not check it into a public repository.
+
+#### Referencing keystores in codemagic.yaml
+
+To tell Codemagic to fetch the uploaded keystores from the **Code signing identities** section during the build, list the reference of the uploaded keystore under the `android_signing` field.
+
+Add the following code to the `environment` section of your `codemagic.yaml` file:
+
+```yaml
+workflows:
+  android-workflow:
+    name: Android Workflow
+    # ....
+    environment:
+      android_signing:
+        - keystore_reference
+```
+
+Default environment variables are assigned by Codemagic for the values on the build machine:
+
+- Keystore path: `CM_KEYSTORE_PATH`
+- Keystore password: `CM_KEYSTORE_PASSWORD`
+- Key alias: `CM_KEY_ALIAS`
+- Key alias password: `CM_KEY_PASSWORD`
+
+#### Signing Android apps using Gradle
+
+To sign your Android app, simply modify your **`android/app/build.gradle`** or **`android/app/build.gradle.kts`** as follows:
+
+- build.gradle
+- build.gradle.kts
+
+```Groovy
+...
+  android {
+      ...
+      defaultConfig { ... }
+      signingConfigs {
+          release {
+              if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
+                  storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
+                  storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
+                  keyAlias System.getenv()["CM_KEY_ALIAS"]
+                  keyPassword System.getenv()["CM_KEY_PASSWORD"]
+              } else {
+                  keyAlias keystoreProperties['keyAlias']
+                  keyPassword keystoreProperties['keyPassword']
+                  storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                  storePassword keystoreProperties['storePassword']
+              }
+          }
+      }
+      buildTypes {
+          release {
+              ...
+              signingConfig signingConfigs.release
+          }
+      }
+  }
+  ...
+```
+
+```groovy
+import java.io.File
+import java.util.*
+
+val keystoreProperties =
+    Properties().apply {
+        var file = File("key.properties")
+        if (file.exists()) load(file.reader())
+    }
+
+plugins { ... }
+
+android {
+    ...
+    val appVersionCode = (System.getenv()["NEW_BUILD_NUMBER"] ?: "1")?.toInt()
+    defaultConfig {
+        ...
+        versionCode = appVersionCode
+        ...
+    }
+    signingConfigs {
+        create("release") {
+            if (System.getenv()["CI"].toBoolean()) { // CI=true is exported by Codemagic
+                storeFile = file(System.getenv()["CM_KEYSTORE_PATH"])
+                storePassword = System.getenv()["CM_KEYSTORE_PASSWORD"]
+                keyAlias = System.getenv()["CM_KEY_ALIAS"]
+                keyPassword = System.getenv()["CM_KEY_PASSWORD"]
+            } else {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+
+dependencies { ... }
+```
+
+## Setting up the Android package name
+
+Configure Android package name by adding the corresponding variable in the `codemagic.yaml`:
+
+```yaml
+  workflows:
+    react-native-android:
+      # ....
+      environment:
+        groups:
+          # ...
+        vars:
+          PACKAGE_NAME: "io.codemagic.sample.androidnative"
+```
+
+## Configure scripts to build the app
+
+Add the following scripts to your `codemagic.yaml` file in order to prepare the build environment and start the actual build process.
+In this step you can also define the build artifacts you are interested in. These files will be available for download when the build finishes. For more information about artifacts, see [here](https://docs.codemagic.io/yaml/yaml-getting-started/#artifacts).
+
+```yaml
+scripts:
+    # ....
+  - name: Set Android SDK location
+    script: |
+      echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+  - name: Build Android release
+    script: |
+      ./gradlew bundleRelease # -> to create the .aab
+      # gradlew assembleRelease # -> to create the .apk
+
+artifacts:
+  - app/build/outputs/**/*.aab
+```
+
+## Build versioning
+
+If you are going to publish your app to Google Play, each uploaded artifact must have a new version. Codemagic allows you to easily automate this process and increment the version numbers for each build. For more information and details, see [here](https://docs.codemagic.io/configuration/build-versioning).
+
+One very useful method of calculating the code version is to use Codemagic command line tools to get the latest build number from Google Play and increment it by one.
+
+You can find the full sample project with the instructions on alternative ways to perform Android build versioning [in our repository](https://github.com/codemagic-ci-cd/android-versioning-example).
+
+The prerequisite is a valid **Google Cloud Service Account**. Please follow these steps:
+
+1. Go to [this guide](https://docs.codemagic.io/yaml-publishing/google-play/) and complete the steps in the **Google Play** section.
+2. Skip to the **Creating a service account** section in the same guide and complete those steps also.
+3. You now have a `JSON` file with the credentials.
+4. Open Codemagic UI and create a new Environment variable `GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS`.
+5. Paste the content of the downloaded `JSON` file in the **_Value_** field, set the group name (e.g. **google\_play**) and make sure the **Secret** option is checked.
+
+* * *
+
+6. Add the **google\_play** variable group to the `codemagic.yaml`
+
+
+
+
+```yaml
+workflows:
+     android-workflow-id:
+       # ....
+       environment:
+         groups:
+        - google_play
+```
+
+7. Modify the build script to calculate the build number and use it as gradlew arguments.
+
+
+
+
+```yaml
+scripts:
+       # ....
+  - name: Build Android release
+    script: |
+      LATEST_GOOGLE_PLAY_BUILD_NUMBER=$(google-play get-latest-build-number --package-name "$PACKAGE_NAME")
+      if [ -z $LATEST_GOOGLE_PLAY_BUILD_NUMBER ]; then
+        # fallback in case no build number was found from Google Play.
+        # Alternatively, you can `exit 1` to fail the build
+        # BUILD_NUMBER is a Codemagic built-in variable tracking the number
+        # of times this workflow has been built
+          UPDATED_BUILD_NUMBER=$BUILD_NUMBER
+      else
+          UPDATED_BUILD_NUMBER=$(($LATEST_GOOGLE_PLAY_BUILD_NUMBER + 1))
+      fi
+      cd android
+      ./gradlew bundleRelease \
+          -PversionCode=$UPDATED_BUILD_NUMBER \
+          -PversionName=1.0.$UPDATED_BUILD_NUMBER
+```
+
+8. Modify the `android/app/build.gradle` file to get the build number values and apply them:
+
+
+
+
+```kotlin
+// get version code from the specified property argument `-PversionCode` during the build call
+def getMyVersionCode = { ->
+       return project.hasProperty('versionCode') ? versionCode.toInteger() : -1
+}
+
+// get version name from the specified property argument `-PversionName` during the build call
+def getMyVersionName = { ->
+       return project.hasProperty('versionName') ? versionName : "1.0"
+}
+
+....
+android {
+       ....
+       defaultConfig {
+           ...
+           versionCode getMyVersionCode()
+           versionName getMyVersionName()
+```
+
+
+## Publishing
+
+Codemagic offers a wide array of options for app publishing and the list of partners and integrations is continuously growing. For the most up-to-date information, check the guides in the **Configuration > Publishing** section of these docs.
+To get more details on the publishing options presented in this guide, please check the [Email publishing](https://docs.codemagic.io/yaml-publishing/email) and the [Google Play Store](https://docs.codemagic.io/yaml-publishing/google-play) publishing docs.
+
+#### Email publishing
+
+If the build finishes successfully, release notes (if passed), and the generated artifacts will be published to the provided email address(es). If the build fails, an email with a link to build logs will be sent.
+
+If you don’t want to receive an email notification on build success or failure, you can set `success` to `false` or `failure` to `false` accordingly.
+
+```yaml
+workflows:
+sample-workflow-id:
+    environment:
+      # ...
+    scripts:
+      # ...
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+```
+
+}
+
+#### Publishing to Google Play
+
+Publishing apps to Google Play requires you to set up a service account in Google Play Console and save the content of the `JSON` key file to a secret environment variable as explained above in **Android Build Versioning** steps 1-5.
+Configuring Google Play publishing is simple as you only need to provide credentials and choose the desired track. If the app is in `draft` status, please also include the `submit_as_draft: true` or promote the app status in Google Play.
+
+```yaml
+react-native-android:
+# ...
+publishing:
+    # ...
+    google_play:
+      credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+      track: internal
+      submit_as_draft: true
+```
+
+## Conclusion
+
+Having followed all of the above steps, you now have a working `codemagic.yaml` file that allows you to build, code sign, automatically version and publish your project using Codemagic CI/CD.
+Save your work, commit the changes to the repository, open the app in the Codemagic UI and start the build to see it in action.
+
+Your final `codemagic.yaml` file should look something like this:
+
+```yaml
+workflows:
+native-android:
+    name: Native Android
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    environment:
+      android_signing:
+        - keystore_reference
+      groups:
+        - google_play
+      vars:
+        PACKAGE_NAME: "io.codemagic.sample.androidnative"
+    scripts:
+      - name: Set Android SDK location
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+      - name: Build Android release
+        script: |
+          LATEST_GOOGLE_PLAY_BUILD_NUMBER=$(google-play get-latest-build-number --package-name "$PACKAGE_NAME")
+          if [ -z $LATEST_GOOGLE_PLAY_BUILD_NUMBER ]; then
+              # fallback in case no build number was found from google play. Alternatively, you can `exit 1` to fail the build
+              UPDATED_BUILD_NUMBER=$BUILD_NUMBER
+          else
+              UPDATED_BUILD_NUMBER=$(($LATEST_GOOGLE_PLAY_BUILD_NUMBER + 1))
+          fi
+          ./gradlew bundleRelease -PversionCode=$UPDATED_BUILD_NUMBER -PversionName=1.0.$UPDATED_BUILD_NUMBER
+    artifacts:
+      - app/build/outputs/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - user_1@example.com
+          - user_2@example.com
+        notify:
+          success: true
+          failure: false
+      google_play:
+        credentials: $GOOGLE_PLAY_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: true
+```
+
+## Next steps
+
+While this basic workflow configuration is incredibly useful, it is certainly not the end of the road and there are numerous advanced actions that Codemagic can help you with.
+
+We encourage you to investigate [Running tests with Codemagic](https://docs.codemagic.io/yaml-testing/testing) to get you started with testing, as well as additional guides such as the one on running tests on [Firebase Test Lab](https://docs.codemagic.io/yaml-testing/firebase-test-lab) or [Registering iOS test devices](https://docs.codemagic.io/testing/ios-provisioning).
+
+Documentation on [using codemagic.yaml](https://docs.codemagic.io/yaml/yaml-getting-started) teaches you to configure additional options such as [changing the instance type](https://docs.codemagic.io/yaml/yaml-getting-started/#instance-type) on which to build, or configuring builds to be [automatically triggered](https://docs.codemagic.io/yaml/yaml-getting-started/#triggering) on repository events.
+
+## Getting help and support
+
+If you have a technical question or need help with some particular issue, you can get help in our GitHub Discussions community
+[here](https://github.com/codemagic-ci-cd/codemagic-docs/discussions).
+
+Alternatively, join the Codemagic Community Discord Server
+[here](https://discord.gg/pefznye93R).
+
+If you're a paying customer, use the in-app chat widget to get support.
+You have to be logged in to see the chat icon at the bottom right corner (please note that some ad blockers might block the chat widget).
+
+---
+
+
+## 5. Using codemagic.yaml {#section-5}
+
+*Source: [https://docs.codemagic.io/yaml-basic-configuration/yaml-getting-started/](https://docs.codemagic.io/yaml-basic-configuration/yaml-getting-started/)*
+
+# Using codemagic.yaml
+
+Configure all your workflows in a single file
+
+`codemagic.yaml` is a highly customizable configuration file for setting up your CI/CD pipeline with Codemagic. Configure all your workflows in a single file and commit the file to version control.
+
+[iframe](https://www.youtube.com/embed/er7hRWhW0B0?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0)
+
+## Building with YAML
+
+In order to use `codemagic.yaml` for build configuration on Codemagic, it has to be committed to your repository. The name of the file must be `codemagic.yaml` and it must be located in the root directory of the repository.
+
+When detected in the repository, `codemagic.yaml` is automatically used for configuring builds triggered in response to the events defined in the file, provided that a [webhook](https://docs.codemagic.io/building/webhooks) is set up.
+
+Builds can also be started manually by clicking **Start new build** in Codemagic and selecting the branch and workflow to build in the **Specify build configuration** popup.
+
+Check out the [**cheatsheet**](https://docs.codemagic.io/codemagic-yaml-cheatsheet.html) we have created to help you when using Codemagic YAML.
+
+## Syntax
+
+You can readily commit `codemagic.yaml` with the following content to test it out:
+
+```yaml
+workflows:
+  hello-world:
+    name: Hello world workflow
+    scripts:
+        - echo "Hello World!"
+```
+
+The scripts in the `scripts` section will be run right after the repository is cloned.
+
+`codemagic.yaml` follows the traditional [YAML syntax](https://yaml.org/). Here are a few tips and tricks on how to better structure the file.
+
+**Note:** You can use the Codemagic JSON schema to validate `codemagic.yaml` in your IDE. See how to set it up [here](https://docs.codemagic.io/knowledge-base/validate-yaml/).
+
+### Section names
+
+For easier reading of the configuration file and build logs, you can divide the scripts into meaningful sections with descriptive names.
+
+```yaml
+scripts:
+  - name: Build for iOS         # Name of the section
+    script: flutter build ios   # The script(s) to be run in that section
+```
+
+### Reusing sections
+
+If a particular section would be reused multiple times in the file, e.g. in each workflow, you can avoid repetitions by using **anchors**. This is also convenient when you need to make changes to the code, as you would have to edit it in just one place.
+
+Define the section to be reused by adding `&` in front of it.
+
+```yaml
+scripts:
+  - &increment_build_number       # Defined section
+    name: Increment build number
+    script: agvtool new-version -all $(($PROJECT_BUILD_NUMBER +1))
+```
+
+Reuse the defined section elsewhere by adding a `*` in front of it.
+
+```yaml
+scripts:
+  - script1
+  - *increment_build_number       # Reused section
+  - script3
+```
+
+You can also define the reusable section under `definitions` by adding `&` in front of the section name.
+
+```yaml
+definitions:
+  env_versions: &env_versions
+    xcode: latest
+    cocoapods: default
+```
+
+Expand the defined section elsewhere by using aliased mapping ( `<<`) and adding a `*` in front of the section name.
+
+```yaml
+workflows:
+  ios-release:
+    name: iOS release
+    environment:
+      << : *env_versions
+```
+
+Here’s a [sample](https://github.com/codemagic-ci-cd/codemagic-sample-projects/blob/main/yaml/yaml_anchors_aliases_sample/codemagic.yaml) `codemagic.yaml` that extensively uses anchors, aliases, and aliased mappings to reuse the sections in different workflows.
+
+## Template
+
+This is the skeleton structure of `codemagic.yaml`. Each section, along with the configuration options, is described in more detail
+
+```yaml
+workflows:
+  my-workflow:
+    name: My workflow name
+    labels:
+      - QA
+      - ${TENANT_NAME}
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    inputs: # more information about build inputs:https://docs.codemagic.io/knowledge-codemagic/build-inputs/
+      name: # input ID
+        description: Input description
+        default: Codemagic
+    environment:
+      groups:
+        - group_name
+      vars:
+        PUBLIC_ENV_VAR: "value here"
+      flutter: stable
+      xcode: latest
+    cache:
+      cache_paths:
+        - ~/.pub-cache
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+      cancel_previous_builds: false
+    scripts:
+      - echo "Hello, ${{ inputs.name }}"
+      - ...
+    artifacts:
+      - build/**/outputs/bundle/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - name@example.com
+      scripts:
+        - echo 'Post-publish script'
+```
+
+### Workflows
+
+You can use `codemagic.yaml` to define several workflows for building a project. Each workflow describes the entire build pipeline from triggers to publishing. For example, you may want to have separate workflows for developing, testing, and publishing the app.
+
+```yaml
+workflows:
+  my-workflow:                   # workflow ID
+    name: My workflow name       # workflow name displayed in Codemagic UI
+    instance_type: mac_mini_m2   # machine instance type
+    max_build_duration: 60       # build duration in minutes (min 1, max 120)
+    environment:
+    cache:
+    triggering:
+    scripts:
+    artifacts:
+    publishing:
+```
+
+The main sections in each workflow are described below.
+
+### Instance Type
+
+`instance_type:` specifies the [build machine type](https://docs.codemagic.io/specs/machine-type) to use for the build. The supported build machines are:
+
+| **Instance Type** | **Build Machine** |
+| --- | --- |
+| `mac_mini_m2` | Apple silicon M2 Mac mini |
+| `linux_x2` | Linux |
+| `windows_x2` | Windows |
+
+**Note:** Instance types `linux_x2` and `windows_x2` are only available for teams and users with [billing enabled](https://docs.codemagic.io/billing/billing/).
+
+### Build inputs
+
+Build inputs are parameters that allow you to customize your build configurations right before starting a new build without hardcoding them in **codemagic.yaml**. For example, build inputs can be used to determine whether to build the workflow for test or release purposes or which Xcode version to use, etc. More information about how to configure build inputs and examples can be found [here](https://docs.codemagic.io/knowledge-codemagic/build-inputs/).
+
+### Environment
+
+`environment:` section specifies the environment variables and their respective group and build machine software versions.
+
+**Note:** Environment variables must belong to a group if environment variables are defined in the Codemagic app settings.
+
+#### Environment variable groups
+
+The snippet below shows how to import [environment variable groups](https://docs.codemagic.io/building/environment-variable-groups/) defined in the team settings and application settings and also how to define them in the configuration file. Environment variables typically include credentials and API keys required for [code signing](https://docs.codemagic.io/code-signing-yaml/signing). Click **Secret** to encrypt the values. Note that binary files have to be [`base64 encoded`](https://docs.codemagic.io/yaml/configuring-environment-variables/#storing-sensitive-valuesfiles) locally before they can be saved to environment variables and decoded during the build.
+
+```yaml
+environment:
+  groups:             # Define your environment variables groups here
+    - keystore_credentials
+    - app_store_credentials
+    - manual_cert_credentials
+    - firebase_credentials
+    - other
+
+    # Android code signing - Add the keystore_credentials group environment variables in Codemagic UI
+    # (either in Application/Team variables)
+    #     CM_KEYSTORE
+    #     CM_KEYSTORE_PASSWORD
+    #     CM_KEY_PASSWORD
+    #     CM_KEY_ALIAS
+
+    # iOS automatic code signing - Add the app_store_credentials group environment variables
+    # in Codemagic UI (either in Application/Team variables)
+    #     APP_STORE_CONNECT_ISSUER_ID
+    #     APP_STORE_CONNECT_KEY_IDENTIFIER
+    #     APP_STORE_CONNECT_PRIVATE_KEY
+    #     CERTIFICATE_PRIVATE_KEY
+
+    # iOS manual code signing - Add the manual_cert_credentials group environment variables
+    # in Codemagic UI (either in Application/Team variables)
+    #     CM_CERTIFICATE
+    #     CM_CERTIFICATE_PASSWORD
+    #     CM_PROVISIONING_PROFILE
+
+    # Firebase secrets - Add the firebase_credentials group environment variables in Codemagic UI
+    # (either in Application/Team variables
+    #     ANDROID_FIREBASE_SECRET
+    #     IOS_FIREBASE_SECRET
+
+    # Add the other group environment variables in Codemagic UI
+    # (either in Application/Team variables
+    #     SSH_KEY_GITHUB     # defining an ssh key used to download private dependencies
+    #     CREDENTIALS        # publishing a package to pub.dev
+    #     APP_CENTER_TOKEN   # publishing an application to App Center
+```
+
+**Tip:** Store related variables in the same group so they can be imported to codemagic.yaml workflow in a single step.
+
+**Note:** If a group of variables is reusable for various applications, it can be defined in [Global variables and secrets](https://docs.codemagic.io/variables/environment-variable-groups/#global-variables-and-secrets) in **Team settings** for easier access.
+
+#### Workflow environment variables
+
+The snippet below shows how to define workflow specific public environment variables.
+
+```yaml
+environment:
+  vars:             # Define your environment variables here
+    PUBLIC_ENV_VAR: "value here"
+```
+
+#### Build machine and software versions
+
+The snippet below shows how to specify the versions of Flutter, Xcode, Ubuntu, CocoaPods, Node, npm, ndk, Java and Ruby used in the build.
+
+```yaml
+environment:
+  flutter: stable   # Define the channel name, version (e.g. v1.13.4), or fvm for Flutter Version Management
+  xcode: latest     # Define latest, edge or version (e.g. 11.2)
+  ubuntu: 24.04     # Define the OS version for linux_x2 instance type (available options are 20.04, 24.04)
+  cocoapods: 1.9.1  # Define default or version
+  node: 12.14.0     # Define default, latest, current, lts, carbon (or another stream), nightly or version
+  npm: 6.13.7       # Define default, latest, next, lts or version
+  ndk: r21d         # Define default or revision if supported (e.g. r26) or full version (e.g. 26.1.10909125)
+  java: 1.8         # Define default, or platform version (e.g. 11)
+  ruby: 2.7.2       # Define default or version (macOS only)
+```
+
+Currently, only the above-mentioned software versions can be customized via the environment section in the yaml file. If a different software version needs to be customized, then it may require a different approach depending upon use cases.
+
+**Note:** The Xcode version defines type of macOS build machine used for the build (even if you’re building Android). See the default software versions on Codemagic macOS build machines [here.](https://docs.codemagic.io/specs/versions-macos/)
+
+**Note**: Using a non-default version of Ruby for macOS builds will increase the time of your `Preparing build machine` step significantly.
+
+#### Environment section example
+
+You can freely use all of the above features of environment section in conjunction.
+
+```yaml
+environment:
+  vars: # Define your public environment variables here
+    PUBLIC_ENV_VAR: "value here"
+  groups: # Import UI defined environment variable groups(either in Application/Team variables) here
+    - staging
+  xcode: latest # Define latest, edge or version (e.g. 11.2)
+  flutter: stable   # Define the channel name or version (e.g. v1.13.4)
+```
+
+### Cache
+
+`cache:` defines the paths to be cached and stored on Codemagic. For example, you may consider caching the following paths:
+
+| **Path** | **Description** |
+| --- | --- |
+| `$FLUTTER_ROOT/.pub-cache` | Dart cache |
+| `$HOME/.gradle/caches` | Gradle cache. Note: do not cache `$HOME/.gradle` |
+| `$HOME/Library/Caches/CocoaPods` | CocoaPods cache |
+| `$CM_BUILD_DIR`/node\_modules | Node cache |
+
+**Note:** Caching `$HOME/Library/Developer/Xcode/DerivedData` won’t help speed up iOS builds with Xcode 10.2 or later.
+
+```yaml
+cache:
+  cache_paths:
+    - ~/.gradle/caches
+    - ...
+```
+
+You can read more about configuring caching for your builds and its usage limits [here](https://docs.codemagic.io/knowledge-codemagic/caching/)
+
+**Note:** Codemagic doesn’t support caching symlinks.
+
+**Note:** Each workflow has its own cache. It is possible to view the cache for each workflow under the **Caching** tab in the Codemagic UI.
+
+### Triggering
+
+**Note:** For automatic build triggering, it is required to configure a webhook in the repository. In your app settings, click **Create webhook** on the right sidebar under **Webhooks** to have Codemagic create a webhook. If you need to set up a webhook manually, refer [here](https://docs.codemagic.io/building/webhooks) for details.
+
+`triggering:` defines the events for automatic build triggering and watched branches. If no events are defined, you can start builds only manually.
+
+A branch pattern can match the name of a particular branch, or you can use wildcard symbols to create a pattern that matches several branches. Note that for **pull request builds**, you have to specify whether the watched branch is the source or the target of the pull request.
+
+To avoid running builds on outdated commits, you can set `cancel_previous_builds` to automatically cancel all ongoing and queued builds triggered by webhooks on push or pull request commit when a more recent build has been triggered for the same branch.
+
+```yaml
+triggering:
+  events:                       # List the events that trigger builds
+    - push
+    - pull_request
+    - pull_request_labeled      #GitHub only
+    - tag
+  branch_patterns:              # Include or exclude watched branches
+    - pattern: '*'
+      include: true
+      source: true              # Applicable only to Pull Request triggers to determine if pattern is for source or target branch
+    - pattern: excluded-target
+      include: false
+      source: false
+    - pattern: included-source
+      include: true
+      source: true
+  tag_patterns:                 # Include or exclude watched tag labels
+    - pattern: '*'
+      include: true
+    - pattern: excluded-tag
+      include: false
+    - pattern: included-tag
+      include: true
+  cancel_previous_builds: false  # Set to `true` to automatically cancel outdated webhook builds
+```
+
+For information about using API calls to trigger builds, look [here](https://docs.codemagic.io/rest-api/overview/).
+
+Read more about configuring [additional conditions to run or skip](https://docs.codemagic.io/yaml-running-builds/starting-builds-automatically/#using-when-to-run-or-skip-builds) builds or build steps.
+
+### Scripts
+
+Scripts specify what kind of application is built. This is where you can specify the commands to [test](https://docs.codemagic.io/testing-yaml/testing/), build and code sign your project (see our documentation for [iOS code signing](https://docs.codemagic.io/code-signing-yaml/signing-ios) and [Android code signing](https://docs.codemagic.io/code-signing-yaml/signing-android)). You can also run shell ( `sh`) scripts directly in your `.yaml` file, or run scripts in other languages by defining the language with a shebang line or by launching a script file present in your repository.
+
+When you set `ignore_failure` to `true`, the workflow will continue to run even if the script fails.
+
+```yaml
+scripts:
+  - echo "single line script"
+  - name: Flutter test
+    script: flutter test
+    ignore_failure: true
+  - |
+    #!/usr/bin/env python3
+
+    print('Multiline python script')
+  - name: Build for iOS
+    script: flutter build ios
+```
+
+There are example scripts available for building a [Flutter application](https://docs.codemagic.io/yaml-basic-configuration/building-a-flutter-app/), [React Native application](https://docs.codemagic.io/yaml-basic-configuration/building-a-react-native-app/), [native Android application](https://docs.codemagic.io/yaml-basic-configuration/building-a-native-android-app/) or a [native iOS application](https://docs.codemagic.io/yaml-basic-configuration/building-a-native-ios-app/).
+
+By default, scripts are run after your app sources are fetched and the repository is cloned. To run scripts before the repository cloning step, use the pre\_clone\_scripts step:
+
+```yaml
+workflows:
+    default-workflow:
+        name: Default Workflow
+        pre_clone_scripts:
+          - name: Scripts to run before cloning the repository
+            script: ...
+        scripts:
+            - name: Scripts to run after cloning the repository
+              script: ...
+```
+
+### Artifacts
+
+Configure the paths and names of the artifacts you would like to use in the following steps, e.g. for publishing, or have available for download on the build page. All paths are relative to the clone directory, but absolute paths are supported as well. You can also use [environment variables](https://docs.codemagic.io/building/environment-variables) in artifact patterns.
+
+```yaml
+artifacts:
+  - build/**/outputs/apk/**/*.apk                   # relative path for a project in root directory
+  - subfolder_name/build/**/outputs/apk/**/*.apk    # relative path for a project in subfolder
+  - build/**/outputs/**/*.aab
+  - build/**/outputs/**/mapping.txt
+  - build/ios/ipa/*.ipa
+  - build/macos/**/*.pkg
+  - /tmp/xcodebuild_logs/*.log
+  - flutter_drive.log
+```
+
+There are several things to keep in mind about patterns:
+
+- The pattern can match several files or folders. If it picks up files or folders with the same name, the top level file or folder name will be suffixed with `_{number}`.
+- If one of the patterns includes another pattern, duplicate artifacts are not created.
+- `apk`, `aab`, `aar`, `ipa`, `app`, `pkg`, proguard mapping ( `mapping.txt`), `flutter_drive.log`, `jar`, `zip`, `xarchive` and `dSYM.zip` files will be available as separate items in the Artifacts section on the build page. The rest of the artifacts will be included in an archive with the following name pattern: `{project-name}_{version}_artifacts.zip`.
+
+### Publishing
+
+Codemagic has a number of integrations for publishing but you can also publish elsewhere with custom scripts. See the options under the [Publishing section](https://docs.codemagic.io/publishing-yaml/distribution/).
+
+Note that by default the publishing scripts are run regardless of the build status. You can specify additional conditions with if statements.
+
+```yaml
+publishing:
+  email:
+    recipients:
+      - name@example.com
+  scripts:
+    name: Check for apk
+    script: |
+      apkPath=$(find build -name "*.apk" | head -1)
+      if [[ -z ${apkPath} ]]
+      then
+        echo "No .apk were found"
+      else
+        echo "Publishing .apk artifacts"
+      fi
+```
+
+You can also use the publishing scripts to report build status.
+
+```yaml
+scripts:
+  - name: Report build start
+    script: # build started
+
+    . . .
+
+  - name: Build finished successfully
+    script: touch ~/SUCCESS
+publishing:
+  scripts:
+    - name: Report build status
+      script: |
+        if [ -a "~/SUCCESS" ] ; then
+           # build successful
+        else
+           # build failed
+        fi
+```
+
+### Labels
+
+You may use `codemagic.yaml` to define labels for your apps. Labels serve as additional information about the workflow you are building and are helpful when you have multiple versions of a workflow. The labels are visible on the `/builds` and `/app/<app-id>/build/<build-id>` pages. As shown in the snippet below, labels also support environment variables.
+
+```yaml
+workflows:
+  sample_workflow:
+    name: My Workflow
+    labels:
+      - QA
+      - ${TENANT_NAME}
+```
+
+If you are building white label apps and use the Codemagic REST API to initiate your builds, labels should be passed as described [here](https://docs.codemagic.io/rest-api/builds/) because it is not possible to override environment variables that will be used as labels.
+
+## Working directory
+
+You may select a working directory globally for the entire workflow or individual scripts only. If not specified, the global working directory defaults to the directory where the repository is cloned ( `/Users/builder/clone`). You can override the global working directory by specifying the working directory in the individual steps. Consider the example below:
+
+```yaml
+workflows:
+  build-apps:
+    name: Build iOS and Android
+    working_directory: mobile
+    scripts:
+      - name: Prepare
+        script: pwd # current working directory is /Users/builder/clone/mobile
+      - name: Build iOS
+        working_directory: mobile/ios
+        script: pwd # current working directory is /Users/builder/clone/mobile/ios
+      - name: Build Android
+        working_directory: mobile/android
+        script: pwd # current working directory is /Users/builder/clone/mobile/android
+      - name: Process Logs
+        working_directory: /Users/builder/Library/Logs
+        script: pwd # current working directory is /Users/builder/Library/Logs
+```
+
+Working directory paths are relative to the repository clone directory, e.g. if `mobile` is the working directory, then the script will be executed in `/Users/builder/clone/mobile`.
+
+Note that you can specify an absolute path as a working directory as well.
+
+## Validating codemagic.yaml locally
+
+Using the Codemagic JSON schema, you can validate your `codemagic.yaml` for structure and syntax errors right in your IDE. The same level of validation is carried out on the frontend in the YAML editor in your project settings.
+
+The JSON schema does not validate the maximum build duration value, software version values, credentials, environment variable values, or whether you have access to any paid features.
+
+Codemagic JSON schema is available out of the box in the IDEs integrated with [schemastore.org](http://schemastore.org/), e.g. Android Studio and Visual Studio Code.
+
+If your IDE does not have the Codemagic JSON schema available by default, you can set up validation manually. To do so:
+
+- make sure you have YAML language support in the IDE
+- configure the IDE to use the Codemagic JSON schema for validation available at [https://codemagic.io/codemagic-schema.json](https://codemagic.io/codemagic-schema.json)
+
+## Getting help and support
+
+If you have a technical question or need help with some particular issue, you can get help in our GitHub Discussions community
+[here](https://github.com/codemagic-ci-cd/codemagic-docs/discussions).
+
+Alternatively, join the Codemagic Community Discord Server
+[here](https://discord.gg/pefznye93R).
+
+If you're a paying customer, use the in-app chat widget to get support.
+You have to be logged in to see the chat icon at the bottom right corner (please note that some ad blockers might block the chat widget).
+
+---
+
+
+## 6. 404 {#section-6}
+
+*Source: [https://docs.codemagic.io/yaml-basic-configuration/yaml-properties/](https://docs.codemagic.io/yaml-basic-configuration/yaml-properties/)*
+
+# 404
+
+Not found
+
+---
+
+
+## 7. Starting builds automatically with codemagic.yaml {#section-7}
+
+*Source: [https://docs.codemagic.io/yaml-running-builds/starting-builds-automatically/](https://docs.codemagic.io/yaml-running-builds/starting-builds-automatically/)*
+
+# Starting builds automatically with codemagic.yaml
+
+How to setup builds to run on repository events
+
+In order to fully automate your CI/CD pipeline, you can set up automatic build triggering by configuring which branches to track and when to trigger builds.
+
+`triggering:` section in `codemagic.yaml` defines the events for automatic build triggering and watched branches. If no events are defined, you can start builds only manually.
+
+For repositories added via SSH or HTTP/HTTPS, or if you are configuring your builds using `codemagic.yaml`, you would have to [set up webhooks manually](https://docs.codemagic.io/building/webhooks). Note that webhook triggers might not be supported for all repository providers.
+
+**Note:** The team admin who added the repository can update the webhook by clicking the **Update webhook** button in the Codemagic UI.
+
+## Build triggers
+
+In the `events:` section, specify which events in the repository trigger builds.
+
+- **push** \- a build will be started every time you commit code to any of the tracked branches.
+
+- **pull\_request** \- a build will be started when a pull request is opened or updated to verify the resulting merge commit.
+
+For triggering pull requests, you can specify whether each branch pattern matches the **source** or the **target** branch of the pull request.
+
+- **pull\_request\_labeled** \- a build will be started every time you add a new label to a **GitHub** pull request.
+
+- **tag** \- Codemagic will automatically build the tagged commit whenever you create a tag for this app. Note that the watched branch settings do not affect tag builds.
+
+If enabled, you would be able to specify `tag_patterns:` to trigger builds. Similarly to **Watched branch patterns**, the first pattern in the list is applied first and each pattern will limit the set of tag labels further. In the case of conflicting patterns, the latter will prevail. Using wildcard symbols is supported.
+
+
+To avoid running builds on outdated commits, you can set `cancel_previous_builds` to automatically cancel all ongoing and queued builds triggered by webhooks on push or pull request commit when a more recent build has been triggered for the same branch.
+
+**Note:** When starting workflows using webhooks, Codemagic uses the `codemagic.yaml` file from the source branch. If you are triggering builds on Pull requests, make sure the PR source branch has a valid `codemagic.yaml` file. Otherwise, the build will be skipped and the **Recent deliveries** section in **Apps > Webhooks** will show a message similar to _“Webhook is skipped. There are no workflows configured to run on pull request from ’testing’ to ‘release’”_.
+
+## Tracking specific branches and tags
+
+Instead of watching all branches and tags, you can limit automatic build triggering to branches or tags whose name matches a specific pattern.
+
+The branches tracked for building are selected by configuring the `branch_patterns` section. The tracked tags can be configured in the `tag_patterns` section.
+
+A pattern can match the name of a particular branch or tag. You can use wildcard symbols to create a pattern that matches several branches or tags, see the examples below.
+
+Note that for pull request builds, you have to specify whether the watched branch is the source or the target of the pull request.
+
+The first (i.e. topmost) pattern in the list is applied first. Each following pattern will limit the set of values further. In the case of conflicting patterns, the latter will prevail.
+
+```yaml
+triggering:
+  events:                       # List the events that trigger builds
+    - push
+    - pull_request
+    - pull_request_labeled      #GitHub only
+    - tag
+  branch_patterns:              # Include or exclude watched branches
+    - pattern: '*'
+      include: true
+      source: true
+    - pattern: excluded-target
+      include: false
+      source: false
+    - pattern: included-source
+      include: true
+      source: true
+  tag_patterns:                 # Include or exclude watched tag labels
+    - pattern: '*'
+      include: true
+    - pattern: excluded-tag
+      include: false
+    - pattern: included-tag
+      include: true
+  cancel_previous_builds: false  # Set to `true` to automatically cancel outdated webhook builds
+```
+
+### Pattern examples
+
+| Pattern | Explanation |
+| --- | --- |
+| `*` | Matches everything |
+| `*-dev` | Matches values with the suffix `-dev`, e.g. `v0.0.42-dev` |
+| `!(*-dev)` | Matches values without the suffix `-dev`, e.g. `v0.0.42` |
+| `{test,qa}/*` | Matches values with the prefix `test/` or `qa/`, e.g. `test/popup` |
+| `v+([0-9]).+([0-9]).+([0-9])` | Matches tags with three numbers, e.g. `v0.0.42` |
+
+Please refer to [Wildcard Match Documentation](https://facelessuser.github.io/wcmatch/fnmatch/) for more advanced matching patterns.
+
+## Working with Pull Requests
+
+When dealing with pull requests, you have two options: you can either focus on the branch where the proposed changes are made, or you can target the destination branch after the pull request has been merged.
+
+**Example 1**. When creating pull requests on the `main` branch from a `feature` branch, which is a way to propose and review changes before they’re integrated into `main`, remember to set `source:false` and `pattern:main`. This will ensure that the build runs on the proposed code changes within the `feature` branch when pull request is created or updated.
+
+```yaml
+triggering:
+  events:
+    - pull_request
+  branch_patterns:
+    - pattern: 'main'
+      include: true
+      source: false
+```
+
+**Example 2**. Setting `source:true`, `pattern:main` will trigger the build on the `main` branch once the pull request has been merged from the `feature` branch into the `main` branch.
+
+```yaml
+triggering:
+  events:
+    - push
+    - pull_request
+  branch_patterns:
+    - pattern: 'main'
+      include: true
+      source: true
+```
+
+**Note:** The above pattern is set for the `main` branch but you can set similar patterns for any branch depending on your workflow.
+
+**Example 3**. Trigger a build when adding a label to your pull request.
+
+```yaml
+triggering:
+  events:
+    - pull_request_labeled
+```
+
+You will learn later in this page how to add a [condition](https://docs.codemagic.io/yaml-running-builds/starting-builds-automatically/#using-condition-inside-when) to filter the added labels.
+
+## Exit or ignore build on certain commit message
+
+You can **skip building** automatically triggered workflows by adding `[skip ci]` or `[ci skip]` to your commit message. The workflow will still be started but it will exit without building.
+
+If you want to exit a build **when commit message does not include certain string**, then you can add the following script at the top of your scripts section and it will take care of exiting the build or moving forward. In the following example, builds will proceed only if the commit message includes **_buildcd_** string.
+
+```yaml
+  scripts:
+    - name: Exit build if keyword not defined
+      script: |
+        set -e
+        set -x
+        export COMMIT_MSG=$(git log -1 --pretty=%B)
+        echo COMMIT_MSG
+        if [[ $COMMIT_MSG != *"buildcd"* ]]
+          then
+            echo "Commit needs to include 'buildcd' in it's message."
+            exit 1
+          else
+            echo "Commit message includes 'buildcd', moving forward..."
+        fi
+```
+
+## Using `when` to run or skip builds
+
+In addition to [build triggers](https://docs.codemagic.io/yaml-running-builds/starting-builds-automatically/#build-triggers) and [branch filtering](https://docs.codemagic.io/yaml-running-builds/starting-builds-automatically/#tracking-specific-branches), you can further specify and automate workflow behavior by using `when` keyword to run or skip a build depending on the specified `changeset` and `condition` states.
+
+### Using `changeset` inside `when`
+
+By using `changeset` setting, you can avoid unnecessary builds when functional components of your repository were not modified.
+
+**Note:** After `changeset` setting is configured in `codemagic.yaml`, the subsequent build will be triggered regardless of the condition and only after that successful build, builds will be skipped according to the `changeset` condition.
+
+When using `changeset` filtering, a build will be run if any of the following is true:
+
+- `codemagic.yaml` file was modified
+- watched files/folders have changed **since the last successful build**
+
+You should specify the files to watch in `changeset` by using the `includes` and `excludes` keys.
+
+```yaml
+workflows:
+  sample-workflow:
+    name: Sample App workflow
+    triggering:
+      events:
+        - push
+    when:
+      changeset:
+        includes:
+          - '.'
+        excludes:
+          - '**/*.md'
+```
+
+In this case, the build would be skipped if there were changes only to Markdown files `.md`.
+
+Both the `includes` and `excludes` keys in `changeset` are _optional_. If the `includes` key is not specified, its value will default to `'.'` (track everything). The `excludes` key defaults to no exclusions.
+
+**Note:** Adding one or more `includes` keys will disable the default “include all” behavior. Remember to add the `'.'` pattern if needed.
+
+If you use a monorepo, each workflow can be responsible for building a part of your application. Use conditional workflow triggering and specify the path to the application in the changeset as in the example below.
+
+```yaml
+workflows:
+  build-android:
+    name: Build Android
+    triggering:
+      events:
+        - push
+    when:
+      changeset:
+        includes:
+          - 'android/'
+```
+
+As a result, commits with changes outside of the `android` folder will skip a build.
+
+**Note:** ‘Skipping’ a build means that the build will be triggered and only after fetching app sources and meeting the **changeset** condition, the build will be stopped.
+
+**Note:** The **`codemagic.yaml`** is always included in the changeset by default.
+
+### Using `condition` inside `when`
+
+Use `condition` to run or skip a build depending on the values of environment variables or webhook payload.
+
+The `condition` you specify will be evaluated during the build. The build will be skipped if the condition evaluates to `false`.
+
+You can use logical operators `==`, `not`, `and`, `or`.
+
+Environment variables are available under the `env` variable. You can check [built-in](https://docs.codemagic.io/variables/environment-variables/) or other environment variables.
+
+Webhook payload is available under the `event` variable. You can check the structure of the webhook payloads that your git provider sends on the **Webhooks** tab in application settings. Note that `event` is not available if the build is started manually from the UI or by a schedule.
+
+Webhook payload sample
+
+Here’s a JOSN payload from GitHub which you can access from the `event` variable.
+
+```json
+{
+    "action": "labeled", // could be "opened", "synchronize", "reopened", or "ready_for_review"
+    "number": 2,
+    "pull_request": {
+      "url": "https://api.github.com/repos/username/repo/pulls/2",
+      "id": 100000000,
+      "issue_url": "https://api.github.com/repos/username/repo/issues/2",
+      "number": 2,
+      "state": "open",
+      "title": "fix-2",
+      "user": {
+        "login": "username",
+        "id": 100000000,
+        "url": "https://api.github.com/users/username",
+        ...
+      },
+      "created_at": "2023-10-18T05:27:35Z",
+      "updated_at": "2023-10-18T05:28:21Z",
+      "assignee": null,
+      "assignees": [],
+      "requested_reviewers": [],
+      "requested_teams": [],
+      "labels": [\
+        {\
+          "id": 100000000,\
+          "url": "https://api.github.com/repos/username/repo/labels/label",\
+          "name": "label",\
+          "color": "6816E0",\
+          "default": false,\
+          "description": ""\
+        }\
+      ],
+      "draft": false,
+      "merged": false,
+      "mergeable": true,
+      "rebaseable": true,
+      "mergeable_state": "clean",
+      "merged_by": null,
+      "comments": 0,
+      "review_comments": 0,
+      "maintainer_can_modify": false,
+      "commits": 1,
+      "additions": 2,
+      "deletions": 4,
+      "changed_files": 1,
+      ...
+    },
+    "label": {
+      "id": 100000000,
+      "url": "https://api.github.com/repos/username/repo/labels/label",
+      "name": "label",
+      "color": "6816E0",
+      "default": false,
+      "description": ""
+    },
+    "repository": {
+      "id": 100000000,
+      "name": "repo",
+      "full_name": "username/repo",
+      "private": true,
+      "html_url": "https://github.com/username/repo",
+      "created_at": "2023-10-16T11:24:57Z",
+      "updated_at": "2023-10-16T11:24:57Z",
+      "pushed_at": "2023-10-18T05:27:35Z",
+      "git_url": "git://github.com/username/repo.git",
+      "visibility": "private",
+      "default_branch": "main",
+      ...
+    },
+    "sender": {
+      "login": "username",
+      "id": 100000000,
+      "url": "https://api.github.com/users/username",
+      "type": "User",
+      ...
+    },
+    ...
+  }
+
+```
+
+**Example 1**. This build will continue if the triggering event was _not_ a draft pull request update. In other words, it will skip the build if a pull request is marked as a draft:
+
+```yaml
+workflows:
+  build:
+    name: Build on PR update
+    triggering:
+      events:
+        - pull_request
+    when:
+      condition: not event.pull_request.draft
+```
+
+**Example 2**. Use built-in environment variables in the condition. This build will continue only if the source branch is “master.” In other words, it will skip the build if the source branch of the pull request is anything other than “master,” regardless of the destination branch.
+
+```yaml
+workflows:
+  build:
+    name: Build on PR update
+    triggering:
+      events:
+        - pull_request
+    when:
+      condition: env.CM_BRANCH == "master"
+```
+
+**Example 3**. This build is triggered on adding a label to a pull request but will continue only if the label added was anything else than “codemagicTest”:
+
+```yaml
+workflows:
+  build:
+    name: Build on PR update
+    triggering:
+      events:
+        - pull_request_labeled
+    when:
+      condition: not event.pull_request.labels[0].name == "codemagicTest"
+```
+
+**Example 4**. You can also combine triggering conditions, just make sure that each condition is wrapped in brackets:
+
+```yaml
+workflows:
+  build:
+    name: Build on PR update
+    triggering:
+      events:
+        - pull_request
+        - pull_request_labeled
+    when:
+      condition: (not event.pull_request.draft) and (not event.pull_request.labels[0].name == "codemagicTest")
+```
+
+**Note:** Condition expression is evaluated only after cloning the repository so the builds will be started regardless of the `condition`. However, if a `condition` is not met, the build will terminate early and will be marked as `skipped`.
+
+## Using `when` to run or skip build steps
+
+You may want to either run or skip some specific build steps in your workflow when building your application.
+
+```yaml
+  scripts:
+    - name: Run unit tests
+      script: |
+        flutter test
+      when:
+        condition: env.RUN_TEST == "true"
+```
+
+Both `changeset` and `condition` are supported for build steps.
+
+## Getting help and support
+
+If you have a technical question or need help with some particular issue, you can get help in our GitHub Discussions community
+[here](https://github.com/codemagic-ci-cd/codemagic-docs/discussions).
+
+Alternatively, join the Codemagic Community Discord Server
+[here](https://discord.gg/pefznye93R).
+
+If you're a paying customer, use the in-app chat widget to get support.
+You have to be logged in to see the chat icon at the bottom right corner (please note that some ad blockers might block the chat widget).
+
+---
+
+
+## 8. Running tests {#section-8}
+
+*Source: [https://docs.codemagic.io/yaml-testing/testing/](https://docs.codemagic.io/yaml-testing/testing/)*
+
+# Running tests
+
+How to run tests with codemagic.yaml
+
+Test scripts are added under `scripts` in the [overall architecture](https://docs.codemagic.io/getting-started/yaml#template), before the build commands.
+
+You can display test results visually in the build overview if you use an expanded form of the script in `codemagic.yaml`. Just include the `test_report` field with a glob pattern matching the test result file location. We support every test runner, including GoTest, RSpec, PHPUnit, Karma, PyTest, ESLint, Cucumber, ExUnit, Mocha, CargoTest, and JUnit. If your test runner can export [Junit XML](https://llg.cubic.org/docs/junit/) and `.JSON` for Flutter’s `--machine` report test results, Codemagic can use it.
+
+For instructions on testing your app on real devices in Firebase Test Lab, refer [here](https://docs.codemagic.io/yaml-testing/firebase-test-lab).
+
+## Flutter unit tests
+
+To run Flutter unit tests, simply add the `flutter test` command to your scripts section.
+
+```yaml
+scripts:
+  - name: Unit tests
+    script: |
+      mkdir -p test-results
+      flutter test --machine > test-results/flutter.json
+    test_report: test-results/flutter.json
+```
+
+**Tip:** you can display Flutter test results visually in the build overview if you use the expanded form of the script in codemagic.yaml.
+Just include the `test_report` field with a glob pattern matching the test result file location:
+
+## Flutter integration tests
+
+The `integration_test` dependency allows you to run integration tests on a real device or emulator. Android application tests can be run on an Android emulator, iOS application tests can be run on an iOS simulator, and web application tests can be run on a web browser driver.
+
+**Tip:** It is possible to generate machine readable output for integration tests using the `--machine` flag; hence the results can be displayed in the UI. Just include the `test_report` field with a glob pattern matching the test result file location:
+
+```yaml
+scripts:
+  - name: Integration tests
+    script: |
+      mkdir -p test-results
+      flutter -d emulator-5554 test --machine > test-results/flutter.json integration_test
+      # for iOS use: -d iPhone
+    test_report: test-results/flutter.json
+```
+
+To run integration tests for web, it is possible to use `chromedriver`. Take note that for running tests on web, it is necessary to provide the `--driver` and `--target` arguments, and machine-readable output is unavailable.
+
+```yaml
+scripts:
+  - name: Integration tests
+    script: |
+      flutter config --enable-web
+      chromedriver --port=4444 &
+      flutter -d chrome drive --driver=test_driver/integration_driver.dart --target=integration_test/app_test.dart
+```
+
+### Running application tests on a mobile simulator/emulator
+
+- Android
+- iOS
+
+Due to limitations by Apple silicon, the Apple Virtualization API doesn’t support nested virtualization required for Android emulators. To use Android emulators in macOS workflows, please use third-party service integrations such as emulator.wtf, Katalon, Firebase, or AWS Device Farm.
+
+For the Android emulator you can launch and run your tests as follows:
+
+```yaml
+scripts:
+  - name: Emulator tests
+    script: |
+      flutter config --enable-web
+      # The ampersand is used to run the emulator in the background without blocking the next command:
+      flutter emulators --launch emulator &
+      # adb wait-for-device is used to wait for the emulator to finish loading:
+      adb wait-for-device
+      flutter -d emulator-5554 test integration_test
+```
+
+You can launch the iOS simulator and run tests as follows:
+
+```yaml
+scripts:
+  - name: Emulator tests
+    script: |
+      flutter emulators --launch apple_ios_simulator
+      flutter -d iPhone test integration_test
+```
+
+You can launch a specific iOS simulator and run tests on the simulator using ‘simctl’ which is a binary to interact with iOS simulators from the command line, as follows:
+
+```yaml
+scripts:
+  - name: Emulator tests
+    script: |
+      # this command will will shutdown the existing simulators to save on resources.
+      xcrun simctl shutdown all
+      #
+      # create new simulator with specified configuration, you can run
+      # 'xcrun simctl list' - to check the list of available simulator configurations
+      TEST_DEVICE=$(xcrun simctl create test-device com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-15-0)
+      #
+      # boot the newly created simulator
+      xcrun simctl boot $TEST_DEVICE
+      #
+      # run the actual test command
+      flutter -d $TEST_DEVICE test integration_test
+```
+
+### Running web application tests on a web browser driver
+
+- Chrome
+- Safari
+
+```yaml
+scripts:
+  - name: 'Flutter integration test for web'
+    script: |
+      chromedriver --port=4444 &
+      flutter config --enable-web
+      flutter drive --driver=test_driver/integration_driver.dart --target=integration_test/app_test.dart -d web-server --release --browser-name chrome
+```
+
+```yaml
+scripts:
+  - name: 'Flutter integration test for web'
+    script: |
+      sudo safaridriver --enable
+      safaridriver --port 4444 &
+      flutter config --enable-web
+      flutter drive --driver=test_driver/integration_driver.dart --target=integration_test/app_test.dart -d web-server --release --browser-name safari
+```
+
+## React Native Unit Tests using Jest
+
+This basic example illustrates how to use Jest tests defined in the `package.json` file as follows:
+
+```json
+// package.json
+"scripts": {
+  "test": "jest"
+},
+"jest": {
+  "preset": "jest-expo",
+  "setupFiles": ["<rootDir>/testing/jest-setup.js"]
+}
+```
+
+In the root directory of the project, create a new file named `jest.config.js` with the following content:
+
+```javascript
+module.exports = {
+  preset: 'react-native',
+  setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
+}
+```
+
+The `preset` is used as a base for Jest’s configuration and should point to an npm module that has a `jest-preset.json` or `jest-preset.js` file at the root.
+
+The `setUpFilesAfterEnv` specifies a list of paths to modules that run some code to configure or set up the testing framework before each test file in the suite is executed.
+
+To execute the tests, use the following script in your `codemagic.yaml` file:
+
+```yaml
+scripts:
+  - name: 'Flutter integration test for web'
+    script: |
+      npm test
+      # or: yarn test
+```
+
+In React Native, 3rd party modules are oftentimes published as **untranspiled**. Since all files inside `node_modules` are not transformed by default, Jest will not understand the code in these modules, resulting in syntax errors. To overcome this, you need to use `transformIgnorePatterns` to allow transpiling such modules.
+
+In such cases, modify your `package.json` as follows:
+
+```json
+"jest": {
+  "preset": "jest-expo",
+  "transformIgnorePatterns": [\
+    "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"\
+  ]
+}
+```
+
+## React Native Integration Tests using Appium and Emulator
+
+[Appium](https://appium.io/) is an open-source testing automation framework for testing cross-platform and mobile applications. You can use **Appium** and **WebDriverIO** with React Native thanks to its out-of-the-box support.
+
+Before running tests in Codemagic, you need to install and setup **WebDriverIO** in your project root directory. Run the following command **on your local machine**: provide input to a series of questions:
+
+```bash
+npx wdio config
+```
+
+After answering a series of questions, a file named `wdio.conf` will be generated inside the `tests` directory. Edit the content of that file as follows to enable WebDriverIO to work with Appium and run tests on Android Emulator:
+
+```javascript
+exports.config = {
+  services: ['appium'],
+  port: 4723,
+  runner: 'local',
+  specs: [\
+    './tests/specs/**/*.js'\
+  ],
+  capabilities: [{\
+     maxInstances: 1,\
+     browserName: '',\
+     appiumVersion: '1.13.0',\
+     platformName: 'Android',\
+     platformVersion: '<emulator platform version>',    // Specify your emulator details\
+     deviceName: '<emulator name>',\
+     app: '<path to APK>',\
+     automationName: 'UiAutomator2'\
+  }],
+
+  logLevel: 'trace',
+  bail: 0,
+  waitforTimeout: 10000,
+  connectionRetryTimeout: 90000,
+  connectionRetryCount: 3,
+  framework: 'mocha',
+  reporters: ['spec'],
+  mochaOpts: {
+    ui: 'bdd'
+    timeout: 60000
+  }
+}
+```
+
+To execute the tests, use the following scripts in your `codemagic.yaml` file:
+
+```yaml
+    scripts:
+      - name: Install npm dependencies    # Add Appium and WebDriverIO dependencies
+        script: npm install && npm install -g appium && npm install --save webdriverio @wdio/cli
+
+      - name: Launch emulator             # Insert before the build command
+        script: |
+          react-native run-android  &
+          adb wait-for-device
+      - name: Launch Appium
+        script: appium
+      - name: Run WebDriver test suite
+        script: npx wdio ./wdio.conf.js
+
+  ...
+```
+
+## Native iOS
+
+To execute the tests, use the following scripts in your `codemagic.yaml` file:
+
+```yaml
+  scripts:
+    - name: iOS test
+      script: |
+        xcode-project run-tests \
+          --workspace MyAwesomeApp.xcworkspace \
+          --scheme MyAwesomeApp \
+          --device "iPhone 11"
+    test_report: build/ios/test/*.xml
+```
+
+Please check [Codemagic CLI tools documentation](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/xcode-project/run-tests.md#run-tests) to learn more about more optional arguments to `xcode-project run-tests`.
+
+## Native macOS
+
+**Note:** macOS UI Testing is only supported on Xcode 13 images and above as it requires System Integrity Protection (SIP) to be disabled in order to access the accessibility permissions. Older images with Xcode 12 and below do not have SIP disabled and are unsuitable for UI testing macOS apps.
+
+To execute the tests, use the following scripts in your `codemagic.yaml` file:
+
+```yaml
+  scripts:
+    - name: macOS test
+      script: |
+        xcode-project run-tests \
+          --project MyAwesomeApp.xcodeproj \
+          --scheme MyAwesomeApp \
+          --sdk macosx \
+          --test-xcargs "CODE_SIGNING_ALLOWED='no'" \
+          --output-dir build/macos/test
+      test_report: build/macos/test/*.xml
+```
+
+For macOS tests, no destination is specified. Please check [Codemagic CLI tools documentation](https://github.com/codemagic-ci-cd/cli-tools/blob/master/docs/xcode-project/run-tests.md#run-tests) to learn more about optional arguments to `xcode-project run-tests`.
+
+## Native Android
+
+For non-UI tests or unit tests:
+
+```yaml
+  scripts:
+    - name: Test
+      script: ./gradlew test
+      test_report: app/build/test-results/**/*.xml
+```
+
+For UI tests (also known as instrumented tests):
+
+```yaml
+  scripts:
+    - name: Launch emulator
+      script: |
+        cd $ANDROID_HOME/tools
+        emulator -avd emulator &
+        adb wait-for-device
+    - name: Test
+      script: |
+        set -e
+        ./gradlew connectedAndroidTest
+        adb logcat -d > emulator.log
+    test_report: app/build/outputs/androidTest-results/connected/*.xml
+```
+
+**Tip**: you can save the emulator log with the `adb logcat -d > emulator.log` command
+
+## Getting help and support
+
+If you have a technical question or need help with some particular issue, you can get help in our GitHub Discussions community
+[here](https://github.com/codemagic-ci-cd/codemagic-docs/discussions).
+
+Alternatively, join the Codemagic Community Discord Server
+[here](https://discord.gg/pefznye93R).
+
+If you're a paying customer, use the in-app chat widget to get support.
+You have to be logged in to see the chat icon at the bottom right corner (please note that some ad blockers might block the chat widget).
+
+---
+
+
+## 9. 404 {#section-9}
+
+*Source: [https://docs.codemagic.io/yaml-publishing/publishing/](https://docs.codemagic.io/yaml-publishing/publishing/)*
+
+# 404
+
+Not found
+
+---
