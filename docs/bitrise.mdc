@@ -1,22 +1,27 @@
 ---
 title: Bitrise Complete Pipeline Reference
 provider: Bitrise
-description: Mobile-focused CI/CD platform
-generated_at: 2025-07-08T13:42:56.293Z
-pages_included: 4
+generated_at: 2025-07-08T14:45:00.645Z
+pages_included: 10
 ---
 
 # Bitrise Complete Pipeline Reference
 
-Mobile-focused CI/CD platform - Complete documentation for mobile CI/CD pipelines.
+This comprehensive guide contains all pipeline, workflow, and build configuration documentation for Bitrise.
 
 ## Table of Contents
 
 
 1. [Builds](#section-1)
-2. [Steps and Workflows](#section-2)
-3. [Bitrise YAML Basics](#section-3)
-4. [Workflow Reference](#section-4)
+2. [Workflows and Pipelines](#section-2)
+3. [Basics of configuration YAML](#section-3)
+4. [Workflow reference](#section-4)
+5. [Configuration YAML](#section-5)
+6. [Starting builds](#section-6)
+7. [Environment Variables](#section-7)
+8. [Workflows](#section-8)
+9. [Steps](#section-9)
+10. [Build numbering and app versioning](#section-10)
 
 
 ---
@@ -26,28 +31,18 @@ Mobile-focused CI/CD platform - Complete documentation for mobile CI/CD pipeline
 
 *Source: [https://devcenter.bitrise.io/en/builds.html](https://devcenter.bitrise.io/en/builds.html)*
 
-[Skip to main content](https://devcenter.bitrise.io/en/builds.html#content-wrapper)
 
 ```
 
 ```
 
-[Advanced search](https://devcenter.bitrise.io/search.html)
 
-EN
 
 - [EN](https://devcenter.bitrise.io/en/builds.html)
-- [日本語](https://devcenter.bitrise.io/ja/builds.html)
 
-- [Go to Support](https://support.bitrise.io/en/)
-- [Start for free](https://app.bitrise.io/users/sign_up)
 
-_print_
 
-Toggle navigation
 
-- [Prev](https://devcenter.bitrise.io/en/connectivity/bitrise-mcp.html)
-- [Next](https://devcenter.bitrise.io/en/builds/configuration-yaml.html)
 
 - [Home](https://devcenter.bitrise.io/)
 - Builds
@@ -129,40 +124,27 @@ _app_ _project_ _trigger_ _application_ _app_ _app_ _app_ _project_ _stack_
 
 No results found
 
-[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
 
-- [Prev](https://devcenter.bitrise.io/en/connectivity/bitrise-mcp.html)
-- [Next](https://devcenter.bitrise.io/en/builds/configuration-yaml.html)
 
 ---
 
 
-## 2. Steps and Workflows {#section-2}
+## 2. Workflows and Pipelines {#section-2}
 
 *Source: [https://devcenter.bitrise.io/en/steps-and-workflows.html](https://devcenter.bitrise.io/en/steps-and-workflows.html)*
 
-[Skip to main content](https://devcenter.bitrise.io/en/steps-and-workflows.html#content-wrapper)
 
 ```
 
 ```
 
-[Advanced search](https://devcenter.bitrise.io/search.html)
 
-EN
 
 - [EN](https://devcenter.bitrise.io/en/steps-and-workflows.html)
-- [日本語](https://devcenter.bitrise.io/ja/steps-and-workflows.html)
 
-- [Go to Support](https://support.bitrise.io/en/)
-- [Start for free](https://app.bitrise.io/users/sign_up)
 
-_print_
 
-Toggle navigation
 
-- [Prev](https://devcenter.bitrise.io/en/apps/creating-white-label-app-versions.html)
-- [Next](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html)
 
 - [Home](https://devcenter.bitrise.io/)
 - Workflows and Pipelines
@@ -214,40 +196,27 @@ _app_ _app_ _apps_ _Workflows_ _app_ _app_ _app_ _app_ _project scanner_
 
 No results found
 
-[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
 
-- [Prev](https://devcenter.bitrise.io/en/apps/creating-white-label-app-versions.html)
-- [Next](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html)
 
 ---
 
 
-## 3. Bitrise YAML Basics {#section-3}
+## 3. Basics of configuration YAML {#section-3}
 
 *Source: [https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html)*
 
-[Skip to main content](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html#content-wrapper)
 
 ```
 
 ```
 
-[Advanced search](https://devcenter.bitrise.io/search.html)
 
-EN
 
 - [EN](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html)
-- [日本語](https://devcenter.bitrise.io/ja/references/basics-of-bitrise-yml.html)
 
-- [Go to Support](https://support.bitrise.io/en/)
-- [Start for free](https://app.bitrise.io/users/sign_up)
 
-_print_
 
-Toggle navigation
 
-- [Prev](https://devcenter.bitrise.io/en/references.html)
-- [Next](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
 
 - [Home](https://devcenter.bitrise.io/)
 - [References](https://devcenter.bitrise.io/en/references.html)
@@ -377,40 +346,27 @@ The Bitrise Workflow Editor allows you to edit your Workflows, configure Steps, 
 
 No results found
 
-[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
 
-- [Prev](https://devcenter.bitrise.io/en/references.html)
-- [Next](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
 
 ---
 
 
-## 4. Workflow Reference {#section-4}
+## 4. Workflow reference {#section-4}
 
 *Source: [https://devcenter.bitrise.io/en/references/workflows-reference.html](https://devcenter.bitrise.io/en/references/workflows-reference.html)*
 
-[Skip to main content](https://devcenter.bitrise.io/en/references/workflows-reference.html#content-wrapper)
 
 ```
 
 ```
 
-[Advanced search](https://devcenter.bitrise.io/search.html)
 
-EN
 
 - [EN](https://devcenter.bitrise.io/en/references/workflows-reference.html)
-- [日本語](https://devcenter.bitrise.io/ja/references/workflows-reference.html)
 
-- [Go to Support](https://support.bitrise.io/en/)
-- [Start for free](https://app.bitrise.io/users/sign_up)
 
-_print_
 
-Toggle navigation
 
-- [Prev](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
-- [Next](https://devcenter.bitrise.io/en/references/steps-reference.html)
 
 - [Home](https://devcenter.bitrise.io/)
 - [References](https://devcenter.bitrise.io/en/references.html)
@@ -602,9 +558,903 @@ A Step is a block of script execution that encapsulates a build task on Bitrise:
 
 No results found
 
-[Would you like to provide feedback? Just click here to suggest edits.](https://support.bitrise.io/hc/en-us/requests/new?ticket_form_id=4407829788061)
 
-- [Prev](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html)
-- [Next](https://devcenter.bitrise.io/en/references/steps-reference.html)
+
+---
+
+
+## 5. Configuration YAML {#section-5}
+
+*Source: [https://devcenter.bitrise.io/en/builds/configuration-yaml.html](https://devcenter.bitrise.io/en/builds/configuration-yaml.html)*
+
+
+```
+
+```
+
+
+
+- [EN](https://devcenter.bitrise.io/en/builds/configuration-yaml.html)
+
+
+
+
+
+- [Home](https://devcenter.bitrise.io/)
+- [Builds](https://devcenter.bitrise.io/en/builds.html)
+- Configuration YAML
+
+# Configuration YAML
+
+Abstract
+
+
+Your Bitrise CI configuration is defined and stored inside YAML files that define the version of the Bitrise CLI the build will use, the stack and machine type, the trigger map, and even Environment Variables.
+
+Your Bitrise CI configuration is defined and stored inside YAML files. When you modify your configuration on the GUI of the Workflow Editor, you modify YAML files. The files define:
+
+- The format version of [the Bitrise CLI](https://devcenter.bitrise.io/en/bitrise-cli.html "Bitrise CLI") the build will use. The format version number determines what Bitrise CLI versions will be able to run the configuration.
+
+- The type of the project (for example, Android or iOS).
+
+- The default [source of Steps](https://devcenter.bitrise.io/en/references/steps-reference/step-reference-id-format.html "Step reference/ID format") used.
+
+- The [stack](https://devcenter.bitrise.io/en/builds/configuring-build-settings/setting-the-stack-for-your-builds.html#setting-the-stack-in-the-configuration-yaml "Setting the stack in the Configuration YAML") and [machine type](https://devcenter.bitrise.io/en/builds/configuring-build-settings/setting-the-stack-for-your-builds.html#setting-the-machine-type-in-the-configuration-yaml "Setting the machine type in the Configuration YAML") of the build and of the specific Workflows.
+
+- The trigger map: your configuration of [automatic build triggers](https://devcenter.bitrise.io/en/builds/starting-builds/triggering-builds-automatically.html "Build triggers") based on Git events.
+
+- App- and Workflow-level [Environment Variables](https://devcenter.bitrise.io/en/builds/environment-variables.html#setting-env-vars-in-the-configuration-yaml "Setting Env Vars in the configuration YAML") accessible to the build.
+
+- The Workflows and Steps used in the build.
+
+
+The default configuration YAML file is called `bitrise.yml`. Each Bitrise project has a `bitrise.yml` file. You can find detailed reference information on the `bitrise.yml` file: [Basics of configuration YAML](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html "Basics of configuration YAML").
+
+This file can be stored on:
+
+- bitrise.io. This is the default setting.
+
+- Your own Git repository.
+
+
+If you store your YAML configuration in your own Git repository, you can also use a modular YAML configuration. This means that in addition to the default `bitrise.yml` configuration file, you have one or more additional YAML files containing additional configuration. This allows breaking down large
+configurations into smaller, modular components, as well as efficient reuse of configuration segments across multiple different repositories and Bitrise projects.
+
+### Enterprise only
+
+A modular YAML configuration is only available to Workspaces on an [Enterprise plan](https://bitrise.io/pricing). For now, it is not available if you store your YAML configuration on bitrise.io.
+
+In this section:
+
+- [Storing an app's configuration YAML](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html)
+- [Accessing a build's configuration YAML](https://devcenter.bitrise.io/en/builds/configuration-yaml/accessing-a-build-s-bitrise-yml-file.html)
+- [Editing a project's bitrise.yml configuration file](https://devcenter.bitrise.io/en/builds/configuration-yaml/editing-an-app-s-bitrise-yml-file.html)
+- [Modular YAML configuration](https://devcenter.bitrise.io/en/builds/configuration-yaml/modular-yaml-configuration.html)
+
+## Search results
+
+No results found
+
+
+
+---
+
+
+## 6. Starting builds {#section-6}
+
+*Source: [https://devcenter.bitrise.io/en/builds/starting-builds.html](https://devcenter.bitrise.io/en/builds/starting-builds.html)*
+
+
+```
+
+```
+
+
+
+- [EN](https://devcenter.bitrise.io/en/builds/starting-builds.html)
+
+
+
+
+
+- [Home](https://devcenter.bitrise.io/)
+- [Builds](https://devcenter.bitrise.io/en/builds.html)
+- Starting builds
+
+# Starting builds
+
+Abstract
+
+
+You can start builds on Bitrise in multiple ways: manually, by scheduling, setting up triggers, or by using the API.
+
+### Pipelines
+
+This section of the documentation deals with starting standalone Bitrise builds. For starting a Pipelines, check out [Running a Pipeline](https://devcenter.bitrise.io/document/preview/72855#UUID-40a9f04b-9e6d-0de6-f509-f8786cd8bde4).Running a Pipeline
+
+You can start builds on Bitrise in multiple ways:
+
+- [Starting builds manually](https://devcenter.bitrise.io/en/builds/starting-builds/starting-builds-manually.html "Starting builds manually")
+
+- [Scheduling builds](https://devcenter.bitrise.io/en/builds/starting-builds/scheduling-builds.html "Scheduling builds")
+
+- [Build triggers](https://devcenter.bitrise.io/en/builds/starting-builds/triggering-builds-automatically.html "Build triggers")
+
+- With the API: [Triggering and aborting builds](https://devcenter.bitrise.io/en/api/triggering-and-aborting-builds.html "Triggering and aborting builds")
+
+
+You can also configure Bitrise to skip certain commits or Git Tags, preventing these from triggering builds.
+
+In this section:
+
+- [Starting builds manually](https://devcenter.bitrise.io/en/builds/starting-builds/starting-builds-manually.html)
+- [Build triggers](https://devcenter.bitrise.io/en/builds/starting-builds/triggering-builds-automatically.html)
+- [YAML syntax for build triggers](https://devcenter.bitrise.io/en/builds/starting-builds/using-the-trigger-map-to-trigger-builds.html)
+- [Legacy project-based triggers](https://devcenter.bitrise.io/en/builds/starting-builds/legacy-project-based-triggers.html)
+- [Triggering builds by Slack commands](https://devcenter.bitrise.io/en/builds/starting-builds/triggering-builds-by-slack-commands.html)
+- [Scheduling builds](https://devcenter.bitrise.io/en/builds/starting-builds/scheduling-builds.html)
+- [Approving pull request builds](https://devcenter.bitrise.io/en/builds/starting-builds/approving-pull-request-builds.html)
+- [Starting parallel builds with a single trigger](https://devcenter.bitrise.io/en/builds/starting-builds/starting-parallel-builds-with-a-single-trigger.html)
+- [Skipping a given commit or pull request](https://devcenter.bitrise.io/en/builds/starting-builds/skipping-a-given-commit-or-pull-request.html)
+
+_app_ _app_
+
+## Search results
+
+No results found
+
+
+
+---
+
+
+## 7. Environment Variables {#section-7}
+
+*Source: [https://devcenter.bitrise.io/en/builds/environment-variables.html](https://devcenter.bitrise.io/en/builds/environment-variables.html)*
+
+
+```
+
+```
+
+
+
+- [EN](https://devcenter.bitrise.io/en/builds/environment-variables.html)
+
+
+
+
+
+- [Home](https://devcenter.bitrise.io/)
+- [Builds](https://devcenter.bitrise.io/en/builds.html)
+- Environment Variables
+
+# Environment Variables
+
+Abstract
+
+
+An Environment Variable (Env Var) is a key-value pair that holds data that you can use in your builds by inserting them into Step inputs.
+
+An Environment Variable (Env Var) is a key-value pair that holds data that you can use in your builds. For example, working directory of a project's repository is often stored in an Env Var so you don't have to specify the path for every [Step](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N629f741be4d32 "") input that needs it.
+
+You can configure Env Vars for an entire project or for specific Pipelines and [Workflows](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N62a1dd5315b38 "").
+Project level Env Vars are available for every Workflow of the app; Pipeline- and Workflow level Env Vars are only available for the given Pipeline or Workflow.
+
+### Size limit of the Env Var list
+
+By default, the Env Var list size is 120 KB. You can easily increase the list size using a Script Step as described in this [Knowledge Base article](https://support.bitrise.io/en/articles/9676692-envman-environment-list-too-large-error).
+
+Secrets are a specific type of Environment Variable: they hide their information in an encrypted format and their value is not exposed in the build logs.
+
+### Protect confidential information
+
+Unlike Secrets, Env Vars are fully exposed in builds triggered by pull requests so you should not add any sensitive information to Env Vars.
+
+## Scope of Environment Variables
+
+Users can declare Environment Variables on three different levels:
+
+- App level.
+
+- Workflow level.
+
+- Step level.
+
+
+In addition to the user-declared Env Vars, there are Env Vars automatically exposed by either the Bitrise CLI or bitrise.io. These are always available in any build. You can find the list of these here: [Available Environment Variables](https://devcenter.bitrise.io/en/references/available-environment-variables.html "Available Environment Variables")
+
+**App level Env Vars** are available to every build of a given app. Whenever you create a new Workflow, for example, it immediately and automatically has access to every single app level Env Var.
+
+**A Workflow level Env Var** is only available to the specific Workflow it was defined in. If your `primary` Workflow has an Env Var with the key `TEST_ENV`, your `deploy` Workflow won't be able to access that Env
+Var.
+
+### Chaining Workflows together
+
+If you [chain Workflows together](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/managing-workflows.html#chaining-workflows-together "Chaining Workflows together"), using the `after_run` parameter, and define an Env Var in one of the Workflows, all
+subsequent Workflows in the chain will be able to access that Env Var.
+
+**A Step level Env Var** is defined within a particular Step of a build. Such an Env Var is not available to other Workflows, or to the preceding Steps in the same Workflow. Subsequent Steps, however, can access it. Step outputs are also exposed as Environment Variables.
+
+You can set Environment Variables, regardless of level, in both the Workflow Editor, in your app's `bitrise.yml` file, or during a build with a custom Script using the [envman](https://github.com/bitrise-io/envman/) tool:
+
+- [Setting an Env Var in the Workflow Editor](https://devcenter.bitrise.io/en/builds/environment-variables.html#setting-an-env-var-in-the-workflow-editor "Setting an Env Var in the Workflow Editor")
+
+- [Setting and managing Env Vars during a build](https://devcenter.bitrise.io/en/builds/environment-variables.html#setting-and-managing-env-vars-during-a-build "Setting and managing Env Vars during a build")
+
+
+Environment Variables have a given processing order based on their level: [Availability order of Environment Variables](https://devcenter.bitrise.io/en/builds/environment-variables.html#availability-order-of-environment-variables "Availability order of Environment Variables")
+
+## Availability order of Environment Variables
+
+Environment Variables (Env Var) are available after the Env Var is processed.
+
+There are Env Vars exposed by the Bitrise CLI. These are available from the start: for example, `BITRISE_SOURCE_DIR` and `BITRISE_TRIGGERED_WORKFLOW_ID`.
+
+All other Env Vars are processed and made available as the build progresses.
+
+The processing order is the following:
+
+1. Env Vars exposed by the Bitrise CLI.
+
+2. [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html "Secrets"): they are processed before a Workflow starts.
+
+3. One-off Environment Variables specified for the build through our API.
+
+4. App Environment Variables.
+
+5. Workflow Environment Variables: when the processing of the specified Workflow starts, the Env Vars specified for that Workflow are made available.
+
+If the Workflow has Workflows [chained before or after it](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/managing-workflows.html "Managing Workflows"), the Environment Variables of the chained workflows are processed and made available right before the first Step of
+    the Workflow would run.
+
+6. Step inputs: they are exposed for each Step, right before the Step would start.
+
+7. Step outputs: they are exposed by the specific Step, so those are available for subsequent Steps after the Step finishes.
+
+
+## Setting an Env Var in the Workflow Editor
+
+### Every Env Var value is a string
+
+The value of an Environment Variable or Secret can only be a string. Even if you set a number (for example, 7), it will be passed on as a string.
+
+### Using the $ character
+
+You can use the `$` character in the value of an Env Var or Secret (for example, in a password) but in that case always leave the Replace variables in inputs option unchecked. If you replace the variable's key with its value in inputs, the Bitrise CLI will treat the
+value as another Env Var because of the `$` character.
+
+To set a new Environment Variable (Env Var):
+
+1. Log in to Bitrise and select Bitrise CI on the left, then select your project.
+
+2. Click the Workflows button on the main page.
+
+
+
+![opening-workflow-editor.png](https://devcenter.bitrise.io/en/image/uuid-99bb894c-3e79-91c8-9e62-7e475573495d.png)
+
+3. On the left, select Env Vars from the navigation menu.
+
+4. Choose the level of the Env Var:
+   - Scroll down to the App Environment Variables section to set an app level Env Var.
+
+
+
+     ![Secrets and Env Vars](https://devcenter.bitrise.io/en/image/uuid-b81a2b79-c62d-b113-a36a-e91351cc2d41.png)
+
+   - Scroll down to one of the Workflow Environment Variables sections to set an Env Var for that specific Workflow.
+
+
+
+     ![Secrets and Env Vars](https://devcenter.bitrise.io/en/image/uuid-ff754b01-bc60-0109-5a45-4c21b65d9855.png)
+5. Click the Add new button in your chosen section.
+
+6. Add a key and a value.
+
+7. Click Save changes in the top right corner.
+
+
+That's it. Your new Env Var is saved and ready to be used.
+
+## Replacing variables in inputs
+
+Replacing variables in inputs ensures that the value of the Env Var will be passed to the build instead of the key. For details, check [Replacing variables in\\
+inputs](https://devcenter.bitrise.io/en/builds/environment-variables.html#replacing-variables-in-inputs "Replacing variables in inputs").
+
+Toggling on this option ensures that instead of the key of the Env Var, the value of the Env Var will be passed to the build. Normally, this is not necessary.
+
+Please note that if you add a new Environment Variable directly in the `bitrise.yml` file and do NOT set the `is_expand` property, the default value will be `true`. We recommend explicitly setting `is_expand` in this case:
+
+```
+envs:
+  - opts:
+      is_expand: false
+      KEY: VALUE
+Copy
+```
+
+## Setting a custom Env Var when starting a build
+
+When scheduling a new build or starting a new build manually, you have the option to set up custom Environment Variables (Env Var). These variables are only available for the build you started or scheduled.
+
+### Don't use the same key as an App Env Var
+
+App Environment Variables have precedence over custom Environment Variables! This means that if you define a custom Env Var with the same key as an App Env Var, the build will use the value of the App Env Var.
+
+1. On the Bitrise CI page of your app, find the Start build button and click the button with the clock icon next to it.
+
+
+
+![schedule-build.png](https://devcenter.bitrise.io/en/image/uuid-ea158f34-25dc-4585-c7a3-0961c5ef5472.png)
+
+2. In the Build configuration pop-up window, select the Advanced tab.
+
+3. Find the Custom Environment Variables section.
+
+4. Enter a key and a value.
+
+
+
+### Replacing variables in inputs
+
+
+
+Replacing variables in inputs ensures that the value of the Env Var will be passed to the build instead of the key. For details, check [Replacing variables in\\
+inputs](https://devcenter.bitrise.io/en/builds/environment-variables.html#replacing-variables-in-inputs "Replacing variables in inputs").
+
+5. Press the \+ Add Environment Variable button.
+
+6. Finish starting or scheduling the build.
+
+
+## Using an Env Var in a Step input
+
+Many [Step inputs](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/step-versions.html "Step versioning") accept Environment Variables (Env Var) and [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html "Secrets") as input values.
+
+### Sensitive inputs
+
+Input fields marked as SENSITIVE only accept Secrets as their input. Generally, we do not recommend changing the value of these inputs.
+
+To use an Env Var or a Secret as a Step input value:
+
+1. Log in to Bitrise and select Bitrise CI on the left, then select your project.
+
+2. Click the Workflows button on the main page.
+
+
+
+![opening-workflow-editor.png](https://devcenter.bitrise.io/en/image/uuid-99bb894c-3e79-91c8-9e62-7e475573495d.png)
+
+3. Select Env Vars from the navigation menu on the left.
+
+4. Select a Step from the Workflow. For example, the **Git Clone Repository** Step.
+
+5. Choose a Step input. For example, the Clone destination (local) directory path input of the **Git Clone Repository** Step.
+
+6. Next to the name of the input, click Insert variable.
+
+7. Find the Env Var in the list, and select it.
+
+You can search for the Env Var by typing its key (or a part of it) into the Filter by key search field.
+
+
+
+### Env Vars generated by Steps
+
+
+
+The interactive list of Env Vars will show the Env Vars that are generated by previous Steps of the Workflow. For example, if you want to insert an Env Var into one of the inputs of the third Step in the Workflow, you can choose from the Env Vars generated by the first and second Steps.
+
+
+That's it. The next time you run a build of that Workflow, the Step input will use the value of the inserted Env Var as the Step input value.
+
+## Using Env Vars in the value of an Env Var
+
+Environment Variables (Env Var) normally contain a simple string value. However, it is possible to set up an Env Var that includes other Env Vars as values.
+
+### Secrets as variable values
+
+The methods described here also apply to [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html "Secrets"). You can also embed a Secret within an Env Var.
+
+You can, at any time, use another Environment Variable in the value of an Env Var - embedding the Env Var, so to speak. For example, let's say we want to set the value of the `$BITRISE_AUTH` Env Var to `$PERSONAL_ACCESS_TOKEN` which is another Env Var.
+
+To do this, you need to make sure that the key of `$BITRISE_AUTH` is replaced with its value so that its the embedded Env Var that is passed on to the Workflows and Steps.
+
+1. Log in to Bitrise and select Bitrise CI on the left, then select your project.
+
+2. Click the Workflows button on the main page.
+
+
+
+![opening-workflow-editor.png](https://devcenter.bitrise.io/en/image/uuid-99bb894c-3e79-91c8-9e62-7e475573495d.png)
+
+3. On the left, select Env Vars from the navigation menu.
+
+4. Under the key of the Env Var you need, toggle the Replace variables in inputs? toggle to active.
+
+
+## Setting and managing Env Vars during a build
+
+You can set Env Vars during a build by defining them in a Step, typically a **Script** Step. To accomplish this, you can use the [envman](https://github.com/bitrise-io/envman/) tool.
+
+### New Env Vars take effect from the next Step
+
+Any Environment Variable you create with the `envman` tool takes effect only from the subsequent Step in the Workflow. In other words, you can't use a newly created Environment Variable in the same Step in which it was created.
+
+Here is a simple example where we're using `envman` to add a new Env Var with the key `MY_RELEASE_NOTE`:
+
+```
+envman add --key MY_RELEASE_NOTE --value "This is the release note"Copy
+```
+
+You can call `envman` in any Step, including a **Script** Step, or even in your own script (stored in your repository) if you call it from a `bitrise` build.
+
+You can specify the value as the `--value` parameter, or by using pipe:
+
+```
+echo 'hi' | envman add --key MY_RELEASE_NOTECopy
+```
+
+You can also read the value from a file:
+
+```
+envman add --key MY_RELEASE_NOTE --valuefile ./some/file/pathCopy
+```
+
+Once the Env Var is exposed, you can use it like any other Env Var. You can use these exposed Env Vars in the inputs of other Steps as well.
+
+Here is an example where we’re exposing the release note Env Var and then using it in another **Script** Step and in a **Send a Slack message** Step:
+
+```
+workflows:
+  example:
+    steps:
+    - script:
+        inputs:
+        - content: |
+            #!/bin/bash
+            envman add --key MY_RELEASE_NOTE --value "This is the release note"
+    - script:
+        inputs:
+        - content: |
+            #!/bin/bash
+            echo "My Release Note: $MY_RELEASE_NOTE"
+    - slack:
+        inputs:
+        - channel: ...
+        - webhook_url: ...
+        - message: "Release Note: $MY_RELEASE_NOTE"Copy
+```
+
+If you want to expose the value of an Env Var to be accessible through the key of another Env Var, you can do so.
+
+For example, to expose the value of `BITRISE_BUILD_NUMBER` under the key `MY_BUILD_NUMBER`:
+
+```
+ envman add --key MY_BUILD_NUMBER --value "${BITRISE_BUILD_NUMBER}"Copy
+```
+
+After this, subsequent Steps can get the value of `BITRISE_BUILD_NUMBER` from the `MY_BUILD_NUMBER` Env Var. If you change the value of `BITRISE_BUILD_NUMBER` after this, the value of `MY_BUILD_NUMBER` won’t be modified, it will
+still hold the original value!
+
+If you need to know if a custom Env Var has been defined, you can easily check it, and even overwrite its value:
+
+```
+#!/bin/bash
+set -ex
+if [ ! -z "$API_PROJECT_SCHEME" ] ; then
+  envman add --key PROJECT_SCHEME --value "$API_PROJECT_SCHEME"
+fiCopy
+```
+
+This script checks whether the `API_PROJECT_SCHEME` Env Var is defined, and if it is, its value will be assigned to the `PROJECT_SCHEME` Environment Variable, overwriting the original value of `PROJECT_SCHEME`.
+
+## Setting Env Vars in the configuration YAML
+
+You can set Env Vars directly in the YAML configuration file for your app. You can set both app level and Workflow level Env Vars in your app's config file.
+
+In this example, we have a configuration with an app-level Env Var called `TEST_KEY`:
+
+```
+app:
+  envs:
+  - opts:
+      is_expand: false
+    TEST_KEY: test valueCopy
+```
+
+### Replacing variables in inputs
+
+Replacing variables in inputs ensures that the value of the Env Var will be passed to the build instead of the key. For details, check [Replacing variables in\\
+inputs](https://devcenter.bitrise.io/en/builds/environment-variables.html#replacing-variables-in-inputs "Replacing variables in inputs").
+
+In this example, the `deploy-alpha` Workflow defines an Env Var called `ENV_TYPE`, and then runs another Workflow that can use that Env Var:
+
+```
+workflows:
+
+  deploy-alpha:
+    envs:
+    - ENV_TYPE: alpha
+    after_run:
+    - _deploy
+
+  _deploy:
+    steps:
+    - script:
+        inputs:
+        - content: |
+            #!/bin/bash
+            echo "ENV_TYPE: $ENV_TYPE"Copy
+```
+
+If you run the `deploy-alpha` Workflow, that will set the `ENV_TYPE` Env Var to `alpha`, then it will run the `deploy` Workflow, which can use that Env Var. In this example, it will simply print its value (the printed text will
+be: `ENV_TYPE: alpha`).
+
+A Step is a block of script execution that encapsulates a build task on Bitrise: the code to perform that task, the inputs and parameters you can define for the task, and the outputs the task generates.
+
+A Workflow is a collection of Steps, Environment Variables, and other configurations. When Bitrise starts a build, it runs one or more Workflows according to the configuration defined in the `bitrise.yml` file.
+
+## Search results
+
+No results found
+
+
+
+---
+
+
+## 8. Workflows {#section-8}
+
+*Source: [https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html)*
+
+
+```
+
+```
+
+
+
+- [EN](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html)
+
+
+
+
+
+- [Home](https://devcenter.bitrise.io/)
+- [Workflows and Pipelines](https://devcenter.bitrise.io/en/steps-and-workflows.html)
+- Workflows
+
+# Workflows
+
+Abstract
+
+
+A Bitrise Workflow is a collection of Steps. When a build of an app is running, each [Step](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N629f741be4d32 "") will be executed in the order that is defined in the Workflow.
+
+A Bitrise Workflow is a collection of Steps. When a build of an _app_ is running, each [Step](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N629f741be4d32 "") will be executed in the order that is defined in the Workflow. Workflows can be created, defined and modified in two ways:
+
+- Using the graphical Workflow Editor on [bitrise.io](https://www.bitrise.io/), or [the offline\\
+version on your own device](https://devcenter.bitrise.io/en/bitrise-cli/installing-and-upgrading-the-offline-workflow-editor.html "Installing and upgrading the offline Workflow Editor").
+
+- Directly editing the [bitrise.yml](https://devcenter.bitrise.io/en/references/glossary.html#UUID-bd1f4267-9e10-9cdd-d7ab-0964f8fbe9fa_N62a0991e33840 "") file of your project.
+
+
+Ultimately, both methods modify the `bitrise.yml` file - the **Workflow Editor** is simply a friendlier way of doing so!
+
+By default, [a single build](https://devcenter.bitrise.io/en/builds.html "Builds") is a single Workflow. But you can also chain Workflows together so they run in succession, as well as to trigger multiple Workflow to run simultaneously.
+
+Workflows can also be arranged into [Pipelines](https://devcenter.bitrise.io/en/steps-and-workflows/build-pipelines/pipelines-with-stages.html "Pipelines with stages"). A Pipeline consists of multiple Stages and each Stage consists of one or more Workflows which run in parallel.
+
+In this section:
+
+- [Default Pipelines and Workflows](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/default-workflows.html)
+- [Creating a Workflow](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/creating-a-workflow.html)
+- [Managing Workflows](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/managing-workflows.html)
+- [Copying Workflows from one app to another](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/copying-workflows-from-one-app-to-another.html)
+- [Workflow recipes for Android apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-android-apps.html)
+- [Workflow recipes for iOS apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-ios-apps.html)
+- [Workflow recipes for cross-platform apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-cross-platform-apps.html)
+- [Generic Workflow recipes](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/generic-workflow-recipes.html)
+
+See also:
+
+- [Connecting to a VPN during a build](https://devcenter.bitrise.io/en/connectivity/connecting-to-a-vpn-during-a-build.html "Connecting to a VPN during a build")
+- [Bitrise Build Cache for Gradle](https://devcenter.bitrise.io/en/dependencies-and-caching/remote-build-caching/remote-build-cache-for-gradle.html "Bitrise Build Cache for Gradle")
+- [Managing build artifacts](https://devcenter.bitrise.io/en/api/managing-build-artifacts.html "Managing build artifacts")
+
+A Step is a block of script execution that encapsulates a build task on Bitrise: the code to perform that task, the inputs and parameters you can define for the task, and the outputs the task generates.
+
+_app_
+
+The `bitrise.yml` file stores your entire [build configuration for an app](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html "Storing an app's configuration YAML"). It specifies your stack and the build triggers, and
+defines the Workflows of the app. When you make changes on the graphical UI of our Workflow Editor, you actually modify the `bitrise.yml` file.
+
+_apps_ _Workflows_ _app_
+
+## Search results
+
+No results found
+
+
+
+---
+
+
+## 9. Steps {#section-9}
+
+*Source: [https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html)*
+
+
+```
+
+```
+
+
+
+- [EN](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html)
+
+
+
+
+
+- [Home](https://devcenter.bitrise.io/)
+- [Workflows and Pipelines](https://devcenter.bitrise.io/en/steps-and-workflows.html)
+- Steps
+
+# Steps
+
+Abstract
+
+
+A Step is a block of script execution that encapsulates a build task on Bitrise: the code to perform that task, the inputs and parameters you can define for the task, and the outputs the task generates.
+
+Steps are the heart of Bitrise. A Step is a build task: for example, the **Git Clone** Step clones your Git repository at the start of a build while the **Google Play Deploy** Step can deploy your finished app to the Play Store.
+
+A Step contains the code that performs the build task. You can configure the inputs and parameters that define the task, and view and reuse the outputs a Step generates. Reusing the output means that another Step can use it as the value of one of its inputs.
+
+Our Steps are defined in YAML format, and written in either bash or Go.
+
+You can find a list of our Steps in:
+
+- [The Integrations page](https://www.bitrise.io/integrations).
+
+- [The Bitrise StepLib](https://github.com/bitrise-io/bitrise-steplib).
+
+- The Workflow Editor.
+
+
+You can also create and run any custom script you want as part of your Bitrise build using the [**Script**](https://www.bitrise.io/integrations/steps/script) Step. All you need to do is specify the script runner (the default is bash),
+add the script, and run a build. For more information on how to set up these custom scripts, check out [Bitrise Script Step - Running (Bash, Python,\\
+NodeJS, Ruby, Swift, Kotlin)](https://support.bitrise.io/hc/en-us/articles/8932506599955-Bitrise-Script-Step-Running-Bash-Python-NodeJS-Ruby-Swift-Kotlin-).
+
+For the purposes of your builds, Steps can be managed directly from the Workflow Editor. You can rearrange them, set their versions, add or remove Steps at any time.
+
+## Types of Steps
+
+Bitrise has over 300 Steps in its [Step Library (StepLib)](https://github.com/bitrise-steplib) which third-party companies or open-source teams can enrich with Steps based on their services/tools.
+
+There are three different types of Steps at Bitrise. You can identify each one based on their labels on our GUI:
+
+- **Official Bitrise Steps**: These Steps are created and maintained by Bitrise. These Steps are labeled by a green badge and a "B".
+
+- **Verified Steps**: These Steps are created and maintained by the community, but they are owned by a service or tool or an open-source team that guarantees secure, maintained, consistent, and high-quality performance for any Bitrise user. These Steps are labeled by a blue badge
+and a check mark. For more information about Verified Steps, check out [our guide](https://devcenter.bitrise.io/en/steps-and-workflows/developing-your-own-bitrise-step/verified-steps.html#what-are-verified-steps- "What are Verified Steps?").
+
+- **Community Steps**: These Steps can be created by anyone in the community. These Steps are not labeled and don't have a badge. If you would like to learn how to develop Steps and share them with the Bitrise community, check out [Developing a new Step](https://devcenter.bitrise.io/en/steps-and-workflows/developing-your-own-bitrise-step/developing-a-new-step.html "Developing a new Step").
+
+
+![StepTypes.png](https://devcenter.bitrise.io/en/image/uuid-5b243f17-057e-1324-1fd8-31305be6c08c.png)
+
+In this section:
+
+- [Adding Steps to a Workflow](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/adding-steps-to-a-workflow.html)
+- [Step versioning](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/step-versions.html)
+- [Step inputs](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/step-inputs.html)
+- [Configuring a Step to always run](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/skipping-steps.html)
+- [Enabling or disabling a Step conditionally](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/enabling-or-disabling-a-step-conditionally.html)
+- [Step bundles](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/step-bundles.html)
+- [Setting a time limit for Steps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/setting-a-time-limit-for-steps.html)
+- [Detecting and aborting hanging Steps without output](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps/detecting-and-aborting-hanging-steps.html)
+
+See also:
+
+- [Build machine types](https://devcenter.bitrise.io/en/infrastructure/build-machines/build-machine-types.html "Build machine types")
+- [Workflows and Pipelines](https://devcenter.bitrise.io/en/steps-and-workflows.html "Workflows and Pipelines")
+- [Workflow recipes for Android apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-android-apps.html "Workflow recipes for Android apps")
+- [Workflow recipes for iOS apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-ios-apps.html "Workflow recipes for iOS apps")
+- [Workflow recipes for cross-platform apps](https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows/workflow-recipes-for-cross-platform-apps.html "Workflow recipes for cross-platform apps")
+- [Storing an app's configuration YAML](https://devcenter.bitrise.io/en/builds/configuration-yaml/managing-an-app-s-bitrise-yml-file.html "Storing an app's configuration YAML")
+- [Secrets](https://devcenter.bitrise.io/en/builds/secrets.html "Secrets")
+- [Basics of configuration YAML](https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html "Basics of configuration YAML")
+- [Customizing your configuration YAML](https://devcenter.bitrise.io/en/references/customizing-bitrise-yml.html "Customizing your configuration YAML")
+- [Workflow reference](https://devcenter.bitrise.io/en/references/workflows-reference.html "Workflow reference")
+
+## Search results
+
+No results found
+
+
+
+---
+
+
+## 10. Build numbering and app versioning {#section-10}
+
+*Source: [https://devcenter.bitrise.io/en/builds/build-numbering-and-app-versioning.html](https://devcenter.bitrise.io/en/builds/build-numbering-and-app-versioning.html)*
+
+
+```
+
+```
+
+
+
+- [EN](https://devcenter.bitrise.io/en/builds/build-numbering-and-app-versioning.html)
+
+
+
+
+
+- [Home](https://devcenter.bitrise.io/)
+- [Builds](https://devcenter.bitrise.io/en/builds.html)
+- Build numbering and app versioning
+
+# Build numbering and app versioning
+
+Abstract
+
+
+All Bitrise builds have a build number. The first build of your app is, by default, number 1, and the build number gets incremented with each build. You can also change your build number manually.
+
+All Bitrise builds have a build number. The first build of your app is, by default, number 1, and the build number gets incremented with each build. You can get a build’s Bitrise build number on the website, as well as via the `$BITRISE_BUILD_NUMBER` Environment Variable. This variable can be used in
+any Step or script where you need the Bitrise build number for any reason.
+
+You can also take care of your app’s versioning automatically, using Bitrise. We have two Steps to do it for you: [Setting up app versioning automatically on Bitrise](https://devcenter.bitrise.io/en/builds/build-numbering-and-app-versioning.html#setting-up-app-versioning-automatically-on-bitrise "Setting up app versioning automatically on Bitrise")
+
+## Adding the SSH key to the machine user
+
+In order for Bitrise to be able to use the machine user to access your repository, you must add the same SSH key to the machine user and the app on Bitrise.
+
+### Negative build numbers
+
+The build number must be either 0 or a positive integer. Negative numbers are not accepted. You can, however, set any number you have already used.
+
+1. Open your project on Bitrise with a user that has the Admin [role on the project](https://devcenter.bitrise.io/en/apps/user-roles-on-app-teams.html "User roles on project teams").
+
+2. On the main page of the project, click on the Project settings button.
+
+
+
+![project-settings-button.png](https://devcenter.bitrise.io/en/image/uuid-14defaa4-472c-2d09-84df-145dc3aef4f5.png)
+
+3. On the left, select Builds.
+
+4. Scroll down to Next build number.
+
+
+
+![build-numbering.png](https://devcenter.bitrise.io/en/image/uuid-ccdbd639-8424-98d8-f569-ddf58f73cbec.png)
+
+
+
+This number is automatically incremented whenever you run a build but you can set it manually.
+
+5. To modify the number, click Edit.
+
+
+## Setting up app versioning automatically on Bitrise
+
+Track the version of your app in its Git repository by modifying the file containing the essential information about the app (for example, the `Info.plist` file for iOS apps and either the `build.gradle` file or the `AndroidManifest.xml` file
+for Android apps).
+
+Bitrise has two steps to do this for you. These two Steps can insert the Bitrise build number or some other specified number into their respective files:
+
+- **Change Android versionCode and versionName** for Android apps.
+
+- **Set Xcode Project Build Number** for iOS apps.
+
+
+Both Steps accept either numbers (integers and/or numeric strings) or environment variables in their relevant inputs. By default, both use the `$BITRISE_BUILD_NUMBER` Environment Variable as their default value for the build number.
+
+### Setting the versionCode and the versionName of an Android app
+
+For an Android app, the setting is used as an internal version number, to determine if a build of the app is more recent than another build. The `versionName` setting is a string used as the version number shown to users.
+
+For in-depth information about Android versioning, please check out [the Android developer guide on the subject](https://developer.android.com/studio/publish/versioning).
+
+### Version information in the manifest file
+
+In this guide, we’re setting the version information in the `build.gradle` file. This is the recommended method: you can also set it directly in the `AndroidManifest.xml` file but be aware that any version info set in the manifest file before the build will be
+overwritten by the `build.gradle` file’s settings during the build.
+
+To configure Android versioning:
+
+1. Add the **[Change Android versionCode and versionName](https://bitrise.io/integrations/steps/change-android-versioncode-and-versionname)** Step to your Workflow.
+
+2. Set the the path to your `build.gradle` file in the Path to the build.gradle file input.
+
+
+
+![Build numbering and app versioning](https://devcenter.bitrise.io/en/image/uuid-fb7fb260-5679-1832-9448-228a048e2b80.png)
+
+3. Add a value in the New versionCode input.
+
+The default value is the `$BITRISE_BUILD_NUMBER` Environment Variable.
+
+4. Add a value in the New versionName input.
+
+
+### Setting the CFBundleVersion and CFBundleShortVersionString of an iOS app
+
+For an iOS app, the value of the `CFBundleVersion` key (“Bundle version” in Xcode) is the build number of the app while the value of the `CFBundleShortVersionString` key (“Bundle versions string, short” in Xcode) is the version number of the app.
+
+For in-depth information about iOS versioning, including the functions of the `CFBundleVersion` and the `CFBundleShortVersionString` keys, please check out [this Apple technical note](https://developer.apple.com/library/archive/technotes/tn2420/_index.html); you can also look up the [summary of most important keys](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html).
+
+### Setting up iOS versioning for apps using Xcode 13+
+
+To set up iOS versioning on Bitrise using Xcode 13+, update the following in Xcode:
+
+- Set the Generate Info.plist File to `No`, under PROJECT and TARGETS on the Build Settings tab.
+
+- Make sure you have all the necessary keys defined in the `Info.plist` file.
+
+
+1. Add the **Set Xcode Project Build Number** Step to your Workflow.
+
+2. Set the file path to the `Info.plist` file in the Project path, scheme and Target input.
+
+3. Add a value in the Build Number input. This sets the `CFBundleVersion` key to the specified value in the `Info.plist` file. The default value is the `$BITRISE_BUILD_NUMBER` Environment Value.
+
+4. Optionally, add a value in the Version Number input. This will set the `CFBundleShortVersionString` key to the specified value in the `Info.plist` file. This input is not required.
+
+
+## Offsetting the build version
+
+You can also offset your App’s build version numbers if you handled version tracking in a different way before for the same app: all you need to do is setting the value which should be added to the build number. The value can be either a fixed integer value or an Environment Variable.
+
+To offset your version number by your Bitrise build number every time a build is triggered, use the `$BITRISE_BUILD_NUMBER` Environment Variable:
+
+- For Android apps, find the versionCode Offset input of the **Change Android versionCode and versionName** Step and set **`$BITRISE_BUILD_NUMBER`** as its value. The value of the variable will be added to the
+value specified in the **versionCode** input.
+
+- For iOS apps, find the Build Number Offset input of the **Set Xcode Project Build Number** Step and set **`$BITRISE_BUILD_NUMBER`** as its value. The value of the variable will be added to the value specified
+in the Build Number input.
+
+
+Example 1. Offsetting an Android app's version
+
+
+Let’s say you have an app and you are about to run its fifth build on Bitrise. You wish to offset the Build Number by 6 as the app had six builds before starting to use Bitrise. The following configuration is used:
+
+```
+- Version Code: $BITRISE_BUILD_NUMBER
+- Version Code Offset: 6
+- Version Name: 1.0.5Copy
+```
+
+The value of `$BITRISE_BUILD_NUMBER` (which equals 5 in our example) will be added to the `Version Code Offset` value. As such, `android:versionName` value will be set to 1.0.5 (11), indicating it’s the 11th build of the 1.0.5 version of your
+app.
+
+Example 2. Offsetting an iOS app's version
+
+
+Let’s say you have an app and you are about to run its fifth build on Bitrise. You wish to offset the Build Number by 6 as the app had six builds before starting to use Bitrise. The following configuration is used:
+
+```
+- Build Number: $BITRISE_BUILD_NUMBER
+- Build Number Offset: 6
+- Version Number: 1.1Copy
+```
+
+The value of `$BITRISE_BUILD_NUMBER` (which equals 5 in our example) will be added to the `Build Number Offset` value. As such, `CFBundleShortVersionString` will be set to 1.1 (11), indicating it’s the 11th build of the 1.1 version of your
+app.
+
+## Search results
+
+No results found
+
+
 
 ---

@@ -15,15 +15,20 @@ class ComprehensiveScraper {
     this.providers = {
       bitrise: {
         name: 'Bitrise',
+        description: 'Mobile-focused CI/CD platform',
         pages: [
           'https://devcenter.bitrise.io/en/builds.html',
-          'https://devcenter.bitrise.io/en/builds/configuring-build-settings.html',
-          'https://devcenter.bitrise.io/en/builds/selective-builds.html',
-          'https://devcenter.bitrise.io/en/workflows.html',
-          'https://devcenter.bitrise.io/en/steps.html',
-          'https://devcenter.bitrise.io/en/bitrise-yml/basics-of-bitrise-yml.html',
-          'https://devcenter.bitrise.io/en/bitrise-yml/workflows.html',
-          'https://devcenter.bitrise.io/en/pipelines/pipelines-overview.html'
+          'https://devcenter.bitrise.io/en/steps-and-workflows.html',
+          'https://devcenter.bitrise.io/en/references/basics-of-bitrise-yml.html',
+          'https://devcenter.bitrise.io/en/references/workflows-reference.html',
+          'https://devcenter.bitrise.io/en/builds/configuration-yaml.html',
+          'https://devcenter.bitrise.io/en/builds/starting-builds.html',
+          'https://devcenter.bitrise.io/en/builds/environment-variables.html',
+          'https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-workflows.html',
+          'https://devcenter.bitrise.io/en/steps-and-workflows/introduction-to-steps.html',
+          'https://devcenter.bitrise.io/en/builds/build-numbering-and-app-versioning.html',
+          'https://devcenter.bitrise.io/en/testing/mobile-app-tests.html',
+          'https://devcenter.bitrise.io/en/deploying/deployment-overview.html'
         ]
       },
       codemagic: {
@@ -56,6 +61,7 @@ class ComprehensiveScraper {
       },
       'github-actions': {
         name: 'GitHub Actions',
+        description: 'Native GitHub CI/CD platform',
         pages: [
           'https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions',
           'https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows',
@@ -64,7 +70,9 @@ class ComprehensiveScraper {
           'https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift',
           'https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle',
           'https://docs.github.com/en/actions/deployment/about-deployments/deploying-with-github-actions',
-          'https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts'
+          'https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts',
+          'https://docs.github.com/en/actions/examples',
+          'https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs'
         ]
       },
       'gitlab-ci': {
@@ -168,10 +176,23 @@ class ComprehensiveScraper {
       );
 
       if (response.data && response.data.success && response.data.data) {
+        const rawContent = response.data.data.markdown || '';
+        const cleanedContent = this.cleanContent(rawContent);
+        const title = this.extractTitle(cleanedContent) || 'Untitled';
+        
+        // Skip pages that are clearly 404s or error pages
+        if (title.includes('404') || 
+            title.toLowerCase().includes('not found') ||
+            title.toLowerCase().includes('page not found') ||
+            cleanedContent.length < 200) {
+          console.warn(`  Skipping ${url} - appears to be 404 or insufficient content`);
+          return null;
+        }
+        
         return {
           url: url,
-          content: response.data.data.markdown || '',
-          title: this.extractTitle(response.data.data.markdown) || 'Untitled'
+          content: cleanedContent,
+          title: title
         };
       }
       
@@ -181,6 +202,47 @@ class ComprehensiveScraper {
       console.error(`  Error scraping ${url}:`, error.message);
       return null;
     }
+  }
+
+  cleanContent(markdown) {
+    if (!markdown) return '';
+    
+    let lines = markdown.split('\n');
+    let cleanedLines = [];
+    
+    for (let line of lines) {
+      const trimmed = line.trim();
+      
+      // Skip navigation and UI elements
+      if (trimmed.includes('Skip to main content') ||
+          trimmed.includes('Toggle navigation') ||
+          trimmed.includes('Advanced search') ||
+          trimmed.includes('print_') ||
+          trimmed.includes('Go to Support') ||
+          trimmed.includes('Start for free') ||
+          trimmed === 'EN' ||
+          trimmed.includes('日本語') ||
+          trimmed.includes('[Prev]') ||
+          trimmed.includes('[Next]') ||
+          trimmed.includes('Would you like to provide feedback')) {
+        continue;
+      }
+      
+      // Skip Japanese language links and content
+      if (trimmed.includes('/ja/') || 
+          /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(trimmed)) {
+        continue;
+      }
+      
+      // Skip empty navigation lists
+      if (trimmed === '-' || trimmed === '•' || trimmed === '*') {
+        continue;
+      }
+      
+      cleanedLines.push(line);
+    }
+    
+    return cleanedLines.join('\n');
   }
 
   extractTitle(markdown) {
